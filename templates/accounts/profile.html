@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Mi perfil{% endblock %}
+
+{% block content %}
+    <h1>Mi perfil</h1>
+    <p>Usuario: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Miembro desde: {{ user.date_joined }}</p>
+    <p>Bio: {{ user.bio|default:"(sin biografía)" }}</p>
+
+    <form method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit">Cerrar sesión</button>
+    </form>
+{% endblock %}
