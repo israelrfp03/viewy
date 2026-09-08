@@ -8,6 +8,8 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("library/", views.library_list, name="list"),
     path("library/add/", views.media_create, name="create"),
+    path("library/search/", views.media_search, name="search"),
+    path("library/add-from-tmdb/", views.media_add_from_tmdb, name="add_from_tmdb"),
     path("library/<int:pk>/edit/", views.media_update, name="update"),
     path("library/<int:pk>/delete/", views.media_delete, name="delete"),
 ]

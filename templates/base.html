@@ -10,6 +10,7 @@
         <a href="{% url 'library:home' %}">Viewy</a>
         {% if user.is_authenticated %}
             <a href="{% url 'library:list' %}">Mi biblioteca</a>
+            <a href="{% url 'library:search' %}">Buscar en TMDB</a>
             <a href="{% url 'accounts:profile' %}">Mi perfil</a>
         {% else %}
             <a href="{% url 'accounts:login' %}">Iniciar sesión</a>

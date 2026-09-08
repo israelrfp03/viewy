@@ -3,6 +3,10 @@ from django import forms
 from .models import MediaItem, UserMedia
 
 
+class LibrarySearchForm(forms.Form):
+    q = forms.CharField(label="Título", max_length=255)
+
+
 class MediaItemForm(forms.ModelForm):
     class Meta:
         model = MediaItem

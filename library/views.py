@@ -4,7 +4,9 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import MediaItemForm, UserMediaForm
+from integrations import tmdb
+
+from .forms import LibrarySearchForm, MediaItemForm, UserMediaForm
 from .models import MediaItem, UserMedia
 from .queries import DEFAULT_SORT, SORT_LABELS, filter_user_library
 
@@ -72,6 +74,92 @@ def media_create(request):
     return render(
         request, "library/create.html", {"media_form": media_form, "entry_form": entry_form}
     )
+
+
+def _get_or_create_media_from_tmdb(detail):
+    media = MediaItem.objects.filter(
+        external_source=MediaItem.ExternalSource.TMDB, external_id=detail.external_id
+    ).first()
+    if media:
+        return media
+
+    # Reutiliza un MediaItem manual equivalente en vez de duplicar el título.
+    media = MediaItem.objects.filter(
+        title__iexact=detail.title, media_type=detail.media_type, external_id=""
+    ).first()
+    if media:
+        media.external_id = detail.external_id
+        media.external_source = MediaItem.ExternalSource.TMDB
+        media.poster_url = detail.poster_url or media.poster_url
+        media.description = detail.description or media.description
+        media.release_year = detail.release_year or media.release_year
+        media.duration_minutes = detail.duration_minutes or media.duration_minutes
+        media.episodes = detail.episodes or media.episodes
+        media.save()
+        return media
+
+    return MediaItem.objects.create(
+        title=detail.title,
+        media_type=detail.media_type,
+        release_year=detail.release_year,
+        description=detail.description,
+        poster_url=detail.poster_url,
+        external_id=detail.external_id,
+        external_source=MediaItem.ExternalSource.TMDB,
+        duration_minutes=detail.duration_minutes,
+        episodes=detail.episodes,
+    )
+
+
+@login_required
+def media_search(request):
+    form = LibrarySearchForm(request.GET or None)
+    results = []
+    searched = False
+
+    if form.is_valid():
+        searched = True
+        try:
+            results = tmdb.search(form.cleaned_data["q"])
+        except tmdb.TMDBError:
+            messages.error(request, "TMDB no está disponible ahora mismo, inténtalo más tarde.")
+
+    return render(
+        request, "library/search.html", {"form": form, "results": results, "searched": searched}
+    )
+
+
+@login_required
+def media_add_from_tmdb(request):
+    if request.method != "POST":
+        return redirect("library:search")
+
+    external_id = request.POST.get("external_id", "")
+    media_type = request.POST.get("media_type", "")
+
+    if not external_id or media_type not in (
+        MediaItem.MediaType.MOVIE,
+        MediaItem.MediaType.SERIES,
+    ):
+        messages.error(request, "Selección no válida.")
+        return redirect("library:search")
+
+    try:
+        detail = tmdb.get_detail(external_id, media_type)
+    except tmdb.TMDBError:
+        messages.error(request, "No se pudo obtener la información de TMDB. Inténtalo de nuevo.")
+        return redirect("library:search")
+
+    with transaction.atomic():
+        media = _get_or_create_media_from_tmdb(detail)
+
+        if UserMedia.objects.filter(user=request.user, media=media).exists():
+            messages.info(request, "Ya tienes este contenido en tu biblioteca.")
+        else:
+            UserMedia.objects.create(user=request.user, media=media)
+            messages.success(request, "Añadido a tu biblioteca.")
+
+    return redirect("library:list")
 
 
 @login_required

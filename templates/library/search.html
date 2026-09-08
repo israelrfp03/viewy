@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Buscar en TMDB{% endblock %}
+
+{% block content %}
+    <h1>Buscar película o serie</h1>
+
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Buscar</button>
+    </form>
+
+    {% if searched %}
+        {% if results %}
+            <div class="library-grid">
+                {% for result in results %}
+                    <article class="library-card">
+                        {% if result.poster_url %}
+                            <img src="{{ result.poster_url }}" alt="{{ result.title }}" width="120">
+                        {% endif %}
+                        <h2>{{ result.title }}</h2>
+                        <p>
+                            {% if result.media_type == "movie" %}Película{% else %}Serie{% endif %}
+                            {% if result.release_year %} · {{ result.release_year }}{% endif %}
+                        </p>
+                        {% if result.description %}<p>{{ result.description|truncatewords:30 }}</p>{% endif %}
+                        <form method="post" action="{% url 'library:add_from_tmdb' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="external_id" value="{{ result.external_id }}">
+                            <input type="hidden" name="media_type" value="{{ result.media_type }}">
+                            <button type="submit">Añadir a mi biblioteca</button>
+                        </form>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No se ha encontrado ningún resultado para esa búsqueda.</p>
+        {% endif %}
+    {% endif %}
+
+    <p><a href="{% url 'library:list' %}">Volver a mi biblioteca</a></p>
+{% endblock %}

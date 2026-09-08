@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'library',
+    'integrations',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +131,14 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'accounts:profile'
 LOGOUT_REDIRECT_URL = 'library:home'
+
+
+# TMDB integration
+# https://developer.themoviedb.org/docs/authentication-application
+
+TMDB_ACCESS_TOKEN = config('TMDB_ACCESS_TOKEN', default='')
+TMDB_API_BASE_URL = 'https://api.themoviedb.org/3'
+TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 
 
 # Email

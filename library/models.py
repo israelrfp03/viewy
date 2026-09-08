@@ -34,6 +34,11 @@ class MediaItem(models.Model):
                 | models.Q(release_year__isnull=True),
                 name="media_item_release_year_reasonable",
             ),
+            models.UniqueConstraint(
+                fields=["external_source", "external_id"],
+                condition=~models.Q(external_id=""),
+                name="unique_external_media",
+            ),
         ]
 
     def __str__(self):
