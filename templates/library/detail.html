@@ -47,8 +47,8 @@
                 {% if anime_metadata.source_material %} · Origen: {{ anime_metadata.source_material }}{% endif %}
             </p>
 
-            {% if anilist_unavailable %}
-                <p style="font-weight: bold;">No se ha podido cargar información adicional de AniList ahora mismo (proveedor externo caído). Los datos básicos siguen disponibles arriba.</p>
+            {% if anime_provider_unavailable %}
+                <p style="font-weight: bold;">No se ha podido cargar información adicional ahora mismo (proveedores externos caídos). Los datos básicos siguen disponibles arriba.</p>
             {% elif enrichment %}
                 {% if enrichment.characters %}
                     <h3>Personajes principales</h3>

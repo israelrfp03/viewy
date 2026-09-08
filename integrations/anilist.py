@@ -1,9 +1,18 @@
 import re
-from dataclasses import dataclass, field
 
 import requests
 from django.core.cache import cache
 
+from .anime_types import (
+    AnimeCandidate,
+    AnimeCharacter,
+    AnimeEnrichment,
+    AnimeEpisode,
+    AnimeRelation,
+    AnimeStaffMember,
+)
+
+PROVIDER_NAME = "anilist"
 API_URL = "https://graphql.anilist.co"
 REQUEST_TIMEOUT = 5
 ENRICHMENT_CACHE_TTL = 60 * 60 * 24  # 24 horas
@@ -21,57 +30,6 @@ class AniListTimeoutError(AniListError):
 
 class AniListNotFoundError(AniListError):
     pass
-
-
-@dataclass
-class AniListCandidate:
-    external_id: str
-    title_romaji: str
-    title_english: str
-    release_year: int | None
-    poster_url: str
-
-
-@dataclass
-class AniListCharacter:
-    name: str
-    image_url: str
-    role: str
-    voice_actor: str
-    description: str
-
-
-@dataclass
-class AniListStaffMember:
-    name: str
-    role: str
-
-
-@dataclass
-class AniListRelation:
-    title: str
-    relation_type: str
-
-
-@dataclass
-class AniListEpisode:
-    number: int
-    title: str
-    thumbnail_url: str
-
-
-@dataclass
-class AniListEnrichment:
-    external_id: str
-    title_romaji: str
-    title_english: str
-    source_material: str
-    studio: str
-    status: str
-    characters: list = field(default_factory=list)
-    staff: list = field(default_factory=list)
-    relations: list = field(default_factory=list)
-    episodes: list = field(default_factory=list)
 
 
 SEARCH_QUERY = """
@@ -159,7 +117,8 @@ def search_candidates(query):
             start_date = item.get("startDate") or {}
 
             candidates.append(
-                AniListCandidate(
+                AnimeCandidate(
+                    source=PROVIDER_NAME,
                     external_id=str(item["id"]),
                     title_romaji=title.get("romaji") or "",
                     title_english=title.get("english") or "",
@@ -196,7 +155,7 @@ def get_enrichment(external_id):
             voice_actors = edge.get("voiceActors") or []
             voice_actor = voice_actors[0]["name"]["full"] if voice_actors else ""
             characters.append(
-                AniListCharacter(
+                AnimeCharacter(
                     name=name,
                     image_url=image,
                     role=edge.get("role") or "",
@@ -209,7 +168,7 @@ def get_enrichment(external_id):
         for edge in (media.get("staff") or {}).get("edges", []):
             node = edge.get("node") or {}
             staff.append(
-                AniListStaffMember(
+                AnimeStaffMember(
                     name=(node.get("name") or {}).get("full", ""),
                     role=edge.get("role") or "",
                 )
@@ -222,7 +181,7 @@ def get_enrichment(external_id):
                 continue
             node_title = node.get("title") or {}
             relations.append(
-                AniListRelation(
+                AnimeRelation(
                     title=node_title.get("english") or node_title.get("romaji") or "",
                     relation_type=edge.get("relationType") or "",
                 )
@@ -231,14 +190,14 @@ def get_enrichment(external_id):
         episodes = []
         for index, ep in enumerate(media.get("streamingEpisodes") or [], start=1):
             episodes.append(
-                AniListEpisode(
+                AnimeEpisode(
                     number=index,
                     title=ep.get("title") or f"Episodio {index}",
                     thumbnail_url=ep.get("thumbnail") or "",
                 )
             )
 
-        enrichment = AniListEnrichment(
+        enrichment = AnimeEnrichment(
             external_id=str(media["id"]),
             title_romaji=title.get("romaji") or "",
             title_english=title.get("english") or "",

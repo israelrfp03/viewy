@@ -4,7 +4,8 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 
-from integrations import anilist, tmdb
+from integrations import tmdb
+from integrations.anime_provider import AnimeProviderUnavailable, get_anime_enrichment, search_anime
 
 from .forms import LibrarySearchForm, MediaItemForm, UserMediaForm
 from .models import AnimeMetadata, MediaItem, UserMedia
@@ -213,22 +214,24 @@ def entry_detail(request, pk):
 
     anime_metadata = None
     enrichment = None
-    anilist_unavailable = False
+    anime_provider_unavailable = False
 
     if media.media_type == MediaItem.MediaType.ANIME:
         anime_metadata = getattr(media, "anime_metadata", None)
         if anime_metadata:
             try:
-                enrichment = anilist.get_enrichment(anime_metadata.external_id)
-            except anilist.AniListError:
-                anilist_unavailable = True
+                enrichment = get_anime_enrichment(
+                    anime_metadata.external_source, anime_metadata.external_id
+                )
+            except AnimeProviderUnavailable:
+                anime_provider_unavailable = True
 
     context = {
         "entry": entry,
         "media": media,
         "anime_metadata": anime_metadata,
         "enrichment": enrichment,
-        "anilist_unavailable": anilist_unavailable,
+        "anime_provider_unavailable": anime_provider_unavailable,
     }
     return render(request, "library/detail.html", context)
 
@@ -244,20 +247,24 @@ def anime_search_candidates(request, pk):
 
     query = request.GET.get("q", media.title)
     candidates = []
-    anilist_unavailable = False
+    used_provider = None
+    anime_provider_unavailable = False
 
     try:
-        candidates = anilist.search_candidates(query)
-    except anilist.AniListError:
-        anilist_unavailable = True
-        messages.error(request, "AniList no está disponible ahora mismo, inténtalo más tarde.")
+        candidates, used_provider = search_anime(query)
+    except AnimeProviderUnavailable:
+        anime_provider_unavailable = True
+        messages.error(
+            request, "Ni AniList ni Jikan están disponibles ahora mismo, inténtalo más tarde."
+        )
 
     context = {
         "entry": entry,
         "media": media,
         "query": query,
         "candidates": candidates,
-        "anilist_unavailable": anilist_unavailable,
+        "used_provider": used_provider,
+        "anime_provider_unavailable": anime_provider_unavailable,
     }
     return render(request, "library/anime_search.html", context)
 
@@ -271,27 +278,28 @@ def anime_confirm_match(request, pk):
         return redirect("library:detail", pk=pk)
 
     external_id = request.POST.get("external_id", "")
-    if not external_id:
+    source = request.POST.get("source", "")
+    if not external_id or source not in ("anilist", "jikan"):
         messages.error(request, "Selección no válida.")
         return redirect("library:anime_search", pk=pk)
 
     try:
-        enrichment = anilist.get_enrichment(external_id)
-    except anilist.AniListError:
-        messages.error(request, "No se pudo obtener la información de AniList. Inténtalo de nuevo.")
+        enrichment = get_anime_enrichment(source, external_id)
+    except AnimeProviderUnavailable:
+        messages.error(request, "No se pudo obtener la información. Inténtalo de nuevo.")
         return redirect("library:anime_search", pk=pk)
 
     existing = AnimeMetadata.objects.filter(
-        external_source="anilist", external_id=external_id
+        external_source=source, external_id=external_id
     ).exclude(media=media).first()
     if existing:
-        messages.error(request, "Ese anime de AniList ya está asociado a otro elemento de tu catálogo.")
+        messages.error(request, "Ese anime ya está asociado a otro elemento de tu catálogo.")
         return redirect("library:anime_search", pk=pk)
 
     AnimeMetadata.objects.update_or_create(
         media=media,
         defaults={
-            "external_source": "anilist",
+            "external_source": source,
             "external_id": enrichment.external_id,
             "title_romaji": enrichment.title_romaji,
             "title_english": enrichment.title_english,
@@ -299,5 +307,5 @@ def anime_confirm_match(request, pk):
             "studio": enrichment.studio,
         },
     )
-    messages.success(request, "Anime enriquecido con datos de AniList.")
+    messages.success(request, f"Anime enriquecido con datos de {source}.")
     return redirect("library:detail", pk=pk)

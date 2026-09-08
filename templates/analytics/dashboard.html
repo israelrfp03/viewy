@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Estadísticas{% endblock %}
+
+{% block content %}
+    <h1>Mis estadísticas</h1>
+
+    {% if stats.total == 0 %}
+        <p>Todavía no tienes contenido en tu biblioteca. Añade algo para ver tus estadísticas aquí.</p>
+    {% else %}
+        <section>
+            <h2>Resumen</h2>
+            <ul>
+                <li>Total en biblioteca: {{ stats.total }}</li>
+                <li>Pendientes: {{ stats.status_counts.planned }}</li>
+                <li>Viendo: {{ stats.status_counts.watching }}</li>
+                <li>Terminados: {{ stats.status_counts.completed }}</li>
+                <li>Abandonados: {{ stats.status_counts.dropped }}</li>
+                <li>Favoritos: {{ stats.favorites }}</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Por tipo de contenido</h2>
+            <ul>
+                {% for value, data in stats.media_type_breakdown.items %}
+                    <li>{{ data.label }}: {{ data.count }} ({{ data.percentage }}%)</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Puntuaciones</h2>
+            {% if stats.rating_stats.rated_count %}
+                <ul>
+                    <li>Nota media: {{ stats.rating_stats.average }}</li>
+                    <li>Elementos puntuados: {{ stats.rating_stats.rated_count }}</li>
+                    <li>Mejor nota: {{ stats.rating_stats.best }}</li>
+                    <li>Peor nota: {{ stats.rating_stats.worst }}</li>
+                </ul>
+            {% else %}
+                <p>Sin puntuaciones todavía.</p>
+            {% endif %}
+        </section>
+
+        <section>
+            <h2>Actividad</h2>
+            <ul>
+                <li>Terminados este mes: {{ stats.temporal_stats.completed_this_month }}</li>
+                <li>Terminados este año: {{ stats.temporal_stats.completed_this_year }}</li>
+                {% if stats.temporal_stats.best_year %}
+                    <li>
+                        Tu mejor año: {{ stats.temporal_stats.best_year.year }}
+                        ({{ stats.temporal_stats.best_year.count }} terminados)
+                    </li>
+                {% endif %}
+                {% if stats.average_watch_days is not None %}
+                    <li>Tiempo medio entre empezar y terminar: {{ stats.average_watch_days }} días</li>
+                {% endif %}
+            </ul>
+
+            {% if stats.movie_watch_minutes %}
+                <p>
+                    Minutos de películas vistas (estimado, solo películas con duración conocida):
+                    {{ stats.movie_watch_minutes }} min
+                </p>
+            {% endif %}
+        </section>
+
+        {% if stats.recent_completed %}
+            <section>
+                <h2>Últimos completados</h2>
+                <ul>
+                    {% for entry in stats.recent_completed %}
+                        <li>
+                            {{ entry.media.title }}
+                            {% if entry.finished_at %} — {{ entry.finished_at }}{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+
+        {% if stats.anime_stats %}
+            <section>
+                <h2>Anime</h2>
+                <ul>
+                    {% if stats.anime_stats.top_studio %}
+                        <li>Estudio más frecuente: {{ stats.anime_stats.top_studio.studio }}</li>
+                    {% endif %}
+                    {% if stats.anime_stats.top_source %}
+                        <li>Origen más frecuente: {{ stats.anime_stats.top_source.source_material }}</li>
+                    {% endif %}
+                </ul>
+            </section>
+        {% endif %}
+    {% endif %}
+{% endblock %}

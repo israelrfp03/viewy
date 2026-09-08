@@ -10,14 +10,14 @@
         <button type="submit">Buscar</button>
     </form>
 
-    {% if anilist_unavailable %}
+    {% if anime_provider_unavailable %}
         <p style="font-weight: bold;">
-            AniList no está disponible ahora mismo (el proveedor externo está caído o dando errores).
+            Ni AniList ni Jikan están disponibles ahora mismo (ambos proveedores externos están caídos o dando errores).
             Esto no es un fallo de Viewy: la búsqueda y el resto de tu biblioteca siguen funcionando con normalidad.
             Vuelve a intentarlo más tarde.
         </p>
     {% elif candidates %}
-        <p>Elige la coincidencia correcta:</p>
+        <p>Elige la coincidencia correcta {% if used_provider %}(resultados de {{ used_provider }}){% endif %}:</p>
         <div class="library-grid">
             {% for candidate in candidates %}
                 <article class="library-card">
@@ -32,6 +32,7 @@
                     <form method="post" action="{% url 'library:anime_confirm' entry.pk %}">
                         {% csrf_token %}
                         <input type="hidden" name="external_id" value="{{ candidate.external_id }}">
+                        <input type="hidden" name="source" value="{{ candidate.source }}">
                         <button type="submit">Es este</button>
                     </form>
                 </article>
