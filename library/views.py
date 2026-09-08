@@ -1,10 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MediaItemForm, UserMediaForm
 from .models import MediaItem, UserMedia
+from .queries import DEFAULT_SORT, SORT_LABELS, filter_user_library
+
+LIBRARY_PAGE_SIZE = 12
 
 
 def home(request):
@@ -13,8 +17,28 @@ def home(request):
 
 @login_required
 def library_list(request):
-    entries = UserMedia.objects.filter(user=request.user).select_related("media")
-    return render(request, "library/list.html", {"entries": entries})
+    base_queryset = UserMedia.objects.filter(user=request.user).select_related("media")
+    entries = filter_user_library(request.GET, base_queryset)
+
+    paginator = Paginator(entries, LIBRARY_PAGE_SIZE)
+    page = paginator.get_page(request.GET.get("page"))
+
+    querystring = request.GET.copy()
+    querystring.pop("page", None)
+
+    context = {
+        "page": page,
+        "querystring": querystring.urlencode(),
+        "statuses": UserMedia.Status.choices,
+        "media_types": MediaItem.MediaType.choices,
+        "sort_options": SORT_LABELS,
+        "current_sort": request.GET.get("sort", DEFAULT_SORT),
+        "current_query": request.GET.get("q", ""),
+        "current_status": request.GET.get("status", ""),
+        "current_media_type": request.GET.get("media_type", ""),
+        "current_favorite": request.GET.get("favorite", ""),
+    }
+    return render(request, "library/list.html", context)
 
 
 @login_required

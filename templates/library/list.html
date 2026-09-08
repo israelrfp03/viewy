@@ -7,21 +7,75 @@
 
     <p><a href="{% url 'library:create' %}">Añadir contenido</a></p>
 
-    {% if entries %}
-        <ul>
-            {% for entry in entries %}
-                <li>
-                    <strong>{{ entry.media.title }}</strong>
-                    ({{ entry.media.get_media_type_display }})
-                    — {{ entry.get_status_display }}
-                    {% if entry.rating %} — {{ entry.rating }}/10{% endif %}
-                    {% if entry.favorite %} — ★ favorito{% endif %}
-                    <a href="{% url 'library:update' entry.pk %}">Editar</a>
-                    <a href="{% url 'library:delete' entry.pk %}">Eliminar</a>
-                </li>
+    <form method="get">
+        <input type="text" name="q" value="{{ current_query }}" placeholder="Buscar por título">
+
+        <select name="status">
+            <option value="">Todos los estados</option>
+            {% for value, label in statuses %}
+                <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
             {% endfor %}
-        </ul>
+        </select>
+
+        <select name="media_type">
+            <option value="">Todos los tipos</option>
+            {% for value, label in media_types %}
+                <option value="{{ value }}" {% if current_media_type == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>
+            <input type="checkbox" name="favorite" value="1" {% if current_favorite == "1" %}checked{% endif %}>
+            Solo favoritos
+        </label>
+
+        <select name="sort">
+            {% for value, label in sort_options %}
+                <option value="{{ value }}" {% if current_sort == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filtrar</button>
+        <a href="{% url 'library:list' %}">Limpiar filtros</a>
+    </form>
+
+    {% if page.object_list %}
+        <div class="library-grid">
+            {% for entry in page %}
+                <article class="library-card">
+                    <h2>{{ entry.media.title }}</h2>
+                    <p>{{ entry.media.get_media_type_display }}{% if entry.media.release_year %} · {{ entry.media.release_year }}{% endif %}</p>
+                    <p>Estado: {{ entry.get_status_display }}</p>
+                    {% if entry.rating %}<p>Puntuación: {{ entry.rating }}/10</p>{% endif %}
+                    {% if entry.favorite %}<p>★ Favorito</p>{% endif %}
+                    <p>
+                        <a href="{% url 'library:update' entry.pk %}">Editar</a>
+                        <a href="{% url 'library:delete' entry.pk %}">Eliminar</a>
+                    </p>
+                </article>
+            {% endfor %}
+        </div>
+
+        <nav class="pagination">
+            {% if page.has_previous %}
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page=1">« Primera</a>
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+
+            {% if page.has_next %}
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.next_page_number }}">Siguiente</a>
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.paginator.num_pages }}">Última »</a>
+            {% endif %}
+        </nav>
     {% else %}
-        <p>Todavía no has añadido nada a tu biblioteca.</p>
+        <p>No se ha encontrado ningún contenido con esos filtros.</p>
     {% endif %}
 {% endblock %}
