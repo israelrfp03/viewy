@@ -76,16 +76,28 @@ def media_create(request):
     )
 
 
-def _get_or_create_media_from_tmdb(detail):
+def _get_or_create_media_from_tmdb(detail, media_type):
+    """Crea o reutiliza un MediaItem a partir de un detalle de TMDB.
+
+    `media_type` es la clasificación elegida por el usuario (puede ser "anime",
+    más específica que el `detail.media_type` base de TMDB). "anime" nunca
+    degrada un MediaItem ya clasificado como tal, pero sí puede "mejorar" uno
+    que todavía era genérico ("movie"/"series").
+    """
     media = MediaItem.objects.filter(
         external_source=MediaItem.ExternalSource.TMDB, external_id=detail.external_id
     ).first()
     if media:
+        if media_type == MediaItem.MediaType.ANIME and media.media_type != MediaItem.MediaType.ANIME:
+            media.media_type = MediaItem.MediaType.ANIME
+            media.save(update_fields=["media_type"])
         return media
 
     # Reutiliza un MediaItem manual equivalente en vez de duplicar el título.
     media = MediaItem.objects.filter(
-        title__iexact=detail.title, media_type=detail.media_type, external_id=""
+        title__iexact=detail.title,
+        media_type__in={detail.media_type, media_type},
+        external_id="",
     ).first()
     if media:
         media.external_id = detail.external_id
@@ -95,12 +107,14 @@ def _get_or_create_media_from_tmdb(detail):
         media.release_year = detail.release_year or media.release_year
         media.duration_minutes = detail.duration_minutes or media.duration_minutes
         media.episodes = detail.episodes or media.episodes
+        if media_type == MediaItem.MediaType.ANIME:
+            media.media_type = MediaItem.MediaType.ANIME
         media.save()
         return media
 
     return MediaItem.objects.create(
         title=detail.title,
-        media_type=detail.media_type,
+        media_type=media_type,
         release_year=detail.release_year,
         description=detail.description,
         poster_url=detail.poster_url,
@@ -135,23 +149,25 @@ def media_add_from_tmdb(request):
         return redirect("library:search")
 
     external_id = request.POST.get("external_id", "")
+    source_type = request.POST.get("source_type", "")
     media_type = request.POST.get("media_type", "")
 
-    if not external_id or media_type not in (
-        MediaItem.MediaType.MOVIE,
-        MediaItem.MediaType.SERIES,
+    if (
+        not external_id
+        or source_type not in ("movie", "tv")
+        or media_type not in MediaItem.MediaType.values
     ):
         messages.error(request, "Selección no válida.")
         return redirect("library:search")
 
     try:
-        detail = tmdb.get_detail(external_id, media_type)
+        detail = tmdb.get_detail(external_id, source_type)
     except tmdb.TMDBError:
         messages.error(request, "No se pudo obtener la información de TMDB. Inténtalo de nuevo.")
         return redirect("library:search")
 
     with transaction.atomic():
-        media = _get_or_create_media_from_tmdb(detail)
+        media = _get_or_create_media_from_tmdb(detail, media_type)
 
         if UserMedia.objects.filter(user=request.user, media=media).exists():
             messages.info(request, "Ya tienes este contenido en tu biblioteca.")

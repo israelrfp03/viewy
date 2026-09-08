@@ -4,13 +4,17 @@ import requests
 from django.conf import settings
 
 SEARCH_URL = f"{settings.TMDB_API_BASE_URL}/search/multi"
-DETAIL_URL = f"{settings.TMDB_API_BASE_URL}/{{media_type}}/{{external_id}}"
+DETAIL_URL = f"{settings.TMDB_API_BASE_URL}/{{source_type}}/{{external_id}}"
 REQUEST_TIMEOUT = 5
 
 TMDB_TO_INTERNAL_MEDIA_TYPE = {
     "movie": "movie",
     "tv": "series",
 }
+
+# ID de género "Animation" en TMDB (mismo id para /movie y /tv).
+ANIME_GENRE_ID = 16
+ANIME_LANGUAGE = "ja"
 
 
 class TMDBError(Exception):
@@ -28,11 +32,13 @@ class TMDBAuthError(TMDBError):
 @dataclass
 class TMDBSearchResult:
     external_id: str
-    media_type: str
+    source_type: str  # "movie" | "tv" — tipo real en TMDB, usado para pedir el detalle
+    media_type: str  # "movie" | "series" — clasificación base de Viewy
     title: str
     release_year: int | None
     poster_url: str
     description: str
+    is_anime_candidate: bool
 
 
 @dataclass
@@ -82,12 +88,24 @@ def _poster_url(poster_path):
     return f"{settings.TMDB_IMAGE_BASE_URL}{poster_path}"
 
 
+def _is_anime_candidate(original_language, genre_ids):
+    """Heurística: idioma original japonés + género 'Animation'.
+
+    Validada contra casos reales de TMDB (One Piece, Naruto, Attack on Titan,
+    Spirited Away, Your Name como anime; Rick and Morty y Alice in Borderland
+    como no-anime). No es infalible (ver documentación de la Fase 7), por eso
+    solo se usa como sugerencia preseleccionada, nunca como decisión final.
+    """
+    return original_language == ANIME_LANGUAGE and ANIME_GENRE_ID in genre_ids
+
+
 def search(query):
     data = _request(SEARCH_URL, params={"query": query})
     results = []
 
     for item in data.get("results", []):
-        media_type = TMDB_TO_INTERNAL_MEDIA_TYPE.get(item.get("media_type"))
+        source_type = item.get("media_type")
+        media_type = TMDB_TO_INTERNAL_MEDIA_TYPE.get(source_type)
         if media_type is None:
             continue
 
@@ -97,32 +115,40 @@ def search(query):
         results.append(
             TMDBSearchResult(
                 external_id=str(item["id"]),
+                source_type=source_type,
                 media_type=media_type,
                 title=title,
                 release_year=_extract_year(release_date),
                 poster_url=_poster_url(item.get("poster_path")),
                 description=item.get("overview") or "",
+                is_anime_candidate=_is_anime_candidate(
+                    item.get("original_language"), item.get("genre_ids", [])
+                ),
             )
         )
 
     return results
 
 
-def get_detail(external_id, media_type):
-    tmdb_media_type = "movie" if media_type == "movie" else "tv"
-    url = DETAIL_URL.format(media_type=tmdb_media_type, external_id=external_id)
+def get_detail(external_id, source_type):
+    url = DETAIL_URL.format(source_type=source_type, external_id=external_id)
     data = _request(url)
 
+    media_type = TMDB_TO_INTERNAL_MEDIA_TYPE.get(source_type, "movie")
     title = data.get("title") or data.get("name") or ""
     release_date = data.get("release_date") or data.get("first_air_date")
+    genre_ids = [genre["id"] for genre in data.get("genres", [])]
+    episodes = data.get("number_of_episodes") if media_type == "series" else None
 
     return TMDBDetail(
         external_id=str(data["id"]),
+        source_type=source_type,
         media_type=media_type,
         title=title,
         release_year=_extract_year(release_date),
         poster_url=_poster_url(data.get("poster_path")),
         description=data.get("overview") or "",
+        is_anime_candidate=_is_anime_candidate(data.get("original_language"), genre_ids),
         duration_minutes=(data.get("runtime") or None) if media_type == "movie" else None,
-        episodes=data.get("number_of_episodes") if media_type == "series" else None,
+        episodes=episodes or None,
     )

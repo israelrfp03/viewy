@@ -27,7 +27,18 @@
                         <form method="post" action="{% url 'library:add_from_tmdb' %}">
                             {% csrf_token %}
                             <input type="hidden" name="external_id" value="{{ result.external_id }}">
-                            <input type="hidden" name="media_type" value="{{ result.media_type }}">
+                            <input type="hidden" name="source_type" value="{{ result.source_type }}">
+                            <label>
+                                Tipo:
+                                <select name="media_type">
+                                    {% if result.media_type == "movie" %}
+                                        <option value="movie" {% if not result.is_anime_candidate %}selected{% endif %}>Película</option>
+                                    {% else %}
+                                        <option value="series" {% if not result.is_anime_candidate %}selected{% endif %}>Serie</option>
+                                    {% endif %}
+                                    <option value="anime" {% if result.is_anime_candidate %}selected{% endif %}>Anime</option>
+                                </select>
+                            </label>
                             <button type="submit">Añadir a mi biblioteca</button>
                         </form>
                     </article>
