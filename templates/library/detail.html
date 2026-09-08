@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — {{ media.title }}{% endblock %}
+
+{% block content %}
+    <p><a href="{% url 'library:list' %}">← Volver a mi biblioteca</a></p>
+
+    <div class="detail-header">
+        {% if media.poster_url %}
+            <img src="{{ media.poster_url }}" alt="{{ media.title }}" width="180">
+        {% endif %}
+        <div>
+            <h1>{{ media.title }}</h1>
+            <p>
+                {{ media.get_media_type_display }}
+                {% if media.release_year %} · {{ media.release_year }}{% endif %}
+                {% if media.episodes %} · {{ media.episodes }} episodios{% endif %}
+                {% if media.duration_minutes %} · {{ media.duration_minutes }} min{% endif %}
+            </p>
+            {% if media.description %}<p>{{ media.description }}</p>{% endif %}
+
+            <p>
+                Estado: {{ entry.get_status_display }}
+                {% if entry.rating %} · Puntuación: {{ entry.rating }}/10{% endif %}
+                {% if entry.favorite %} · ★ Favorito{% endif %}
+            </p>
+            <p>
+                <a href="{% url 'library:update' entry.pk %}">Editar</a>
+                <a href="{% url 'library:delete' entry.pk %}">Eliminar</a>
+            </p>
+        </div>
+    </div>
+
+    {% if media.media_type == "anime" %}
+        <hr>
+        <h2>Información de anime</h2>
+
+        {% if anime_metadata %}
+            <p>
+                {% if anime_metadata.title_english %}También conocido como: {{ anime_metadata.title_english }}{% endif %}
+                {% if anime_metadata.title_romaji and anime_metadata.title_romaji != anime_metadata.title_english %}
+                    {% if anime_metadata.title_english %} / {% endif %}{{ anime_metadata.title_romaji }}
+                {% endif %}
+            </p>
+            <p>
+                {% if anime_metadata.studio %}Estudio: {{ anime_metadata.studio }}{% endif %}
+                {% if anime_metadata.source_material %} · Origen: {{ anime_metadata.source_material }}{% endif %}
+            </p>
+
+            {% if anilist_unavailable %}
+                <p style="font-weight: bold;">No se ha podido cargar información adicional de AniList ahora mismo (proveedor externo caído). Los datos básicos siguen disponibles arriba.</p>
+            {% elif enrichment %}
+                {% if enrichment.characters %}
+                    <h3>Personajes principales</h3>
+                    <div class="library-grid">
+                        {% for character in enrichment.characters %}
+                            <article class="library-card">
+                                {% if character.image_url %}
+                                    <img src="{{ character.image_url }}" alt="{{ character.name }}" width="100">
+                                {% endif %}
+                                <h4>{{ character.name }}</h4>
+                                <p>{{ character.role }}{% if character.voice_actor %} · {{ character.voice_actor }}{% endif %}</p>
+                                {% if character.description %}<p>{{ character.description }}</p>{% endif %}
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if enrichment.staff %}
+                    <h3>Staff principal</h3>
+                    <ul>
+                        {% for member in enrichment.staff %}
+                            <li>{{ member.name }} — {{ member.role }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% if enrichment.relations %}
+                    <h3>Relacionado</h3>
+                    <ul>
+                        {% for relation in enrichment.relations %}
+                            <li>{{ relation.relation_type }}: {{ relation.title }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% if enrichment.episodes %}
+                    <h3>Episodios</h3>
+                    <ul>
+                        {% for episode in enrichment.episodes %}
+                            <li>{{ episode.number }}. {{ episode.title }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No hay lista de episodios disponible para este anime.</p>
+                {% endif %}
+            {% endif %}
+
+            <p><a href="{% url 'library:anime_search' entry.pk %}">Buscar otra coincidencia en AniList</a></p>
+        {% else %}
+            <p>Este anime todavía no tiene información adicional de AniList.</p>
+            <p><a href="{% url 'library:anime_search' entry.pk %}">Buscar en AniList</a></p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

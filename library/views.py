@@ -4,10 +4,10 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 
-from integrations import tmdb
+from integrations import anilist, tmdb
 
 from .forms import LibrarySearchForm, MediaItemForm, UserMediaForm
-from .models import MediaItem, UserMedia
+from .models import AnimeMetadata, MediaItem, UserMedia
 from .queries import DEFAULT_SORT, SORT_LABELS, filter_user_library
 
 LIBRARY_PAGE_SIZE = 12
@@ -204,3 +204,100 @@ def media_delete(request, pk):
         return redirect("library:list")
 
     return render(request, "library/confirm_delete.html", {"entry": entry})
+
+
+@login_required
+def entry_detail(request, pk):
+    entry = get_object_or_404(UserMedia, pk=pk, user=request.user)
+    media = entry.media
+
+    anime_metadata = None
+    enrichment = None
+    anilist_unavailable = False
+
+    if media.media_type == MediaItem.MediaType.ANIME:
+        anime_metadata = getattr(media, "anime_metadata", None)
+        if anime_metadata:
+            try:
+                enrichment = anilist.get_enrichment(anime_metadata.external_id)
+            except anilist.AniListError:
+                anilist_unavailable = True
+
+    context = {
+        "entry": entry,
+        "media": media,
+        "anime_metadata": anime_metadata,
+        "enrichment": enrichment,
+        "anilist_unavailable": anilist_unavailable,
+    }
+    return render(request, "library/detail.html", context)
+
+
+@login_required
+def anime_search_candidates(request, pk):
+    entry = get_object_or_404(UserMedia, pk=pk, user=request.user)
+    media = entry.media
+
+    if media.media_type != MediaItem.MediaType.ANIME:
+        messages.error(request, "Solo se puede enriquecer contenido de tipo anime.")
+        return redirect("library:detail", pk=pk)
+
+    query = request.GET.get("q", media.title)
+    candidates = []
+    anilist_unavailable = False
+
+    try:
+        candidates = anilist.search_candidates(query)
+    except anilist.AniListError:
+        anilist_unavailable = True
+        messages.error(request, "AniList no está disponible ahora mismo, inténtalo más tarde.")
+
+    context = {
+        "entry": entry,
+        "media": media,
+        "query": query,
+        "candidates": candidates,
+        "anilist_unavailable": anilist_unavailable,
+    }
+    return render(request, "library/anime_search.html", context)
+
+
+@login_required
+def anime_confirm_match(request, pk):
+    entry = get_object_or_404(UserMedia, pk=pk, user=request.user)
+    media = entry.media
+
+    if request.method != "POST" or media.media_type != MediaItem.MediaType.ANIME:
+        return redirect("library:detail", pk=pk)
+
+    external_id = request.POST.get("external_id", "")
+    if not external_id:
+        messages.error(request, "Selección no válida.")
+        return redirect("library:anime_search", pk=pk)
+
+    try:
+        enrichment = anilist.get_enrichment(external_id)
+    except anilist.AniListError:
+        messages.error(request, "No se pudo obtener la información de AniList. Inténtalo de nuevo.")
+        return redirect("library:anime_search", pk=pk)
+
+    existing = AnimeMetadata.objects.filter(
+        external_source="anilist", external_id=external_id
+    ).exclude(media=media).first()
+    if existing:
+        messages.error(request, "Ese anime de AniList ya está asociado a otro elemento de tu catálogo.")
+        return redirect("library:anime_search", pk=pk)
+
+    AnimeMetadata.objects.update_or_create(
+        media=media,
+        defaults={
+            "external_source": "anilist",
+            "external_id": enrichment.external_id,
+            "title_romaji": enrichment.title_romaji,
+            "title_english": enrichment.title_english,
+            "source_material": enrichment.source_material,
+            "studio": enrichment.studio,
+        },
+    )
+    messages.success(request, "Anime enriquecido con datos de AniList.")
+    return redirect("library:detail", pk=pk)

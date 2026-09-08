@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Buscar en AniList{% endblock %}
+
+{% block content %}
+    <h1>Buscar "{{ media.title }}" en AniList</h1>
+
+    <form method="get">
+        <input type="text" name="q" value="{{ query }}" placeholder="Título a buscar en AniList">
+        <button type="submit">Buscar</button>
+    </form>
+
+    {% if anilist_unavailable %}
+        <p style="font-weight: bold;">
+            AniList no está disponible ahora mismo (el proveedor externo está caído o dando errores).
+            Esto no es un fallo de Viewy: la búsqueda y el resto de tu biblioteca siguen funcionando con normalidad.
+            Vuelve a intentarlo más tarde.
+        </p>
+    {% elif candidates %}
+        <p>Elige la coincidencia correcta:</p>
+        <div class="library-grid">
+            {% for candidate in candidates %}
+                <article class="library-card">
+                    {% if candidate.poster_url %}
+                        <img src="{{ candidate.poster_url }}" alt="" width="100">
+                    {% endif %}
+                    <h3>{{ candidate.title_english|default:candidate.title_romaji }}</h3>
+                    {% if candidate.title_romaji and candidate.title_romaji != candidate.title_english %}
+                        <p>{{ candidate.title_romaji }}</p>
+                    {% endif %}
+                    {% if candidate.release_year %}<p>{{ candidate.release_year }}</p>{% endif %}
+                    <form method="post" action="{% url 'library:anime_confirm' entry.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="external_id" value="{{ candidate.external_id }}">
+                        <button type="submit">Es este</button>
+                    </form>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No se han encontrado coincidencias en AniList para esta búsqueda.</p>
+    {% endif %}
+
+    <p><a href="{% url 'library:detail' entry.pk %}">Volver al detalle</a></p>
+{% endblock %}

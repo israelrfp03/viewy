@@ -75,3 +75,31 @@ class UserMedia(models.Model):
 
     def __str__(self):
         return f"{self.user} — {self.media}"
+
+
+class AnimeMetadata(models.Model):
+    """Enriquecimiento opcional de un MediaItem de tipo anime, vía AniList.
+
+    TMDB sigue siendo la fuente principal (título, poster, episodios, año).
+    Este modelo solo añade datos que TMDB no cubre bien para anime.
+    """
+
+    media = models.OneToOneField(MediaItem, on_delete=models.CASCADE, related_name="anime_metadata")
+    external_source = models.CharField(max_length=20, default="anilist")
+    external_id = models.CharField(max_length=50)
+    title_romaji = models.CharField(max_length=255, blank=True)
+    title_english = models.CharField(max_length=255, blank=True)
+    source_material = models.CharField(max_length=50, blank=True)
+    studio = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["external_source", "external_id"], name="unique_external_anime_metadata"
+            ),
+        ]
+
+    def __str__(self):
+        return f"AniList — {self.media.title}"

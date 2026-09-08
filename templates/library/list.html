@@ -49,7 +49,7 @@
         <div class="library-grid">
             {% for entry in page %}
                 <article class="library-card">
-                    <h2>{{ entry.media.title }}</h2>
+                    <h2><a href="{% url 'library:detail' entry.pk %}">{{ entry.media.title }}</a></h2>
                     <p>{{ entry.media.get_media_type_display }}{% if entry.media.release_year %} · {{ entry.media.release_year }}{% endif %}</p>
                     <p>Estado: {{ entry.get_status_display }}</p>
                     {% if entry.rating %}<p>Puntuación: {{ entry.rating }}/10</p>{% endif %}

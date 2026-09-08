@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import MediaItem, UserMedia
+from .models import AnimeMetadata, MediaItem, UserMedia
 
 
 @admin.register(MediaItem)
@@ -16,3 +16,10 @@ class UserMediaAdmin(admin.ModelAdmin):
     list_filter = ("status", "favorite")
     search_fields = ("user__username", "media__title")
     autocomplete_fields = ("user", "media")
+
+
+@admin.register(AnimeMetadata)
+class AnimeMetadataAdmin(admin.ModelAdmin):
+    list_display = ("media", "title_english", "studio", "source_material")
+    search_fields = ("media__title", "title_romaji", "title_english")
+    autocomplete_fields = ("media",)
