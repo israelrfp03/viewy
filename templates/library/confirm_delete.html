@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Eliminar registro{% endblock %}
+
+{% block content %}
+    <h1>¿Eliminar "{{ entry.media.title }}" de tu biblioteca?</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+    </form>
+
+    <p><a href="{% url 'library:list' %}">Cancelar</a></p>
+{% endblock %}

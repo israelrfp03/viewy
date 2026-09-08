@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Mi biblioteca{% endblock %}
+
+{% block content %}
+    <h1>Mi biblioteca</h1>
+
+    <p><a href="{% url 'library:create' %}">Añadir contenido</a></p>
+
+    {% if entries %}
+        <ul>
+            {% for entry in entries %}
+                <li>
+                    <strong>{{ entry.media.title }}</strong>
+                    ({{ entry.media.get_media_type_display }})
+                    — {{ entry.get_status_display }}
+                    {% if entry.rating %} — {{ entry.rating }}/10{% endif %}
+                    {% if entry.favorite %} — ★ favorito{% endif %}
+                    <a href="{% url 'library:update' entry.pk %}">Editar</a>
+                    <a href="{% url 'library:delete' entry.pk %}">Eliminar</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Todavía no has añadido nada a tu biblioteca.</p>
+    {% endif %}
+{% endblock %}

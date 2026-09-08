@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Añadir contenido{% endblock %}
+
+{% block content %}
+    <h1>Añadir contenido</h1>
+
+    {% if media_form.errors or entry_form.errors %}
+        <ul>
+            {% for field in media_form %}
+                {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for field in entry_form %}
+                {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in entry_form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <h2>Contenido</h2>
+        {{ media_form.as_p }}
+        <h2>Tu registro</h2>
+        {{ entry_form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+
+    <p><a href="{% url 'library:list' %}">Volver a mi biblioteca</a></p>
+{% endblock %}
