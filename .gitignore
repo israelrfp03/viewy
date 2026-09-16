@@ -42,3 +42,7 @@ Thumbs.db
 build/
 dist/
 *.egg-info/
+
+# Node / Tailwind
+node_modules/
+static/css/output.css

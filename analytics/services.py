@@ -4,10 +4,17 @@ from django.utils import timezone
 
 from library.models import AnimeMetadata, MediaItem, UserMedia
 
+from .dataframes import get_advanced_stats
+
 
 def get_dashboard_stats(user):
     """Calcula todas las estadísticas del dashboard, únicamente sobre los
-    UserMedia del usuario dado. Nunca debe recibir ni usar un user_id externo."""
+    UserMedia del usuario dado. Nunca debe recibir ni usar un user_id externo.
+
+    "advanced" viene de dataframes.py (pandas); el resto de claves vienen de
+    este módulo (Django ORM) — se mantienen separadas a propósito para que
+    quede claro qué herramienta calculó cada cosa.
+    """
     queryset = UserMedia.objects.filter(user=user)
     total = queryset.count()
 
@@ -22,6 +29,7 @@ def get_dashboard_stats(user):
         "average_watch_days": _average_watch_duration(queryset),
         "recent_completed": _recent_completed(queryset),
         "anime_stats": _anime_stats(user),
+        "advanced": get_advanced_stats(user),
     }
 
 

@@ -3,26 +3,37 @@
 {% block title %}Viewy — Registro{% endblock %}
 
 {% block content %}
-    <h1>Crear cuenta</h1>
+    <div data-reveal class="mx-auto max-w-sm">
+        <p class="text-sm font-semibold text-pink-400">Empieza gratis</p>
+        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Crear cuenta</h1>
 
-    {% if form.errors %}
-        <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ field.label }}: {{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+        {% if form.errors %}
+            <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
+                <ul class="space-y-1 text-sm text-red-300">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Registrarse</button>
-    </form>
+        <form method="post" class="styled-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"
+                    class="mt-2 w-full rounded-full bg-pink-500 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                Registrarse
+            </button>
+        </form>
 
-    <p><a href="{% url 'accounts:login' %}">Ya tengo cuenta</a></p>
+        <p class="mt-6 text-center text-sm text-zinc-400">
+            ¿Ya tienes cuenta?
+            <a href="{% url 'accounts:login' %}" class="font-semibold text-pink-400 hover:text-pink-300">Inicia sesión</a>
+        </p>
+    </div>
 {% endblock %}

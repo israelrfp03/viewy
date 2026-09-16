@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
+from django.db.models import Avg, Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from integrations import tmdb
@@ -15,7 +16,21 @@ LIBRARY_PAGE_SIZE = 12
 
 
 def home(request):
-    return render(request, "home.html")
+    context = {}
+
+    if request.user.is_authenticated:
+        entries = UserMedia.objects.filter(user=request.user)
+        context["quick_stats"] = {
+            "total": entries.count(),
+            "favorites": entries.filter(favorite=True).count(),
+            "completed": entries.filter(status=UserMedia.Status.COMPLETED).count(),
+            "average_rating": entries.aggregate(avg=Avg("rating"))["avg"],
+        }
+        context["watchlist"] = entries.select_related("media").order_by(
+            "-favorite", "-created_at"
+        )[:5]
+
+    return render(request, "home.html", context)
 
 
 @login_required
@@ -29,6 +44,16 @@ def library_list(request):
     querystring = request.GET.copy()
     querystring.pop("page", None)
 
+    all_entries = UserMedia.objects.filter(user=request.user)
+    quick_stats = all_entries.aggregate(
+        total=Count("id"),
+        favorites=Count("id", filter=Q(favorite=True)),
+        completed=Count("id", filter=Q(status=UserMedia.Status.COMPLETED)),
+        watching=Count("id", filter=Q(status=UserMedia.Status.WATCHING)),
+        planned=Count("id", filter=Q(status=UserMedia.Status.PLANNED)),
+        average_rating=Avg("rating"),
+    )
+
     context = {
         "page": page,
         "querystring": querystring.urlencode(),
@@ -40,6 +65,7 @@ def library_list(request):
         "current_status": request.GET.get("status", ""),
         "current_media_type": request.GET.get("media_type", ""),
         "current_favorite": request.GET.get("favorite", ""),
+        "quick_stats": quick_stats,
     }
     return render(request, "library/list.html", context)
 

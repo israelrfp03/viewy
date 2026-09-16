@@ -3,34 +3,48 @@
 {% block title %}Viewy — Añadir contenido{% endblock %}
 
 {% block content %}
-    <h1>Añadir contenido</h1>
+    <div class="mx-auto max-w-2xl">
+        <p class="text-sm font-semibold text-pink-400">Añadir manualmente</p>
+        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Añadir contenido</h1>
 
-    {% if media_form.errors or entry_form.errors %}
-        <ul>
-            {% for field in media_form %}
-                {% for error in field.errors %}
-                    <li>{{ field.label }}: {{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-            {% for field in entry_form %}
-                {% for error in field.errors %}
-                    <li>{{ field.label }}: {{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-            {% for error in entry_form.non_field_errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+        {% if media_form.errors or entry_form.errors %}
+            <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
+                <ul class="space-y-1 text-sm text-red-300">
+                    {% for field in media_form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for field in entry_form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in entry_form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        <h2>Contenido</h2>
-        {{ media_form.as_p }}
-        <h2>Tu registro</h2>
-        {{ entry_form.as_p }}
-        <button type="submit">Guardar</button>
-    </form>
+        <form method="post" class="styled-form space-y-8">
+            {% csrf_token %}
+            <div>
+                <h2 class="mb-4 text-lg font-bold text-white">Contenido</h2>
+                {{ media_form.as_p }}
+            </div>
+            <div>
+                <h2 class="mb-4 text-lg font-bold text-white">Tu registro</h2>
+                {{ entry_form.as_p }}
+            </div>
+            <button type="submit"
+                    class="rounded-full bg-pink-500 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                Guardar
+            </button>
+        </form>
 
-    <p><a href="{% url 'library:list' %}">Volver a mi biblioteca</a></p>
+        <a href="{% url 'library:list' %}" class="mt-6 inline-block text-sm text-zinc-400 transition-colors hover:text-white">
+            ← Volver a mi biblioteca
+        </a>
+    </div>
 {% endblock %}

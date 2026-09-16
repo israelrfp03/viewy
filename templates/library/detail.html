@@ -3,103 +3,170 @@
 {% block title %}Viewy — {{ media.title }}{% endblock %}
 
 {% block content %}
-    <p><a href="{% url 'library:list' %}">← Volver a mi biblioteca</a></p>
+    <a href="{% url 'library:list' %}" class="mb-6 inline-flex items-center gap-1 text-sm text-zinc-400 transition-colors hover:text-white">
+        ← Volver a mi biblioteca
+    </a>
 
-    <div class="detail-header">
-        {% if media.poster_url %}
-            <img src="{{ media.poster_url }}" alt="{{ media.title }}" width="180">
-        {% endif %}
+    <div data-reveal class="mb-12 grid gap-6 sm:grid-cols-[220px_1fr]">
+        <div class="relative aspect-2/3 w-full max-w-[220px] overflow-hidden rounded-2xl border border-zinc-900 bg-gradient-to-br from-purple-900 to-fuchsia-950">
+            {% if media.poster_url %}
+                <img src="{{ media.poster_url }}" alt="{{ media.title }}" class="absolute inset-0 h-full w-full object-cover">
+            {% else %}
+                <span class="absolute inset-0 flex items-center justify-center text-7xl font-black text-white/10">
+                    {{ media.title|slice:":1" }}
+                </span>
+            {% endif %}
+        </div>
+
         <div>
-            <h1>{{ media.title }}</h1>
-            <p>
-                {{ media.get_media_type_display }}
-                {% if media.release_year %} · {{ media.release_year }}{% endif %}
-                {% if media.episodes %} · {{ media.episodes }} episodios{% endif %}
-                {% if media.duration_minutes %} · {{ media.duration_minutes }} min{% endif %}
-            </p>
-            {% if media.description %}<p>{{ media.description }}</p>{% endif %}
+            <p class="text-sm font-semibold text-pink-400">{{ media.get_media_type_display }}</p>
+            <h1 class="mb-3 text-3xl font-black tracking-tight text-white sm:text-4xl">{{ media.title }}</h1>
 
-            <p>
-                Estado: {{ entry.get_status_display }}
-                {% if entry.rating %} · Puntuación: {{ entry.rating }}/10{% endif %}
-                {% if entry.favorite %} · ★ Favorito{% endif %}
-            </p>
-            <p>
-                <a href="{% url 'library:update' entry.pk %}">Editar</a>
-                <a href="{% url 'library:delete' entry.pk %}">Eliminar</a>
-            </p>
+            <div class="mb-4 flex flex-wrap gap-2 text-xs text-zinc-400">
+                {% if media.release_year %}<span class="rounded-full bg-zinc-900 px-3 py-1">{{ media.release_year }}</span>{% endif %}
+                {% if media.episodes %}<span class="rounded-full bg-zinc-900 px-3 py-1">{{ media.episodes }} episodios</span>{% endif %}
+                {% if media.duration_minutes %}<span class="rounded-full bg-zinc-900 px-3 py-1">{{ media.duration_minutes }} min</span>{% endif %}
+            </div>
+
+            {% if media.description %}
+                <p class="mb-4 max-w-2xl text-sm leading-relaxed text-zinc-300">{{ media.description }}</p>
+            {% endif %}
+
+            <div class="mb-5 flex flex-wrap items-center gap-2">
+                <span class="rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-200">
+                    {{ entry.get_status_display }}
+                </span>
+                {% if entry.rating %}
+                    <span class="flex items-center gap-1 rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-amber-400">
+                        ★ {{ entry.rating }}/10
+                    </span>
+                {% endif %}
+                {% if entry.favorite %}
+                    <span class="flex items-center gap-1 rounded-full bg-pink-500/10 px-3 py-1.5 text-xs font-semibold text-pink-400">
+                        ♥ Favorito
+                    </span>
+                {% endif %}
+            </div>
+
+            <div class="flex gap-3">
+                <a href="{% url 'library:update' entry.pk %}"
+                   class="rounded-full bg-pink-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                    Editar
+                </a>
+                <a href="{% url 'library:delete' entry.pk %}"
+                   class="rounded-full border border-zinc-800 px-5 py-2 text-sm font-semibold text-zinc-300 transition-colors hover:bg-zinc-900">
+                    Eliminar
+                </a>
+            </div>
         </div>
     </div>
 
     {% if media.media_type == "anime" %}
-        <hr>
-        <h2>Información de anime</h2>
+        <div data-reveal class="border-t border-zinc-900 pt-8">
+            {% if anime_metadata %}
+                <div class="mb-8 flex flex-wrap items-center gap-3">
+                    {% if anime_metadata.title_english or anime_metadata.title_romaji %}
+                        <p class="text-sm text-zinc-400">
+                            También conocido como:
+                            <span class="text-zinc-200">
+                                {{ anime_metadata.title_english }}{% if anime_metadata.title_romaji and anime_metadata.title_romaji != anime_metadata.title_english %}{% if anime_metadata.title_english %} / {% endif %}{{ anime_metadata.title_romaji }}{% endif %}
+                            </span>
+                        </p>
+                    {% endif %}
+                    {% if anime_metadata.studio %}<span class="rounded-full bg-zinc-900 px-3 py-1 text-xs text-zinc-300">Estudio: {{ anime_metadata.studio }}</span>{% endif %}
+                    {% if anime_metadata.source_material %}<span class="rounded-full bg-zinc-900 px-3 py-1 text-xs text-zinc-300">Origen: {{ anime_metadata.source_material }}</span>{% endif %}
+                </div>
 
-        {% if anime_metadata %}
-            <p>
-                {% if anime_metadata.title_english %}También conocido como: {{ anime_metadata.title_english }}{% endif %}
-                {% if anime_metadata.title_romaji and anime_metadata.title_romaji != anime_metadata.title_english %}
-                    {% if anime_metadata.title_english %} / {% endif %}{{ anime_metadata.title_romaji }}
-                {% endif %}
-            </p>
-            <p>
-                {% if anime_metadata.studio %}Estudio: {{ anime_metadata.studio }}{% endif %}
-                {% if anime_metadata.source_material %} · Origen: {{ anime_metadata.source_material }}{% endif %}
-            </p>
+                {% if anime_provider_unavailable %}
+                    <p class="mb-8 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm font-medium text-amber-300">
+                        No se ha podido cargar información adicional ahora mismo (proveedores externos caídos). Los datos básicos siguen disponibles arriba.
+                    </p>
+                {% elif enrichment %}
+                    {% if enrichment.characters %}
+                        <section class="mb-10">
+                            <h2 class="mb-4 text-xl font-black uppercase tracking-tight text-white">Personajes principales</h2>
+                            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                                {% for character in enrichment.characters %}
+                                    <div class="animate-fade-in-up rounded-xl border border-zinc-900 bg-zinc-900/50 p-3"
+                                         style="animation-delay: {% widthratio forloop.counter0 1 60 %}ms">
+                                        <div class="mb-2 aspect-square overflow-hidden rounded-lg bg-zinc-800">
+                                            {% if character.image_url %}
+                                                <img src="{{ character.image_url }}" alt="{{ character.name }}" class="h-full w-full object-cover">
+                                            {% endif %}
+                                        </div>
+                                        <p class="truncate text-sm font-bold text-white">{{ character.name }}</p>
+                                        <p class="truncate text-xs text-zinc-500">
+                                            {{ character.role }}{% if character.voice_actor %} · {{ character.voice_actor }}{% endif %}
+                                        </p>
+                                        {% if character.description %}
+                                            <p class="mt-1 line-clamp-3 text-xs text-zinc-400">{{ character.description }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
 
-            {% if anime_provider_unavailable %}
-                <p style="font-weight: bold;">No se ha podido cargar información adicional ahora mismo (proveedores externos caídos). Los datos básicos siguen disponibles arriba.</p>
-            {% elif enrichment %}
-                {% if enrichment.characters %}
-                    <h3>Personajes principales</h3>
-                    <div class="library-grid">
-                        {% for character in enrichment.characters %}
-                            <article class="library-card">
-                                {% if character.image_url %}
-                                    <img src="{{ character.image_url }}" alt="{{ character.name }}" width="100">
-                                {% endif %}
-                                <h4>{{ character.name }}</h4>
-                                <p>{{ character.role }}{% if character.voice_actor %} · {{ character.voice_actor }}{% endif %}</p>
-                                {% if character.description %}<p>{{ character.description }}</p>{% endif %}
-                            </article>
-                        {% endfor %}
+                    <div class="grid gap-8 sm:grid-cols-2">
+                        {% if enrichment.staff %}
+                            <section>
+                                <h2 class="mb-3 text-xl font-black uppercase tracking-tight text-white">Staff principal</h2>
+                                <ul class="space-y-2 text-sm">
+                                    {% for member in enrichment.staff %}
+                                        <li class="flex justify-between border-b border-zinc-900 pb-2 text-zinc-300">
+                                            <span class="font-medium text-white">{{ member.name }}</span>
+                                            <span class="text-zinc-500">{{ member.role }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </section>
+                        {% endif %}
+
+                        {% if enrichment.relations %}
+                            <section>
+                                <h2 class="mb-3 text-xl font-black uppercase tracking-tight text-white">Relacionado</h2>
+                                <ul class="space-y-2 text-sm">
+                                    {% for relation in enrichment.relations %}
+                                        <li class="flex justify-between border-b border-zinc-900 pb-2 text-zinc-300">
+                                            <span class="font-medium text-white">{{ relation.title }}</span>
+                                            <span class="text-zinc-500">{{ relation.relation_type }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </section>
+                        {% endif %}
                     </div>
+
+                    <section class="mt-8">
+                        <h2 class="mb-3 text-xl font-black uppercase tracking-tight text-white">Episodios</h2>
+                        {% if enrichment.episodes %}
+                            <ol class="grid gap-2 sm:grid-cols-2">
+                                {% for episode in enrichment.episodes %}
+                                    <li class="flex gap-2 rounded-lg bg-zinc-900/50 px-3 py-2 text-sm text-zinc-300">
+                                        <span class="font-semibold text-pink-400">{{ episode.number }}.</span>
+                                        {{ episode.title }}
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% else %}
+                            <p class="text-sm text-zinc-500">No hay lista de episodios disponible para este anime.</p>
+                        {% endif %}
+                    </section>
                 {% endif %}
 
-                {% if enrichment.staff %}
-                    <h3>Staff principal</h3>
-                    <ul>
-                        {% for member in enrichment.staff %}
-                            <li>{{ member.name }} — {{ member.role }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-
-                {% if enrichment.relations %}
-                    <h3>Relacionado</h3>
-                    <ul>
-                        {% for relation in enrichment.relations %}
-                            <li>{{ relation.relation_type }}: {{ relation.title }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-
-                {% if enrichment.episodes %}
-                    <h3>Episodios</h3>
-                    <ul>
-                        {% for episode in enrichment.episodes %}
-                            <li>{{ episode.number }}. {{ episode.title }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No hay lista de episodios disponible para este anime.</p>
-                {% endif %}
+                <a href="{% url 'library:anime_search' entry.pk %}"
+                   class="mt-8 inline-block text-sm font-medium text-pink-400 transition-colors hover:text-pink-300">
+                    Buscar otra coincidencia en AniList →
+                </a>
+            {% else %}
+                <div class="rounded-2xl border border-dashed border-zinc-800 px-6 py-10 text-center">
+                    <p class="mb-4 text-sm text-zinc-400">Este anime todavía no tiene información adicional de AniList.</p>
+                    <a href="{% url 'library:anime_search' entry.pk %}"
+                       class="inline-block rounded-full bg-pink-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                        Buscar en AniList
+                    </a>
+                </div>
             {% endif %}
-
-            <p><a href="{% url 'library:anime_search' entry.pk %}">Buscar otra coincidencia en AniList</a></p>
-        {% else %}
-            <p>Este anime todavía no tiene información adicional de AniList.</p>
-            <p><a href="{% url 'library:anime_search' entry.pk %}">Buscar en AniList</a></p>
-        {% endif %}
+        </div>
     {% endif %}
 {% endblock %}

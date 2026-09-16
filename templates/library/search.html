@@ -3,34 +3,47 @@
 {% block title %}Viewy — Buscar en TMDB{% endblock %}
 
 {% block content %}
-    <h1>Buscar película o serie</h1>
+    <p class="text-sm font-semibold text-pink-400">TMDB</p>
+    <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Buscar película o serie</h1>
 
-    <form method="get">
-        {{ form.as_p }}
-        <button type="submit">Buscar</button>
+    <form method="get" class="mb-8 flex max-w-xl gap-2">
+        {{ form.q }}
+        <button type="submit"
+                class="shrink-0 rounded-full bg-pink-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+            Buscar
+        </button>
     </form>
 
     {% if searched %}
         {% if results %}
-            <div class="library-grid">
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                 {% for result in results %}
-                    <article class="library-card">
-                        {% if result.poster_url %}
-                            <img src="{{ result.poster_url }}" alt="{{ result.title }}" width="120">
-                        {% endif %}
-                        <h2>{{ result.title }}</h2>
-                        <p>
-                            {% if result.media_type == "movie" %}Película{% else %}Serie{% endif %}
-                            {% if result.release_year %} · {{ result.release_year }}{% endif %}
-                        </p>
-                        {% if result.description %}<p>{{ result.description|truncatewords:30 }}</p>{% endif %}
-                        <form method="post" action="{% url 'library:add_from_tmdb' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="external_id" value="{{ result.external_id }}">
-                            <input type="hidden" name="source_type" value="{{ result.source_type }}">
-                            <label>
-                                Tipo:
-                                <select name="media_type">
+                    <div data-reveal style="transition-delay: {% widthratio forloop.counter0 1 60 %}ms"
+                         class="overflow-hidden rounded-xl border border-zinc-900 bg-zinc-900/50">
+                        <div class="relative aspect-2/3 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-emerald-900 to-teal-950' 'from-purple-900 to-fuchsia-950' 'from-rose-900 to-red-950' %}">
+                            {% if result.poster_url %}
+                                <img src="{{ result.poster_url }}" alt="{{ result.title }}" class="absolute inset-0 h-full w-full object-cover">
+                            {% else %}
+                                <span class="absolute inset-0 flex items-center justify-center text-5xl font-black text-white/10">
+                                    {{ result.title|slice:":1" }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="p-3">
+                            <h2 class="truncate text-sm font-bold text-white">{{ result.title }}</h2>
+                            <p class="mb-2 text-xs text-zinc-500">
+                                {% if result.media_type == "movie" %}Película{% else %}Serie{% endif %}
+                                {% if result.release_year %} · {{ result.release_year }}{% endif %}
+                            </p>
+                            {% if result.description %}
+                                <p class="mb-3 line-clamp-2 text-xs text-zinc-400">{{ result.description|truncatewords:20 }}</p>
+                            {% endif %}
+                            <form method="post" action="{% url 'library:add_from_tmdb' %}" class="space-y-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="external_id" value="{{ result.external_id }}">
+                                <input type="hidden" name="source_type" value="{{ result.source_type }}">
+                                <select name="media_type"
+                                        class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-200 focus:outline-none focus:ring-2 focus:ring-pink-500">
                                     {% if result.media_type == "movie" %}
                                         <option value="movie" {% if not result.is_anime_candidate %}selected{% endif %}>Película</option>
                                     {% else %}
@@ -38,16 +51,23 @@
                                     {% endif %}
                                     <option value="anime" {% if result.is_anime_candidate %}selected{% endif %}>Anime</option>
                                 </select>
-                            </label>
-                            <button type="submit">Añadir a mi biblioteca</button>
-                        </form>
-                    </article>
+                                <button type="submit"
+                                        class="w-full rounded-lg bg-pink-500 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-pink-400">
+                                    Añadir a mi biblioteca
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>No se ha encontrado ningún resultado para esa búsqueda.</p>
+            <div class="rounded-xl border border-dashed border-zinc-800 px-6 py-16 text-center">
+                <p class="text-zinc-400">No se ha encontrado ningún resultado para esa búsqueda.</p>
+            </div>
         {% endif %}
     {% endif %}
 
-    <p><a href="{% url 'library:list' %}">Volver a mi biblioteca</a></p>
+    <a href="{% url 'library:list' %}" class="mt-8 inline-block text-sm text-zinc-400 transition-colors hover:text-white">
+        ← Volver a mi biblioteca
+    </a>
 {% endblock %}

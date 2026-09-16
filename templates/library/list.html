@@ -3,79 +3,174 @@
 {% block title %}Viewy — Mi biblioteca{% endblock %}
 
 {% block content %}
-    <h1>Mi biblioteca</h1>
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-semibold text-pink-400">Mi colección personal</p>
+            <h1 class="text-3xl font-black uppercase tracking-tight text-white">Mi biblioteca</h1>
+        </div>
+        <a href="{% url 'library:create' %}"
+           class="rounded-full bg-pink-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+            + Añadir título
+        </a>
+    </div>
 
-    <p><a href="{% url 'library:create' %}">Añadir contenido</a></p>
+    <div class="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <div data-reveal class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
+            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.total }}">0</p>
+            <p class="text-xs text-zinc-500">Total</p>
+        </div>
+        <div data-reveal style="transition-delay: 40ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
+            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.favorites }}">0</p>
+            <p class="text-xs text-zinc-500">Favoritos</p>
+        </div>
+        <div data-reveal style="transition-delay: 80ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
+            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.completed }}">0</p>
+            <p class="text-xs text-zinc-500">Terminados</p>
+        </div>
+        <div data-reveal style="transition-delay: 120ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
+            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.watching }}">0</p>
+            <p class="text-xs text-zinc-500">Viendo</p>
+        </div>
+        <div data-reveal style="transition-delay: 160ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
+            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.planned }}">0</p>
+            <p class="text-xs text-zinc-500">Pendiente</p>
+        </div>
+        <div data-reveal style="transition-delay: 200ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
+            {% if quick_stats.average_rating %}
+                <p class="text-xl font-black text-white" data-counter="{{ quick_stats.average_rating|floatformat:1 }}" data-counter-decimals="1">0</p>
+            {% else %}
+                <p class="text-xl font-black text-white">—</p>
+            {% endif %}
+            <p class="text-xs text-zinc-500">Rating</p>
+        </div>
+    </div>
 
-    <form method="get">
-        <input type="text" name="q" value="{{ current_query }}" placeholder="Buscar por título">
-
-        <select name="status">
-            <option value="">Todos los estados</option>
-            {% for value, label in statuses %}
-                <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>
-                    {{ label }}
-                </option>
-            {% endfor %}
-        </select>
-
-        <select name="media_type">
-            <option value="">Todos los tipos</option>
-            {% for value, label in media_types %}
-                <option value="{{ value }}" {% if current_media_type == value %}selected{% endif %}>
-                    {{ label }}
-                </option>
-            {% endfor %}
-        </select>
-
-        <label>
-            <input type="checkbox" name="favorite" value="1" {% if current_favorite == "1" %}checked{% endif %}>
-            Solo favoritos
-        </label>
-
-        <select name="sort">
-            {% for value, label in sort_options %}
-                <option value="{{ value }}" {% if current_sort == value %}selected{% endif %}>
-                    {{ label }}
-                </option>
-            {% endfor %}
-        </select>
-
-        <button type="submit">Filtrar</button>
-        <a href="{% url 'library:list' %}">Limpiar filtros</a>
+    <form method="get" class="mb-4">
+        <input type="hidden" name="status" value="{{ current_status }}">
+        <input type="hidden" name="media_type" value="{{ current_media_type }}">
+        <input type="hidden" name="favorite" value="{{ current_favorite }}">
+        <input type="text" name="q" value="{{ current_query }}" placeholder="Buscar por título..."
+               class="w-full rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500">
     </form>
 
-    {% if page.object_list %}
-        <div class="library-grid">
-            {% for entry in page %}
-                <article class="library-card">
-                    <h2><a href="{% url 'library:detail' entry.pk %}">{{ entry.media.title }}</a></h2>
-                    <p>{{ entry.media.get_media_type_display }}{% if entry.media.release_year %} · {{ entry.media.release_year }}{% endif %}</p>
-                    <p>Estado: {{ entry.get_status_display }}</p>
-                    {% if entry.rating %}<p>Puntuación: {{ entry.rating }}/10</p>{% endif %}
-                    {% if entry.favorite %}<p>★ Favorito</p>{% endif %}
-                    <p>
-                        <a href="{% url 'library:update' entry.pk %}">Editar</a>
-                        <a href="{% url 'library:delete' entry.pk %}">Eliminar</a>
-                    </p>
-                </article>
+    <div class="mb-6 flex flex-wrap items-center gap-4">
+        <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Estado</span>
+            <a href="{% querystring status=None page=None %}"
+               class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if not current_status %}bg-pink-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+                Todos
+            </a>
+            {% for value, label in statuses %}
+                <a href="{% querystring status=value page=None %}"
+                   class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if current_status == value %}bg-pink-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+                    {{ label }}
+                </a>
             {% endfor %}
         </div>
 
-        <nav class="pagination">
+        <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Tipo</span>
+            <a href="{% querystring media_type=None page=None %}"
+               class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if not current_media_type %}bg-pink-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+                Todos
+            </a>
+            {% for value, label in media_types %}
+                <a href="{% querystring media_type=value page=None %}"
+                   class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if current_media_type == value %}bg-pink-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+                    {{ label }}
+                </a>
+            {% endfor %}
+        </div>
+
+        {% if current_favorite == "1" %}
+            <a href="{% querystring favorite=None page=None %}"
+               class="ml-auto flex items-center gap-1.5 rounded-full bg-pink-500 px-3 py-1.5 text-xs font-medium text-white transition-colors">
+                <span>♥</span> Favoritos
+            </a>
+        {% else %}
+            <a href="{% querystring favorite="1" page=None %}"
+               class="ml-auto flex items-center gap-1.5 rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:text-white">
+                <span>♡</span> Favoritos
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="mb-8 flex items-center justify-between">
+        <p class="text-sm text-zinc-500">{{ page.paginator.count }} título{{ page.paginator.count|pluralize }}</p>
+        <form method="get">
+            <input type="hidden" name="q" value="{{ current_query }}">
+            <input type="hidden" name="status" value="{{ current_status }}">
+            <input type="hidden" name="media_type" value="{{ current_media_type }}">
+            <input type="hidden" name="favorite" value="{{ current_favorite }}">
+            <select name="sort" onchange="this.form.submit()"
+                    class="rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                {% for value, label in sort_options %}
+                    <option value="{{ value }}" {% if current_sort == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if page.object_list %}
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {% for entry in page %}
+                <a href="{% url 'library:detail' entry.pk %}"
+                   class="group animate-fade-in-up"
+                   style="animation-delay: {% widthratio forloop.counter0 1 60 %}ms">
+                    <div class="relative aspect-2/3 overflow-hidden rounded-xl border border-zinc-900 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-emerald-900 to-teal-950' 'from-purple-900 to-fuchsia-950' 'from-rose-900 to-red-950' 'from-amber-900 to-orange-950' %} transition-transform duration-300 ease-out group-hover:scale-[1.03] group-hover:shadow-xl group-hover:shadow-pink-500/10">
+                        {% if entry.media.poster_url %}
+                            <img src="{{ entry.media.poster_url }}" alt="{{ entry.media.title }}"
+                                 class="absolute inset-0 h-full w-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-70">
+                        {% else %}
+                            <span class="absolute inset-0 flex items-center justify-center text-6xl font-black text-white/10">
+                                {{ entry.media.title|slice:":1" }}
+                            </span>
+                        {% endif %}
+
+                        <span class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-sm {% if entry.favorite %}text-pink-400{% else %}text-zinc-400{% endif %}">
+                            {% if entry.favorite %}♥{% else %}♡{% endif %}
+                        </span>
+
+                        <div class="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-black/90 to-transparent px-2 pb-2 pt-6">
+                            <span class="truncate rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-medium text-zinc-200">
+                                {{ entry.get_status_display }}
+                            </span>
+                            {% if entry.rating %}
+                                <span class="flex shrink-0 items-center gap-0.5 rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-semibold text-amber-400">
+                                    ★ {{ entry.rating }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <p class="mt-2 truncate text-sm font-bold text-white">{{ entry.media.title }}</p>
+                    <p class="text-xs text-zinc-500">
+                        {{ entry.media.get_media_type_display }}{% if entry.media.release_year %} · {{ entry.media.release_year }}{% endif %}
+                    </p>
+                </a>
+            {% endfor %}
+        </div>
+
+        <nav class="mt-8 flex items-center justify-center gap-2 text-sm">
             {% if page.has_previous %}
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page=1">« Primera</a>
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.previous_page_number }}">Anterior</a>
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page=1"
+                   class="rounded-full border border-zinc-800 px-3 py-1.5 text-zinc-300 hover:bg-zinc-900">« Primera</a>
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.previous_page_number }}"
+                   class="rounded-full border border-zinc-800 px-3 py-1.5 text-zinc-300 hover:bg-zinc-900">Anterior</a>
             {% endif %}
 
-            <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+            <span class="px-3 py-1.5 text-zinc-500">Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
 
             {% if page.has_next %}
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.next_page_number }}">Siguiente</a>
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.paginator.num_pages }}">Última »</a>
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.next_page_number }}"
+                   class="rounded-full border border-zinc-800 px-3 py-1.5 text-zinc-300 hover:bg-zinc-900">Siguiente</a>
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.paginator.num_pages }}"
+                   class="rounded-full border border-zinc-800 px-3 py-1.5 text-zinc-300 hover:bg-zinc-900">Última »</a>
             {% endif %}
         </nav>
     {% else %}
-        <p>No se ha encontrado ningún contenido con esos filtros.</p>
+        <div class="rounded-xl border border-dashed border-zinc-800 px-6 py-16 text-center">
+            <p class="text-zinc-400">No se ha encontrado ningún contenido con esos filtros.</p>
+        </div>
     {% endif %}
 {% endblock %}

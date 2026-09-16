@@ -3,17 +3,28 @@
 {% block title %}Viewy — Iniciar sesión{% endblock %}
 
 {% block content %}
-    <h1>Iniciar sesión</h1>
+    <div data-reveal class="mx-auto max-w-sm">
+        <p class="text-sm font-semibold text-pink-400">Bienvenido de nuevo</p>
+        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Iniciar sesión</h1>
 
-    {% if form.errors %}
-        <p>Usuario o contraseña incorrectos.</p>
-    {% endif %}
+        {% if form.errors %}
+            <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
+                <p class="text-sm text-red-300">Usuario o contraseña incorrectos.</p>
+            </div>
+        {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Entrar</button>
-    </form>
+        <form method="post" class="styled-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"
+                    class="mt-2 w-full rounded-full bg-pink-500 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                Entrar
+            </button>
+        </form>
 
-    <p><a href="{% url 'accounts:register' %}">Crear cuenta</a></p>
+        <p class="mt-6 text-center text-sm text-zinc-400">
+            ¿Todavía no tienes cuenta?
+            <a href="{% url 'accounts:register' %}" class="font-semibold text-pink-400 hover:text-pink-300">Crear cuenta</a>
+        </p>
+    </div>
 {% endblock %}
