@@ -24,6 +24,7 @@
                 {% url 'library:list' as list_url %}
                 {% url 'library:search' as search_url %}
                 {% url 'analytics:dashboard' as dashboard_url %}
+                {% url 'recommendations:form' as recommendations_url %}
 
                 <a href="{{ home_url }}"
                    class="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {% if request.path == home_url %}bg-zinc-900 text-white{% else %}text-zinc-400 hover:bg-zinc-900 hover:text-white{% endif %}">
@@ -41,6 +42,10 @@
                     <a href="{{ dashboard_url }}"
                        class="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {% if request.path == dashboard_url %}bg-zinc-900 text-white{% else %}text-zinc-400 hover:bg-zinc-900 hover:text-white{% endif %}">
                         <span aria-hidden="true">📊</span> Estadísticas
+                    </a>
+                    <a href="{{ recommendations_url }}"
+                       class="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {% if request.path == recommendations_url %}bg-zinc-900 text-white{% else %}text-zinc-400 hover:bg-zinc-900 hover:text-white{% endif %}">
+                        <span aria-hidden="true">✨</span> Recomendaciones
                     </a>
                 {% endif %}
             </nav>
@@ -97,6 +102,7 @@
                     <a href="{% url 'library:home' %}" class="shrink-0 rounded-lg px-3 py-1.5 text-zinc-400 hover:bg-zinc-900 hover:text-white">Inicio</a>
                     <a href="{% url 'library:list' %}" class="shrink-0 rounded-lg px-3 py-1.5 text-zinc-400 hover:bg-zinc-900 hover:text-white">Mi biblioteca</a>
                     <a href="{% url 'analytics:dashboard' %}" class="shrink-0 rounded-lg px-3 py-1.5 text-zinc-400 hover:bg-zinc-900 hover:text-white">Estadísticas</a>
+                    <a href="{% url 'recommendations:form' %}" class="shrink-0 rounded-lg px-3 py-1.5 text-zinc-400 hover:bg-zinc-900 hover:text-white">Recomendaciones</a>
                     <a href="{% url 'accounts:profile' %}" class="shrink-0 rounded-lg px-3 py-1.5 text-zinc-400 hover:bg-zinc-900 hover:text-white">Mi perfil</a>
                 </nav>
             {% endif %}

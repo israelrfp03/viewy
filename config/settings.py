@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'library',
     'integrations',
     'analytics',
+    'recommendations',
 ]
 
 MIDDLEWARE = [
@@ -140,6 +141,12 @@ LOGOUT_REDIRECT_URL = 'library:home'
 TMDB_ACCESS_TOKEN = config('TMDB_ACCESS_TOKEN', default='')
 TMDB_API_BASE_URL = 'https://api.themoviedb.org/3'
 TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'
+
+
+# Gemini (recomendaciones con LLM)
+# https://ai.google.dev/gemini-api/docs
+
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
 
 
 # Email
