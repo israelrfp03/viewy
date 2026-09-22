@@ -2,10 +2,15 @@
   "private": true,
   "scripts": {
     "build:css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --minify",
-    "watch:css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch"
+    "watch:css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
+    "copy:vendor": "node -e \"require('fs').copyFileSync('node_modules/chart.js/dist/chart.umd.min.js', 'static/js/vendor/chart.umd.min.js')\"",
+    "postinstall": "npm run copy:vendor"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
     "tailwindcss": "^4.3.3"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.1"
   }
 }

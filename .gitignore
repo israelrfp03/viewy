@@ -43,6 +43,7 @@ build/
 dist/
 *.egg-info/
 
-# Node / Tailwind
+# Node / Tailwind / Chart.js
 node_modules/
 static/css/output.css
+static/js/vendor/

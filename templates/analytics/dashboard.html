@@ -42,6 +42,65 @@
             </div>
         </section>
 
+        <section class="mb-10">
+            <h2 class="mb-4 text-lg font-black uppercase tracking-tight text-white">Gráficas</h2>
+            <div class="grid gap-6 lg:grid-cols-2">
+                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Actividad mensual</h3>
+                    {% if chart_data.monthly_activity %}
+                        <div class="h-64"><canvas id="chart-monthly-activity"></canvas></div>
+                    {% else %}
+                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
+                    {% endif %}
+                </div>
+
+                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Distribución por tipo</h3>
+                    {% if chart_data.type_breakdown %}
+                        <div class="h-64"><canvas id="chart-type-breakdown"></canvas></div>
+                    {% else %}
+                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
+                    {% endif %}
+                </div>
+
+                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Distribución de ratings</h3>
+                    {% if chart_data.rating_distribution %}
+                        <div class="h-64"><canvas id="chart-rating-distribution"></canvas></div>
+                    {% else %}
+                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
+                    {% endif %}
+                </div>
+
+                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Rating medio por tipo</h3>
+                    {% if chart_data.ratings_by_type %}
+                        <div class="h-64"><canvas id="chart-ratings-by-type"></canvas></div>
+                    {% else %}
+                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
+                    {% endif %}
+                </div>
+
+                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Actividad anual</h3>
+                    {% if chart_data.yearly_activity %}
+                        <div class="h-64"><canvas id="chart-yearly-activity"></canvas></div>
+                    {% else %}
+                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
+                    {% endif %}
+                </div>
+
+                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5 lg:col-span-2">
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Tipos de contenido a lo largo del tiempo</h3>
+                    {% if chart_data.type_over_time %}
+                        <div class="h-72"><canvas id="chart-type-over-time"></canvas></div>
+                    {% else %}
+                        <div class="flex h-72 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
         <div class="grid gap-8 lg:grid-cols-2">
             <section data-reveal>
                 <h2 class="mb-4 text-lg font-black uppercase tracking-tight text-white">Por tipo de contenido</h2>
@@ -266,5 +325,18 @@
                 {% endif %}
             </div>
         {% endif %}
+
+        {{ chart_data.monthly_activity|json_script:"chart-data-monthly-activity" }}
+        {{ chart_data.type_breakdown|json_script:"chart-data-type-breakdown" }}
+        {{ chart_data.rating_distribution|json_script:"chart-data-rating-distribution" }}
+        {{ chart_data.ratings_by_type|json_script:"chart-data-ratings-by-type" }}
+        {{ chart_data.yearly_activity|json_script:"chart-data-yearly-activity" }}
+        {{ chart_data.type_over_time|json_script:"chart-data-type-over-time" }}
     {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    {% load static %}
+    <script src="{% static 'js/vendor/chart.umd.min.js' %}"></script>
+    <script src="{% static 'js/analytics/dashboard.js' %}" defer></script>
 {% endblock %}
