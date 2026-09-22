@@ -1,18 +1,15 @@
-"""Integración aislada con el proveedor de LLM (Gemini).
-
-Si algún día cambiamos de proveedor, solo este archivo debería cambiar —
-services.py y prompts.py no saben qué proveedor hay detrás. Mismo patrón que
-integrations/tmdb.py y integrations/anilist.py.
+"""Integración con el proveedor de LLM para recomendaciones — envoltorio fino
+sobre integrations/gemini.py (mecánica HTTP compartida) con la validación de
+negocio específica de recomendaciones (forma, campos, límites).
 """
 
-import json
-
-import requests
-from django.conf import settings
-
-API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-MODEL = "gemini-2.5-flash"  # más estable que gemini-3.6-flash en las pruebas de la Fase 11
-REQUEST_TIMEOUT = 20
+from integrations.gemini import (
+    GeminiConfigError as LLMConfigError,
+    GeminiError as LLMError,
+    GeminiResponseError as LLMResponseError,
+    GeminiTimeoutError as LLMTimeoutError,
+    call_gemini,
+)
 
 VALID_MEDIA_TYPES = {"movie", "series", "anime"}
 MAX_RECOMMENDATIONS = 5
@@ -37,64 +34,10 @@ RESPONSE_SCHEMA = {
 }
 
 
-class LLMError(Exception):
-    """Fallo genérico al comunicarse con el proveedor de LLM."""
-
-
-class LLMTimeoutError(LLMError):
-    pass
-
-
-class LLMConfigError(LLMError):
-    """API key ausente o mal configurada."""
-
-
-class LLMResponseError(LLMError):
-    """El proveedor respondió, pero el contenido no es JSON válido o utilizable."""
-
-
 def get_recommendations_from_llm(system_prompt, user_prompt):
     """Llama al LLM y devuelve la lista de recomendaciones ya validada
     (máx. MAX_RECOMMENDATIONS, cada una con title/media_type/reason)."""
-    api_key = getattr(settings, "GEMINI_API_KEY", "")
-    if not api_key:
-        raise LLMConfigError("Falta configurar GEMINI_API_KEY.")
-
-    payload = {
-        "systemInstruction": {"parts": [{"text": system_prompt}]},
-        "contents": [{"parts": [{"text": user_prompt}]}],
-        "generationConfig": {
-            "thinkingConfig": {"thinkingBudget": 0},
-            "responseMimeType": "application/json",
-            "responseSchema": RESPONSE_SCHEMA,
-            "temperature": 0.6,
-        },
-    }
-
-    try:
-        response = requests.post(
-            API_URL.format(model=MODEL),
-            params={"key": api_key},
-            json=payload,
-            timeout=REQUEST_TIMEOUT,
-        )
-    except requests.exceptions.Timeout as exc:
-        raise LLMTimeoutError("El proveedor de recomendaciones no respondió a tiempo.") from exc
-    except requests.exceptions.RequestException as exc:
-        raise LLMError("No se pudo contactar con el proveedor de recomendaciones.") from exc
-
-    if response.status_code == 429:
-        raise LLMError("Límite de peticiones alcanzado. Inténtalo de nuevo en un momento.")
-    if response.status_code != 200:
-        raise LLMError(f"El proveedor respondió con un error inesperado ({response.status_code}).")
-
-    try:
-        data = response.json()
-        raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
-        parsed = json.loads(raw_text)
-    except (KeyError, IndexError, ValueError) as exc:
-        raise LLMResponseError("La respuesta del proveedor no tiene el formato esperado.") from exc
-
+    parsed = call_gemini(system_prompt, user_prompt, RESPONSE_SCHEMA, temperature=0.6)
     return _validate_recommendations(parsed)
 
 

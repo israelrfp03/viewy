@@ -20,20 +20,20 @@ def get_dashboard_stats(user):
 
     return {
         "total": total,
-        "status_counts": _status_counts(queryset),
-        "media_type_breakdown": _media_type_breakdown(queryset, total),
+        "status_counts": status_counts(queryset),
+        "media_type_breakdown": media_type_breakdown(queryset, total),
         "favorites": queryset.filter(favorite=True).count(),
-        "rating_stats": _rating_stats(queryset),
+        "rating_stats": rating_stats(queryset),
         "temporal_stats": _temporal_stats(queryset),
-        "movie_watch_minutes": _movie_watch_time(queryset),
+        "movie_watch_minutes": movie_watch_time(queryset),
         "average_watch_days": _average_watch_duration(queryset),
-        "recent_completed": _recent_completed(queryset),
-        "anime_stats": _anime_stats(user),
+        "recent_completed": recent_completed(queryset),
+        "anime_stats": anime_stats(user),
         "advanced": get_advanced_stats(user),
     }
 
 
-def _status_counts(queryset):
+def status_counts(queryset):
     """Un único aggregate() con conteo condicional por estado, en vez de
     cuatro .filter().count() separados (cuatro queries)."""
     return queryset.aggregate(
@@ -44,7 +44,7 @@ def _status_counts(queryset):
     )
 
 
-def _media_type_breakdown(queryset, total):
+def media_type_breakdown(queryset, total):
     """Patrón values().annotate(): agrupa por tipo de contenido en una sola query."""
     rows = queryset.values("media__media_type").annotate(count=Count("id"))
     counts_by_type = {row["media__media_type"]: row["count"] for row in rows}
@@ -60,7 +60,7 @@ def _media_type_breakdown(queryset, total):
     return breakdown
 
 
-def _rating_stats(queryset):
+def rating_stats(queryset):
     """Avg/Max/Min/Count(campo) ignoran NULL automáticamente: los elementos
     sin puntuar no distorsionan la media ni se cuentan como puntuados."""
     stats = queryset.aggregate(
@@ -95,7 +95,7 @@ def _temporal_stats(queryset):
     }
 
 
-def _movie_watch_time(queryset):
+def movie_watch_time(queryset):
     """Solo películas: duration_minutes representa duración total y de forma
     fiable únicamente ahí (ver documentación de la Fase 8 sobre por qué no
     se estima para series/anime)."""
@@ -122,17 +122,16 @@ def _average_watch_duration(queryset):
     return avg.days if avg is not None else None
 
 
-def _recent_completed(queryset):
+def recent_completed(queryset, media_type=None, limit=5):
     """Solo elementos con finished_at conocido: sin fecha no hay "reciente" que
     ordenar, y el orden de los NULL en DESC no es portable entre motores de BD."""
-    return (
-        queryset.filter(status=UserMedia.Status.COMPLETED, finished_at__isnull=False)
-        .select_related("media")
-        .order_by("-finished_at")[:5]
-    )
+    entries = queryset.filter(status=UserMedia.Status.COMPLETED, finished_at__isnull=False)
+    if media_type:
+        entries = entries.filter(media__media_type=media_type)
+    return entries.select_related("media").order_by("-finished_at")[:limit]
 
 
-def _anime_stats(user):
+def anime_stats(user):
     """Solo se calcula si el usuario tiene algún anime enriquecido — el
     enriquecimiento es opcional (Fase 7.5), así que puede no haber ninguno."""
     anime_metadata = AnimeMetadata.objects.filter(media__user_entries__user=user)
@@ -154,3 +153,21 @@ def _anime_stats(user):
         .first()
     )
     return {"top_studio": top_studio, "top_source": top_source}
+
+
+def get_top_rated(user, media_type=None, limit=5):
+    """Elementos con rating no nulo, mejor puntuados primero. Reutilizada por
+    recommendations (Fase 11) y por el asistente (Fase 12) — evita mantener
+    la misma consulta escrita dos veces."""
+    entries = UserMedia.objects.filter(user=user, rating__isnull=False).select_related("media")
+    if media_type:
+        entries = entries.filter(media__media_type=media_type)
+    return list(entries.order_by("-rating")[:limit])
+
+
+def get_favorites(user, media_type=None, limit=8):
+    """Elementos marcados como favoritos."""
+    entries = UserMedia.objects.filter(user=user, favorite=True).select_related("media")
+    if media_type:
+        entries = entries.filter(media__media_type=media_type)
+    return list(entries.order_by("-created_at")[:limit])

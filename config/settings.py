@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'integrations',
     'analytics',
     'recommendations',
+    'assistant',
 ]
 
 MIDDLEWARE = [

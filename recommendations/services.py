@@ -7,7 +7,7 @@ ejemplos ya resueltos por ORM. Solo decide qué títulos encajan.
 
 from django.db.models import Avg
 
-from analytics.services import get_dashboard_stats
+from analytics.services import get_dashboard_stats, get_favorites, get_top_rated
 from integrations import tmdb
 from library.models import MediaItem, UserMedia
 
@@ -33,10 +33,8 @@ def build_taste_profile(user):
 
     stats = get_dashboard_stats(user)
 
-    top_rated = (
-        entries.filter(rating__isnull=False).order_by("-rating").select_related("media")[:MAX_EXAMPLE_TITLES]
-    )
-    favorites = entries.filter(favorite=True).select_related("media")[:MAX_EXAMPLE_TITLES]
+    top_rated = get_top_rated(user, limit=MAX_EXAMPLE_TITLES)
+    favorites = get_favorites(user, limit=MAX_EXAMPLE_TITLES)
     dropped = (
         entries.filter(status=UserMedia.Status.DROPPED)
         .order_by("-updated_at")
@@ -46,7 +44,7 @@ def build_taste_profile(user):
         entries.order_by("-created_at").values_list("media__title", flat=True)[:MAX_LIBRARY_TITLES_FOR_DEDUP]
     )
 
-    lines = [f"Biblioteca: {total} títulos ({_type_summary(stats['media_type_breakdown'])})."]
+    lines = [f"Biblioteca: {total} título{'s' if total != 1 else ''} ({_type_summary(stats['media_type_breakdown'])})."]
 
     if stats["rating_stats"]["rated_count"]:
         lines.append(

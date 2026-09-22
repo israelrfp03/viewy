@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Asistente{% endblock %}
+
+{% block content %}
+    <div class="mx-auto max-w-2xl">
+        <p class="text-sm font-semibold text-pink-400">Pregunta a tu biblioteca</p>
+        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Asistente</h1>
+
+        <div class="mb-4 flex flex-wrap gap-2">
+            <button type="button" data-question="¿Cuál es mi nota media?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Mi nota media</button>
+            <button type="button" data-question="¿Qué terminé este año?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Lo que terminé este año</button>
+            <button type="button" data-question="¿Cuáles son mis favoritos?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Mis favoritos</button>
+            <button type="button" data-question="¿Cuáles son mis mejores puntuaciones?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Mejores puntuaciones</button>
+            <button type="button" data-question="¿Qué tipo de contenido veo más?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Mi tipo más visto</button>
+        </div>
+
+        <div class="mb-6 space-y-4">
+            {% if not history %}
+                <div class="rounded-xl border border-dashed border-zinc-800 px-4 py-8 text-center text-sm text-zinc-500">
+                    Hazme una pregunta sobre tu biblioteca — cada pregunta se responde de forma independiente,
+                    todavía no recuerdo lo que hablamos antes.
+                </div>
+            {% endif %}
+            {% for turn in history %}
+                <div class="flex justify-end">
+                    <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-pink-500 px-4 py-2.5 text-sm text-white">
+                        {{ turn.question }}
+                    </div>
+                </div>
+                <div class="flex justify-start">
+                    <div class="max-w-[85%] whitespace-pre-line rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm {% if turn.error %}border border-amber-500/20 bg-amber-500/10 text-amber-300{% else %}border border-zinc-900 bg-zinc-900/50 text-zinc-200{% endif %}">
+                        {{ turn.answer }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <form method="post" id="assistant-form" class="flex gap-2">
+            {% csrf_token %}
+            <input type="text" name="question" id="assistant-question" maxlength="300" autocomplete="off"
+                   placeholder="Escribe tu pregunta..."
+                   class="w-full rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            <button type="submit" id="assistant-submit"
+                    class="shrink-0 rounded-full bg-pink-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                Preguntar
+            </button>
+        </form>
+
+        {% if history %}
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="clear">
+                <button type="submit" class="text-xs text-zinc-500 transition-colors hover:text-white">
+                    Borrar historial de esta sesión
+                </button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        (function () {
+            var form = document.getElementById("assistant-form");
+            var input = document.getElementById("assistant-question");
+            var submitBtn = document.getElementById("assistant-submit");
+
+            document.querySelectorAll(".preset-btn").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    input.value = btn.getAttribute("data-question");
+                    form.requestSubmit();
+                });
+            });
+
+            form.addEventListener("submit", function () {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Pensando...";
+            });
+
+            window.scrollTo(0, document.body.scrollHeight);
+        })();
+    </script>
+{% endblock %}
