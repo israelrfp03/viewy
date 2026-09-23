@@ -774,6 +774,24 @@ No crear tests triviales sin valor.
 
 ---
 
+## Fase 14.5 — Diseño final y QA
+
+- aplicar diseño definitivo con Tailwind CSS
+- revisar consistencia visual
+- responsive
+- navegación móvil
+- formularios
+- tablas/tarjetas
+- estados vacíos
+- mensajes de error
+- loaders
+- páginas 404/500
+- accesibilidad básica
+- revisión manual de todos los flujos
+- solucionar bugs encontrados
+
+---
+
 ## Fase 15 — MySQL, Docker y producción
 
 Preparar:
