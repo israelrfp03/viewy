@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="mx-auto max-w-2xl">
-        <p class="text-sm font-semibold text-pink-400">Pregunta a tu biblioteca</p>
+        <p class="text-sm font-semibold text-brand-400">Pregunta a tu biblioteca</p>
         <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Asistente</h1>
 
         <div class="mb-4 flex flex-wrap gap-2">
@@ -24,7 +24,7 @@
             {% endif %}
             {% for turn in history %}
                 <div class="flex justify-end">
-                    <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-pink-500 px-4 py-2.5 text-sm text-white">
+                    <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-brand-500 px-4 py-2.5 text-sm text-white">
                         {{ turn.question }}
                     </div>
                 </div>
@@ -40,9 +40,9 @@
             {% csrf_token %}
             <input type="text" name="question" id="assistant-question" maxlength="300" autocomplete="off"
                    placeholder="Escribe tu pregunta..."
-                   class="w-full rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                   class="w-full rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-brand-500">
             <button type="submit" id="assistant-submit"
-                    class="shrink-0 rounded-full bg-pink-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                    class="shrink-0 rounded-full bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
                 Preguntar
             </button>
         </form>

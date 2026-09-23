@@ -3,7 +3,7 @@
 {% block title %}Viewy — Vista previa de importación{% endblock %}
 
 {% block content %}
-    <p class="text-sm font-semibold text-pink-400">Revisa antes de confirmar</p>
+    <p class="text-sm font-semibold text-brand-400">Revisa antes de confirmar</p>
     <h1 class="mb-2 text-3xl font-black uppercase tracking-tight text-white">Vista previa</h1>
     <p class="mb-6 text-sm text-zinc-400">
         {{ rows|length }} línea{{ rows|length|pluralize }} detectada{{ rows|length|pluralize }}. Nada se ha guardado todavía —
@@ -27,7 +27,7 @@
                             <span class="rounded-full bg-red-500/10 px-2 py-0.5 text-red-400">✗ {{ row.invalid_reason }}</span>
                         {% endif %}
                         {% if row.already_in_library %}
-                            <span class="rounded-full bg-pink-500/10 px-2 py-0.5 text-pink-400">Ya está en tu biblioteca</span>
+                            <span class="rounded-full bg-brand-500/10 px-2 py-0.5 text-brand-400">Ya está en tu biblioteca</span>
                         {% endif %}
                         {% if row.invalid_reason and row.match_state != "invalid" %}
                             <span class="rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-400">{{ row.invalid_reason }}</span>
@@ -38,16 +38,16 @@
                         <label class="block">
                             <span class="mb-1 block text-xs text-zinc-500">Título</span>
                             <input type="text" name="title_{{ i }}" value="{{ row.title }}"
-                                   class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                   class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
                         </label>
                         <label class="block">
                             <span class="mb-1 block text-xs text-zinc-500">Rating</span>
                             <input type="number" name="rating_{{ i }}" min="1" max="10" step="0.5"
                                    value="{% if row.rating %}{{ row.rating }}{% endif %}"
-                                   class="w-20 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                   class="w-20 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
                         </label>
                         <label class="flex items-center gap-2 pb-2 text-xs text-zinc-400">
-                            <input type="checkbox" name="exclude_{{ i }}" class="h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-pink-500 focus:ring-pink-500">
+                            <input type="checkbox" name="exclude_{{ i }}" class="h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-brand-500 focus:ring-brand-500">
                             Excluir esta fila
                         </label>
                     </div>
@@ -56,7 +56,7 @@
                         <label class="block">
                             <span class="mb-1 block text-xs text-zinc-500">Tipo</span>
                             <select name="media_type_{{ i }}"
-                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
                                 {% for value, label in media_types %}
                                     <option value="{{ value }}" {% if row.media_type == value %}selected{% endif %}>{{ label }}</option>
                                 {% endfor %}
@@ -65,7 +65,7 @@
                         <label class="block">
                             <span class="mb-1 block text-xs text-zinc-500">Estado</span>
                             <select name="status_{{ i }}"
-                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
                                 {% for value, label in statuses %}
                                     <option value="{{ value }}" {% if row.status == value %}selected{% endif %}>{{ label }}</option>
                                 {% endfor %}
@@ -77,7 +77,7 @@
                         <label class="mt-3 block max-w-xs">
                             <span class="mb-1 block text-xs text-zinc-500">Ya la tienes — ¿qué quieres hacer?</span>
                             <select name="duplicate_action_{{ i }}"
-                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
                                 <option value="ignore" selected>Ignorar (no tocar lo que ya tengo)</option>
                                 <option value="update">Actualizar rating/estado con estos valores</option>
                             </select>
@@ -96,9 +96,9 @@
                             <span class="mb-2 block text-xs text-zinc-500">Elige la coincidencia correcta:</span>
                             <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
                                 {% for c in row.candidates %}
-                                    <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 p-2 text-xs has-[:checked]:border-pink-500">
+                                    <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 p-2 text-xs has-[:checked]:border-brand-500">
                                         <input type="radio" name="candidate_{{ i }}" value="{{ c.external_id }}"
-                                               class="h-3.5 w-3.5 border-zinc-700 bg-zinc-900 text-pink-500 focus:ring-pink-500">
+                                               class="h-3.5 w-3.5 border-zinc-700 bg-zinc-900 text-brand-500 focus:ring-brand-500">
                                         {% if c.poster_url %}<img src="{{ c.poster_url }}" alt="" class="h-12 w-8 shrink-0 rounded object-cover">{% endif %}
                                         <span class="text-zinc-300">
                                             {{ c.title }} {% if c.release_year %}({{ c.release_year }}){% endif %}
@@ -114,7 +114,7 @@
         </div>
 
         <button type="submit"
-                class="mt-6 rounded-full bg-pink-500 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                class="mt-6 rounded-full bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
             Confirmar importación
         </button>
     </form>

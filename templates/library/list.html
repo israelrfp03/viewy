@@ -5,11 +5,11 @@
 {% block content %}
     <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-            <p class="text-sm font-semibold text-pink-400">Mi colección personal</p>
+            <p class="text-sm font-semibold text-brand-400">Mi colección personal</p>
             <h1 class="text-3xl font-black uppercase tracking-tight text-white">Mi biblioteca</h1>
         </div>
         <a href="{% url 'library:create' %}"
-           class="rounded-full bg-pink-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+           class="rounded-full bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
             + Añadir título
         </a>
     </div>
@@ -50,19 +50,19 @@
         <input type="hidden" name="media_type" value="{{ current_media_type }}">
         <input type="hidden" name="favorite" value="{{ current_favorite }}">
         <input type="text" name="q" value="{{ current_query }}" placeholder="Buscar por título..."
-               class="w-full rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500">
+               class="w-full rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-brand-500">
     </form>
 
     <div class="mb-6 flex flex-wrap items-center gap-4">
         <div class="flex flex-wrap items-center gap-2">
             <span class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Estado</span>
             <a href="{% querystring status=None page=None %}"
-               class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if not current_status %}bg-pink-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+               class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if not current_status %}bg-brand-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
                 Todos
             </a>
             {% for value, label in statuses %}
                 <a href="{% querystring status=value page=None %}"
-                   class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if current_status == value %}bg-pink-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+                   class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if current_status == value %}bg-brand-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
                     {{ label }}
                 </a>
             {% endfor %}
@@ -71,12 +71,12 @@
         <div class="flex flex-wrap items-center gap-2">
             <span class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Tipo</span>
             <a href="{% querystring media_type=None page=None %}"
-               class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if not current_media_type %}bg-pink-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+               class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if not current_media_type %}bg-brand-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
                 Todos
             </a>
             {% for value, label in media_types %}
                 <a href="{% querystring media_type=value page=None %}"
-                   class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if current_media_type == value %}bg-pink-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+                   class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if current_media_type == value %}bg-brand-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
                     {{ label }}
                 </a>
             {% endfor %}
@@ -84,7 +84,7 @@
 
         {% if current_favorite == "1" %}
             <a href="{% querystring favorite=None page=None %}"
-               class="ml-auto flex items-center gap-1.5 rounded-full bg-pink-500 px-3 py-1.5 text-xs font-medium text-white transition-colors">
+               class="ml-auto flex items-center gap-1.5 rounded-full bg-brand-500 px-3 py-1.5 text-xs font-medium text-white transition-colors">
                 <span>♥</span> Favoritos
             </a>
         {% else %}
@@ -103,7 +103,7 @@
             <input type="hidden" name="media_type" value="{{ current_media_type }}">
             <input type="hidden" name="favorite" value="{{ current_favorite }}">
             <select name="sort" onchange="this.form.submit()"
-                    class="rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    class="rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
                 {% for value, label in sort_options %}
                     <option value="{{ value }}" {% if current_sort == value %}selected{% endif %}>{{ label }}</option>
                 {% endfor %}
@@ -117,7 +117,7 @@
                 <a href="{% url 'library:detail' entry.pk %}"
                    class="group animate-fade-in-up"
                    style="animation-delay: {% widthratio forloop.counter0 1 60 %}ms">
-                    <div class="relative aspect-2/3 overflow-hidden rounded-xl border border-zinc-900 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-emerald-900 to-teal-950' 'from-purple-900 to-fuchsia-950' 'from-rose-900 to-red-950' 'from-amber-900 to-orange-950' %} transition-transform duration-300 ease-out group-hover:scale-[1.03] group-hover:shadow-xl group-hover:shadow-pink-500/10">
+                    <div class="relative aspect-2/3 overflow-hidden rounded-xl border border-zinc-900 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-emerald-900 to-teal-950' 'from-purple-900 to-fuchsia-950' 'from-rose-900 to-red-950' 'from-amber-900 to-orange-950' %} transition-transform duration-300 ease-out group-hover:scale-[1.03] group-hover:shadow-xl group-hover:shadow-brand-500/10">
                         {% if entry.media.poster_url %}
                             <img src="{{ entry.media.poster_url }}" alt="{{ entry.media.title }}"
                                  class="absolute inset-0 h-full w-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-70">
@@ -127,7 +127,7 @@
                             </span>
                         {% endif %}
 
-                        <span class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-sm {% if entry.favorite %}text-pink-400{% else %}text-zinc-400{% endif %}">
+                        <span class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-sm {% if entry.favorite %}text-brand-400{% else %}text-zinc-400{% endif %}">
                             {% if entry.favorite %}♥{% else %}♡{% endif %}
                         </span>
 

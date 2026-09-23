@@ -4,7 +4,7 @@
 
 {% block content %}
     <div data-reveal class="mx-auto max-w-sm">
-        <p class="text-sm font-semibold text-pink-400">Bienvenido de nuevo</p>
+        <p class="text-sm font-semibold text-brand-400">Bienvenido de nuevo</p>
         <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Iniciar sesión</h1>
 
         {% if form.errors %}
@@ -17,14 +17,14 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit"
-                    class="mt-2 w-full rounded-full bg-pink-500 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                    class="mt-2 w-full rounded-full bg-brand-500 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
                 Entrar
             </button>
         </form>
 
         <p class="mt-6 text-center text-sm text-zinc-400">
             ¿Todavía no tienes cuenta?
-            <a href="{% url 'accounts:register' %}" class="font-semibold text-pink-400 hover:text-pink-300">Crear cuenta</a>
+            <a href="{% url 'accounts:register' %}" class="font-semibold text-brand-400 hover:text-brand-300">Crear cuenta</a>
         </p>
     </div>
 {% endblock %}

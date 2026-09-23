@@ -19,7 +19,7 @@
         </div>
 
         <div>
-            <p class="text-sm font-semibold text-pink-400">{{ media.get_media_type_display }}</p>
+            <p class="text-sm font-semibold text-brand-400">{{ media.get_media_type_display }}</p>
             <h1 class="mb-3 text-3xl font-black tracking-tight text-white sm:text-4xl">{{ media.title }}</h1>
 
             <div class="mb-4 flex flex-wrap gap-2 text-xs text-zinc-400">
@@ -42,7 +42,7 @@
                     </span>
                 {% endif %}
                 {% if entry.favorite %}
-                    <span class="flex items-center gap-1 rounded-full bg-pink-500/10 px-3 py-1.5 text-xs font-semibold text-pink-400">
+                    <span class="flex items-center gap-1 rounded-full bg-brand-500/10 px-3 py-1.5 text-xs font-semibold text-brand-400">
                         ♥ Favorito
                     </span>
                 {% endif %}
@@ -50,7 +50,7 @@
 
             <div class="flex gap-3">
                 <a href="{% url 'library:update' entry.pk %}"
-                   class="rounded-full bg-pink-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                   class="rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
                     Editar
                 </a>
                 <a href="{% url 'library:delete' entry.pk %}"
@@ -143,7 +143,7 @@
                             <ol class="grid gap-2 sm:grid-cols-2">
                                 {% for episode in enrichment.episodes %}
                                     <li class="flex gap-2 rounded-lg bg-zinc-900/50 px-3 py-2 text-sm text-zinc-300">
-                                        <span class="font-semibold text-pink-400">{{ episode.number }}.</span>
+                                        <span class="font-semibold text-brand-400">{{ episode.number }}.</span>
                                         {{ episode.title }}
                                     </li>
                                 {% endfor %}
@@ -155,14 +155,14 @@
                 {% endif %}
 
                 <a href="{% url 'library:anime_search' entry.pk %}"
-                   class="mt-8 inline-block text-sm font-medium text-pink-400 transition-colors hover:text-pink-300">
+                   class="mt-8 inline-block text-sm font-medium text-brand-400 transition-colors hover:text-brand-300">
                     Buscar otra coincidencia en AniList →
                 </a>
             {% else %}
                 <div class="rounded-2xl border border-dashed border-zinc-800 px-6 py-10 text-center">
                     <p class="mb-4 text-sm text-zinc-400">Este anime todavía no tiene información adicional de AniList.</p>
                     <a href="{% url 'library:anime_search' entry.pk %}"
-                       class="inline-block rounded-full bg-pink-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                       class="inline-block rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
                         Buscar en AniList
                     </a>
                 </div>
