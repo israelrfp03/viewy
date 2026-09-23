@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — Importar lista{% endblock %}
+
+{% block content %}
+    <div class="mx-auto max-w-2xl">
+        <p class="text-sm font-semibold text-pink-400">Trae tu historial antiguo</p>
+        <h1 class="mb-2 text-3xl font-black uppercase tracking-tight text-white">Importar lista</h1>
+        <p class="mb-6 text-sm text-zinc-400">
+            Pega una lista de títulos, uno por línea. Puedes incluir una puntuación al final de cada línea
+            con el formato que prefieras — nada se guarda todavía, primero verás una vista previa para revisar y corregir.
+        </p>
+
+        <div class="mb-6 rounded-xl border border-zinc-900 bg-zinc-900/50 p-4 text-xs text-zinc-500">
+            <p class="mb-1 font-semibold text-zinc-400">Ejemplos válidos:</p>
+            <pre class="whitespace-pre-wrap">Breaking Bad 9
+Dark: 9
+One Piece - 8
+Interstellar ⭐ 10
+Naruto | 7.5
+Severance (9)</pre>
+        </div>
+
+        <form method="post" id="import-form">
+            {% csrf_token %}
+            <textarea name="text" id="import-text" rows="12" maxlength="20000"
+                      placeholder="Pega aquí tu lista..."
+                      class="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
+            <p class="mt-2 text-xs text-zinc-500">Máximo 100 títulos por importación.</p>
+            <button type="submit" id="import-submit"
+                    class="mt-3 rounded-full bg-pink-500 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-pink-400">
+                Analizar
+            </button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        (function () {
+            var form = document.getElementById("import-form");
+            var submitBtn = document.getElementById("import-submit");
+            form.addEventListener("submit", function () {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Analizando... esto puede tardar unos segundos";
+            });
+        })();
+    </script>
+{% endblock %}

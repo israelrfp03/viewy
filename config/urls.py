@@ -23,5 +23,6 @@ urlpatterns = [
     path('analytics/', include('analytics.urls')),
     path('recommendations/', include('recommendations.urls')),
     path('assistant/', include('assistant.urls')),
+    path('import/', include('imports.urls')),
     path('', include('library.urls')),
 ]

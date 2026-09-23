@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'analytics',
     'recommendations',
     'assistant',
+    'imports',
 ]
 
 MIDDLEWARE = [
