@@ -4,77 +4,111 @@
 {% block title %}Viewy{% endblock %}
 
 {% block content %}
-    {% if user.is_authenticated %}
-        <div class="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div data-reveal class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.total }}">0</p>
-                <p class="text-sm text-zinc-500">En tu biblioteca</p>
-            </div>
-            <div data-reveal style="transition-delay: 60ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.favorites }}">0</p>
-                <p class="text-sm text-zinc-500">Favoritos</p>
-            </div>
-            <div data-reveal style="transition-delay: 120ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.completed }}">0</p>
-                <p class="text-sm text-zinc-500">Completados</p>
-            </div>
-            <div data-reveal style="transition-delay: 180ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
-                {% if quick_stats.average_rating %}
-                    <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.average_rating|floatformat:1 }}" data-counter-decimals="1">0</p>
+    <section class="relative isolate mb-16 overflow-hidden">
+        <span aria-hidden="true"
+              class="pointer-events-none absolute -left-4 -top-6 select-none text-[22vw] font-black leading-none tracking-tighter text-brand-500/[0.22] sm:text-[16vw] lg:-top-10 lg:text-[12rem]">
+            VIEWY
+        </span>
+
+        <div class="relative grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+            <div data-reveal>
+                <p class="mb-3 text-sm font-semibold text-brand-400">Hecho para quienes siempre tienen algo pendiente</p>
+                <h1 class="text-[clamp(2.5rem,4vw+1.25rem,4.75rem)] font-black uppercase leading-[0.95] tracking-tight text-white">
+                    Tu próxima<br>obsesión<br>empieza aquí
+                </h1>
+
+                {% if not user.is_authenticated %}
+                    <div class="mt-8 flex flex-wrap gap-3">
+                        <a href="{% url 'accounts:register' %}"
+                           class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
+                            Crear mi biblioteca →
+                        </a>
+                        <a href="{% url 'accounts:login' %}"
+                           class="rounded-full border border-zinc-800 px-6 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:bg-zinc-900">
+                            Iniciar sesión
+                        </a>
+                    </div>
+                    <ul class="mt-8 space-y-2 text-sm text-zinc-400">
+                        <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Películas, series y anime</li>
+                        <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Estados y puntuaciones</li>
+                        <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Favoritos siempre a mano</li>
+                    </ul>
                 {% else %}
-                    <p class="text-2xl font-black text-white">—</p>
+                    <div class="mt-8 flex flex-wrap gap-3">
+                        <a href="{% url 'library:search' %}"
+                           class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
+                            Buscar algo nuevo →
+                        </a>
+                        <a href="{% url 'library:list' %}"
+                           class="rounded-full border border-zinc-800 px-6 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:bg-zinc-900">
+                            Ver mi biblioteca
+                        </a>
+                    </div>
                 {% endif %}
-                <p class="text-sm text-zinc-500">Rating medio</p>
+            </div>
+
+            <div data-reveal style="transition-delay: 120ms" class="relative hidden h-[420px] lg:block">
+                {% if user.is_authenticated and watchlist %}
+                    {% for entry in watchlist|slice:":4" %}
+                        <div class="absolute {% if forloop.counter == 1 %}right-[10%] top-0 z-30{% elif forloop.counter == 2 %}right-[38%] top-14 z-20{% elif forloop.counter == 3 %}right-0 top-44 z-10{% else %}right-[26%] top-60 z-0{% endif %}">
+                            <div style="transform: rotate({% if forloop.counter == 1 %}-6{% elif forloop.counter == 2 %}4{% elif forloop.counter == 3 %}8{% else %}-9{% endif %}deg)">
+                                <div class="animate-float" style="animation-delay: {% widthratio forloop.counter0 1 700 %}ms">
+                                    <div class="relative aspect-2/3 {% if forloop.counter == 1 %}w-44 sm:w-52{% elif forloop.counter == 3 %}w-40 sm:w-48{% else %}w-32 sm:w-40{% endif %} overflow-hidden rounded-2xl border border-zinc-800 shadow-2xl shadow-black/50 transition-transform duration-300 hover:scale-105">
+                                        {% if entry.media.poster_url %}
+                                            <img src="{{ entry.media.poster_url }}" alt="{{ entry.media.title }}" class="h-full w-full object-cover">
+                                        {% else %}
+                                            <div class="flex h-full w-full items-center justify-center bg-zinc-900 text-3xl font-black text-white/10">
+                                                {{ entry.media.title|slice:":1" }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% for slot in "1234" %}
+                        <div class="absolute {% if forloop.counter == 1 %}right-[10%] top-0 z-30{% elif forloop.counter == 2 %}right-[38%] top-14 z-20{% elif forloop.counter == 3 %}right-0 top-44 z-10{% else %}right-[26%] top-60 z-0{% endif %}">
+                            <div style="transform: rotate({% if forloop.counter == 1 %}-6{% elif forloop.counter == 2 %}4{% elif forloop.counter == 3 %}8{% else %}-9{% endif %}deg)">
+                                <div class="animate-float" style="animation-delay: {% widthratio forloop.counter0 1 700 %}ms">
+                                    <div class="relative aspect-2/3 {% if forloop.counter == 1 %}w-44 sm:w-52{% elif forloop.counter == 3 %}w-40 sm:w-48{% else %}w-32 sm:w-40{% endif %} overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-purple-900 to-fuchsia-950' 'from-emerald-900 to-teal-950' 'from-rose-900 to-red-950' %} shadow-2xl shadow-black/50">
+                                        <img src="{% static 'images/logo-icon-transparent.png' %}" alt="" class="absolute inset-0 m-auto h-10 w-10 opacity-30">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    {% if user.is_authenticated %}
+        <div class="mb-16 grid gap-4 lg:grid-cols-[1.2fr_1fr]">
+            <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-8">
+                <p class="text-6xl font-black text-white" data-counter="{{ quick_stats.total }}">0</p>
+                <p class="mt-2 text-lg text-zinc-400">títulos en tu biblioteca</p>
+            </div>
+            <div class="grid grid-cols-3 gap-4 lg:grid-cols-1">
+                <div data-reveal style="transition-delay: 60ms" class="flex items-center justify-between rounded-2xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
+                    <p class="text-sm text-zinc-500">Favoritos</p>
+                    <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.favorites }}">0</p>
+                </div>
+                <div data-reveal style="transition-delay: 120ms" class="flex items-center justify-between rounded-2xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
+                    <p class="text-sm text-zinc-500">Completados</p>
+                    <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.completed }}">0</p>
+                </div>
+                <div data-reveal style="transition-delay: 180ms" class="flex items-center justify-between rounded-2xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
+                    <p class="text-sm text-zinc-500">Rating medio</p>
+                    {% if quick_stats.average_rating %}
+                        <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.average_rating|floatformat:1 }}" data-counter-decimals="1">0</p>
+                    {% else %}
+                        <p class="text-2xl font-black text-white">—</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     {% endif %}
-
-    <div data-reveal class="mb-6 flex justify-center lg:justify-start">
-        <img src="{% static 'images/logo-full-white-cropped.png' %}" alt="Viewy" class="h-20 w-auto sm:h-24">
-    </div>
-
-    <div class="mb-12 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-        <div data-reveal>
-            <p class="mb-3 text-sm font-semibold text-brand-400">Hecho para quienes siempre tienen algo pendiente</p>
-            <h1 class="text-4xl font-black uppercase tracking-tight text-white sm:text-5xl">
-                Tu próxima obsesión empieza aquí
-            </h1>
-
-            {% if not user.is_authenticated %}
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <a href="{% url 'accounts:register' %}"
-                       class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                        Crear mi biblioteca →
-                    </a>
-                    <a href="{% url 'accounts:login' %}"
-                       class="rounded-full border border-zinc-800 px-6 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:bg-zinc-900">
-                        Iniciar sesión
-                    </a>
-                </div>
-            {% else %}
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <a href="{% url 'library:search' %}"
-                       class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                        Buscar algo nuevo →
-                    </a>
-                    <a href="{% url 'library:list' %}"
-                       class="rounded-full border border-zinc-800 px-6 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:bg-zinc-900">
-                        Ver mi biblioteca
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-
-        {% if not user.is_authenticated %}
-            <div data-reveal style="transition-delay: 120ms" class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-6">
-                <ul class="space-y-3 text-sm text-zinc-300">
-                    <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Películas, series y anime</li>
-                    <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Estados y puntuaciones</li>
-                    <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Favoritos siempre a mano</li>
-                </ul>
-            </div>
-        {% endif %}
-    </div>
 
     {% if user.is_authenticated and watchlist %}
         <section data-reveal>
@@ -88,10 +122,10 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            <div class="flex flex-wrap gap-4">
                 {% for entry in watchlist %}
                     <a href="{% url 'library:detail' entry.pk %}"
-                       class="group animate-fade-in-up"
+                       class="group {% if forloop.first %}w-[45%] sm:w-56{% else %}w-[27%] sm:w-36{% endif %} animate-fade-in-up"
                        style="animation-delay: {% widthratio forloop.counter0 1 100 %}ms">
                         <div class="relative aspect-2/3 overflow-hidden rounded-xl border border-zinc-900 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-emerald-900 to-teal-950' 'from-purple-900 to-fuchsia-950' 'from-rose-900 to-red-950' 'from-amber-900 to-orange-950' %} transition-transform duration-300 ease-out group-hover:scale-[1.03] group-hover:shadow-xl group-hover:shadow-brand-500/10">
                             {% if entry.media.poster_url %}

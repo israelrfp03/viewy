@@ -5,6 +5,7 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --animate-fade-in-up: fade-in-up 0.5s ease-out both;
+  --animate-float: float 6s ease-in-out infinite;
 
   /* Azul de marca extraído del logo (Viewy). Escala 200-500 calculada
      mezclando el color exacto hacia blanco, mismo rol que tenía la escala
@@ -23,6 +24,19 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Movimiento sutil para el collage de posters de la home. La rotación
+   estática vive en un wrapper aparte (inline style) para que no compita
+   por la propiedad `transform` con esta animación. */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
   }
 }
 
@@ -73,5 +87,8 @@ html {
   .animate-fade-in-up {
     animation: none !important;
     opacity: 1 !important;
+  }
+  .animate-float {
+    animation: none !important;
   }
 }
