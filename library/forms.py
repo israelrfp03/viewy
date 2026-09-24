@@ -2,11 +2,8 @@ from django import forms
 
 from .models import MediaItem, UserMedia
 
-INPUT_CLASSES = (
-    "w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 "
-    "placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
-)
-CHECKBOX_CLASSES = "h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-pink-500 focus:ring-pink-500"
+INPUT_CLASSES = "field-input"
+CHECKBOX_CLASSES = "h-5 w-5 rounded accent-brand-500"
 
 
 class LibrarySearchForm(forms.Form):

@@ -1,35 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Viewy — Editar registro{% endblock %}
+{% block title %}Viewy — Editar {{ entry.media.title }}{% endblock %}
 
 {% block content %}
-    <div class="mx-auto max-w-2xl">
-        <p class="text-sm font-semibold text-brand-400">Editar registro</p>
-        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">{{ entry.media.title }}</h1>
+    <div class="mx-auto max-w-xl rounded-card bg-white p-8 shadow-[0_24px_64px_rgba(13,14,18,.15)] ring-1 ring-inset ring-line-soft sm:p-10">
+        <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Editar registro</p>
+        <h1 class="mt-2 font-display text-4xl font-bold tracking-tight text-ink">{{ entry.media.title }}</h1>
 
-        {% if form.errors %}
-            <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
-                <ul class="space-y-1 text-sm text-red-300">
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li>{{ field.label }}: {{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
+        {% if form.non_field_errors %}
+            <div class="mt-6 rounded-card bg-dropped-bg px-4 py-3.5 text-sm font-medium text-dropped-fg">
+                {{ form.non_field_errors }}
             </div>
         {% endif %}
 
-        <form method="post" class="styled-form space-y-4">
+        <form method="post" class="mt-8 flex flex-col gap-5">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit"
-                    class="rounded-full bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                Guardar cambios
-            </button>
-        </form>
+            {% include "components/field.html" with field=form.status %}
+            {% include "components/field.html" with field=form.rating %}
+            {% include "components/field.html" with field=form.current_episode %}
+            <div class="grid grid-cols-2 gap-4">
+                {% include "components/field.html" with field=form.started_at %}
+                {% include "components/field.html" with field=form.finished_at %}
+            </div>
+            {% include "components/field.html" with field=form.review %}
+            <label class="flex items-center gap-2.5 text-sm font-medium text-ink">
+                {{ form.favorite }} Favorito
+            </label>
 
-        <a href="{% url 'library:list' %}" class="mt-6 inline-block text-sm text-zinc-400 transition-colors hover:text-white">
-            ← Volver a mi biblioteca
-        </a>
+            <div class="mt-2 flex gap-3">
+                <a href="{% url 'library:detail' entry.pk %}" class="btn-secondary">Cancelar</a>
+                <button type="submit" class="btn-primary flex-1">Guardar</button>
+            </div>
+        </form>
     </div>
 {% endblock %}
