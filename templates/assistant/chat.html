@@ -3,60 +3,71 @@
 {% block title %}Viewy — Asistente{% endblock %}
 
 {% block content %}
-    <div class="mx-auto max-w-2xl">
-        <p class="text-sm font-semibold text-brand-400">Pregunta a tu biblioteca</p>
-        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Asistente</h1>
+    {% if not history %}
+        <section class="grid gap-10 py-8 lg:grid-cols-12 lg:items-center">
+            <div class="lg:col-span-7">
+                <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Pregunta a tu biblioteca</p>
+                <h1 class="mt-2 font-display text-6xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl">¿Qué quieres saber de ti?</h1>
 
-        <div class="mb-4 flex flex-wrap gap-2">
-            <button type="button" data-question="¿Cuál es mi nota media?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Mi nota media</button>
-            <button type="button" data-question="¿Qué terminé este año?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Lo que terminé este año</button>
-            <button type="button" data-question="¿Cuáles son mis favoritos?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Mis favoritos</button>
-            <button type="button" data-question="¿Cuáles son mis mejores puntuaciones?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Mejores puntuaciones</button>
-            <button type="button" data-question="¿Qué tipo de contenido veo más?" class="preset-btn rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800">Mi tipo más visto</button>
-        </div>
+                <form method="post" id="assistant-form" class="mt-8">
+                    {% csrf_token %}
+                    <div class="relative flex items-center">
+                        <input type="text" name="question" id="assistant-question" maxlength="300" autocomplete="off"
+                               placeholder="Escribe tu pregunta…"
+                               class="field-input h-16 rounded-full pr-16 text-base">
+                        <button type="submit" id="assistant-submit" aria-label="Preguntar"
+                                class="absolute right-2 flex h-12 w-12 items-center justify-center rounded-full bg-brand-500 text-white transition hover:bg-brand-600">
+                            ↑
+                        </button>
+                    </div>
+                </form>
 
-        <div class="mb-6 space-y-4">
-            {% if not history %}
-                <div class="rounded-xl border border-dashed border-zinc-800 px-4 py-8 text-center text-sm text-zinc-500">
-                    Hazme una pregunta sobre tu biblioteca — cada pregunta se responde de forma independiente,
-                    todavía no recuerdo lo que hablamos antes.
+                <div class="mt-4 grid grid-cols-2 gap-3">
+                    <button type="button" data-question="¿Cuál es mi nota media?" class="preset-btn rounded-card bg-white p-4 text-left text-sm font-medium text-ink ring-1 ring-inset ring-line-soft hover:ring-ink">Mi nota media</button>
+                    <button type="button" data-question="¿Qué terminé este año?" class="preset-btn rounded-card bg-white p-4 text-left text-sm font-medium text-ink ring-1 ring-inset ring-line-soft hover:ring-ink">Lo que terminé este año</button>
+                    <button type="button" data-question="¿Cuáles son mis favoritos?" class="preset-btn rounded-card bg-white p-4 text-left text-sm font-medium text-ink ring-1 ring-inset ring-line-soft hover:ring-ink">Mis favoritos</button>
+                    <button type="button" data-question="¿Qué tipo de contenido veo más?" class="preset-btn rounded-card bg-white p-4 text-left text-sm font-medium text-ink ring-1 ring-inset ring-line-soft hover:ring-ink">Mi tipo más visto</button>
                 </div>
-            {% endif %}
+            </div>
+            <div class="hidden flex-col items-center gap-4 text-center lg:col-span-5 lg:flex">
+                <div class="w-56">{% include "components/mascot.html" with variant="ai" size="hero" %}</div>
+                <p class="max-w-[260px] text-sm text-muted">Cada pregunta va por separado — todavía no recuerdo lo que hablamos antes.</p>
+            </div>
+        </section>
+    {% else %}
+        <div class="mx-auto flex max-w-[760px] flex-col gap-6 py-8">
             {% for turn in history %}
                 <div class="flex justify-end">
-                    <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-brand-500 px-4 py-2.5 text-sm text-white">
+                    <div class="max-w-[85%] rounded-[22px_22px_6px_22px] bg-ink px-4 py-2.5 text-sm text-white">
                         {{ turn.question }}
                     </div>
                 </div>
-                <div class="flex justify-start">
-                    <div class="max-w-[85%] whitespace-pre-line rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm {% if turn.error %}border border-amber-500/20 bg-amber-500/10 text-amber-300{% else %}border border-zinc-900 bg-zinc-900/50 text-zinc-200{% endif %}">
+                <div class="flex items-start gap-3">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white ring-1 ring-inset ring-line-soft">
+                        {% include "components/mascot.html" with variant="ai" size="sticker" %}
+                    </span>
+                    <p class="max-w-[calc(100%-52px)] whitespace-pre-line pt-1.5 text-[17px] leading-relaxed {% if turn.error %}text-planned-fg{% else %}text-ink-2{% endif %}">
                         {{ turn.answer }}
-                    </div>
+                    </p>
                 </div>
             {% endfor %}
         </div>
 
-        <form method="post" id="assistant-form" class="flex gap-2">
-            {% csrf_token %}
-            <input type="text" name="question" id="assistant-question" maxlength="300" autocomplete="off"
-                   placeholder="Escribe tu pregunta..."
-                   class="w-full rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-brand-500">
-            <button type="submit" id="assistant-submit"
-                    class="shrink-0 rounded-full bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                Preguntar
-            </button>
-        </form>
-
-        {% if history %}
-            <form method="post" class="mt-3">
+        <div class="mx-auto max-w-[760px] border-t border-line-soft py-6">
+            <form method="post" id="assistant-form" class="flex gap-2">
+                {% csrf_token %}
+                <input type="text" name="question" id="assistant-question" maxlength="300" autocomplete="off"
+                       placeholder="Escribe tu pregunta…"
+                       class="field-input flex-1 rounded-full">
+                <button type="submit" id="assistant-submit" class="btn-primary shrink-0">Preguntar</button>
+            </form>
+            <form method="post" class="mt-3 text-right">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="clear">
-                <button type="submit" class="text-xs text-zinc-500 transition-colors hover:text-white">
-                    Borrar historial de esta sesión
-                </button>
+                <button type="submit" class="text-xs font-medium text-muted hover:text-ink">Borrar historial de esta sesión</button>
             </form>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block extra_js %}
@@ -75,7 +86,6 @@
 
             form.addEventListener("submit", function () {
                 submitBtn.disabled = true;
-                submitBtn.textContent = "Pensando...";
             });
 
             window.scrollTo(0, document.body.scrollHeight);
