@@ -1,0 +1,12 @@
+{% comment %}
+Uso: {% include "components/empty_state.html" with variant="search" eyebrow="mascot-search" title="Nada con ese nombre." text="Prueba el título original." cta_url=some_url cta_label="Buscar en TMDB" %}
+{% endcomment %}
+<div class="flex flex-col items-start gap-3 rounded-card border border-line bg-paper p-7">
+    {% include "components/mascot.html" with variant=variant size="spot" %}
+    {% if eyebrow %}<p class="font-mono text-[10px] uppercase tracking-[.1em] text-brand-500">{{ eyebrow }}</p>{% endif %}
+    <h3 class="font-display text-[26px]/[0.95] font-extrabold tracking-tight text-ink">{{ title }}</h3>
+    <p class="text-[13px]/[1.45] text-muted">{{ text }}</p>
+    {% if cta_url %}
+        <a href="{{ cta_url }}" class="btn-ink self-start h-9 px-3.5 text-[13px]">{{ cta_label }}</a>
+    {% endif %}
+</div>

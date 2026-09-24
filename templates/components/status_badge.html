@@ -1,0 +1,6 @@
+{% load badges %}
+{% comment %}Uso: {% include "components/status_badge.html" with status=entry.status %}{% endcomment %}
+<span class="inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-semibold {{ status|status_bg }} {{ status|status_fg }}">
+    <span class="h-1.5 w-1.5 rounded-full {{ status|status_dot }}"></span>
+    {{ status|status_label }}
+</span>

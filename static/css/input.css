@@ -56,6 +56,34 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Recetas de botón reutilizables (components/button.html en el handoff de
+   diseño). Las utilidades de Tailwind aplicadas junto a estas clases en el
+   HTML pueden sobreescribirlas (la capa utilities se genera después de
+   components), por ejemplo class="btn-primary h-11" para otra altura. */
+@layer components {
+  .btn-primary {
+    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full bg-brand-500 px-[22px] text-[15px] font-semibold text-white transition duration-150 hover:-translate-y-px hover:bg-brand-600 hover:shadow-[0_6px_16px_rgba(0,56,190,.3)] active:scale-[.98];
+  }
+  .btn-ink {
+    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink px-[22px] text-[15px] font-semibold text-white transition duration-150 hover:-translate-y-px hover:bg-brand-500 hover:shadow-[0_6px_16px_rgba(0,56,190,.3)] active:scale-[.98];
+  }
+  .btn-secondary {
+    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full px-5 text-[15px] font-semibold text-ink ring-[1.5px] ring-inset ring-ink transition duration-150 hover:-translate-y-px active:scale-[.98];
+  }
+  .btn-ghost {
+    @apply inline-flex h-12 items-center justify-center gap-2 px-4 text-[15px] font-semibold text-ink transition hover:text-brand-500;
+  }
+  .btn-danger {
+    @apply inline-flex h-12 items-center justify-center gap-2 px-4 text-[15px] font-semibold text-dropped-fg transition hover:text-dropped;
+  }
+  .btn-outline-brand {
+    @apply inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold text-brand-500 ring-[1.5px] ring-inset ring-brand-500 transition active:scale-[.98];
+  }
+  .field-input {
+    @apply h-12 w-full rounded-lg bg-white px-4 text-[15px] text-ink ring-1 ring-inset ring-line transition placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-brand-500 focus:shadow-[0_0_0_4px_#DCE4FA];
+  }
+}
+
 /* Scroll-reveal: usado con data-reveal + animations.js (IntersectionObserver) */
 [data-reveal] {
   opacity: 0;

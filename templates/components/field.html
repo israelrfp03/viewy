@@ -1,0 +1,19 @@
+{% comment %}
+Renderiza un campo de formulario de Django con las clases del sistema de
+diseño. El widget debe llevar ya la clase "field-input" (o "accent-brand-500"
+para checkbox/radio) puesta en widget.attrs desde el propio Form — este
+partial solo añade label, help_text y errores.
+Uso: {% include "components/field.html" with field=form.username %}
+{% endcomment %}
+<div class="flex flex-col gap-1.5">
+    {% if field.label and field.widget_type != "checkbox" %}
+        <label for="{{ field.id_for_label }}" class="text-[13px] font-semibold text-ink">{{ field.label }}</label>
+    {% endif %}
+    {{ field }}
+    {% if field.help_text %}
+        <p class="text-xs text-muted">{{ field.help_text }}</p>
+    {% endif %}
+    {% for error in field.errors %}
+        <p class="text-xs font-medium text-dropped-fg">{{ error }}</p>
+    {% endfor %}
+</div>

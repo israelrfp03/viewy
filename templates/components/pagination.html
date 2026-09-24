@@ -1,0 +1,27 @@
+{% comment %}Uso: {% include "components/pagination.html" with page_obj=page_obj %}{% endcomment %}
+{% if page_obj.has_other_pages %}
+    <nav class="mt-10 flex items-center justify-between border-t border-line pt-5 text-sm font-medium">
+        {% if page_obj.has_previous %}
+            <a href="{% querystring page=page_obj.previous_page_number %}" class="text-ink hover:text-brand-500">← Anterior</a>
+        {% else %}
+            <span class="text-faint">← Anterior</span>
+        {% endif %}
+
+        <div class="hidden items-center gap-0.5 sm:flex">
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-white">{{ num }}</span>
+                {% elif num == 1 or num == page_obj.paginator.num_pages or num > page_obj.number|add:"-2" and num < page_obj.number|add:"2" %}
+                    <a href="{% querystring page=num %}" class="flex h-9 w-9 items-center justify-center rounded-full hover:bg-paper">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <span class="text-muted sm:hidden">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="{% querystring page=page_obj.next_page_number %}" class="text-ink hover:text-brand-500">Siguiente →</a>
+        {% else %}
+            <span class="text-faint">Siguiente →</span>
+        {% endif %}
+    </nav>
+{% endif %}

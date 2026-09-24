@@ -1,0 +1,11 @@
+{% comment %}
+Contenedor estándar para gráficas de Chart.js.
+Uso: {% include "components/chart_card.html" with eyebrow="Actividad mensual" title="Octubre fue tu mes: 9 terminados" canvas_id="chart-monthly" footnote="CALCULADO CON DJANGO ORM" %}
+El <canvas> se rellena desde static/js/analytics/*.js buscando canvas_id.
+{% endcomment %}
+<div class="flex flex-col gap-3.5 rounded-card bg-white p-8 ring-1 ring-inset ring-line-soft">
+    {% if eyebrow %}<p class="font-mono text-[10px] uppercase tracking-[.1em] text-muted">{{ eyebrow }}</p>{% endif %}
+    {% if title %}<h3 class="font-display text-[22px]/[1.1] font-bold tracking-tight text-ink">{{ title }}</h3>{% endif %}
+    <canvas id="{{ canvas_id }}" class="w-full" style="max-height:220px"></canvas>
+    {% if footnote %}<p class="font-mono text-[11px] text-faint">{{ footnote }}</p>{% endif %}
+</div>
