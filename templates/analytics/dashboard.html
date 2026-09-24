@@ -3,242 +3,187 @@
 {% block title %}Viewy — Estadísticas{% endblock %}
 
 {% block content %}
-    <p class="text-sm font-semibold text-brand-400">Tu actividad</p>
-    <h1 class="mb-8 text-3xl font-black uppercase tracking-tight text-white">Mis estadísticas</h1>
+    <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Tu actividad</p>
+    <h1 class="mt-2 font-display text-6xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl lg:text-display-lg">Tu año en pantalla.</h1>
 
     {% if stats.total == 0 %}
-        <div class="rounded-2xl border border-dashed border-zinc-800 px-6 py-16 text-center">
-            <p class="text-zinc-400">Todavía no tienes contenido en tu biblioteca. Añade algo para ver tus estadísticas aquí.</p>
-            <a href="{% url 'library:search' %}"
-               class="mt-4 inline-block rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                Buscar algo
-            </a>
+        <div class="mt-10">
+            {% url 'library:search' as search_url %}
+            {% include "components/empty_state.html" with variant="analytics" title="Aún no hay nada que contar." text="Termina y puntúa algunos títulos y Popi empieza a hacer cuentas." cta_url=search_url cta_label="Buscar algo" %}
         </div>
     {% else %}
-        <section class="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            <div data-reveal class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ stats.total }}">0</p>
-                <p class="text-xs text-zinc-500">Total</p>
+        <section class="mt-10 grid grid-cols-2 gap-6 border-t border-ink py-8 sm:grid-cols-4">
+            <div>
+                <p class="font-display text-6xl font-extrabold tracking-tight text-ink" data-counter="{{ stats.total }}">0</p>
+                <p class="mt-1 text-sm text-muted">títulos totales</p>
             </div>
-            <div data-reveal style="transition-delay: 40ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ stats.status_counts.planned }}">0</p>
-                <p class="text-xs text-zinc-500">Pendientes</p>
+            <div>
+                <p class="font-display text-6xl font-extrabold tracking-tight text-ink" data-counter="{{ stats.temporal_stats.completed_this_year }}">0</p>
+                <p class="mt-1 text-sm text-muted">terminados este año · {{ stats.temporal_stats.completed_this_month }} este mes</p>
             </div>
-            <div data-reveal style="transition-delay: 80ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ stats.status_counts.watching }}">0</p>
-                <p class="text-xs text-zinc-500">Viendo</p>
-            </div>
-            <div data-reveal style="transition-delay: 120ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ stats.status_counts.completed }}">0</p>
-                <p class="text-xs text-zinc-500">Terminados</p>
-            </div>
-            <div data-reveal style="transition-delay: 160ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ stats.status_counts.dropped }}">0</p>
-                <p class="text-xs text-zinc-500">Abandonados</p>
-            </div>
-            <div data-reveal style="transition-delay: 200ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                <p class="text-2xl font-black text-white" data-counter="{{ stats.favorites }}">0</p>
-                <p class="text-xs text-zinc-500">Favoritos</p>
-            </div>
-        </section>
-
-        <section class="mb-10">
-            <h2 class="mb-4 text-lg font-black uppercase tracking-tight text-white">Gráficas</h2>
-            <div class="grid gap-6 lg:grid-cols-2">
-                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
-                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Actividad mensual</h3>
-                    {% if chart_data.monthly_activity %}
-                        <div class="h-64"><canvas id="chart-monthly-activity"></canvas></div>
-                    {% else %}
-                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
-                    {% endif %}
-                </div>
-
-                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
-                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Distribución por tipo</h3>
-                    {% if chart_data.type_breakdown %}
-                        <div class="h-64"><canvas id="chart-type-breakdown"></canvas></div>
-                    {% else %}
-                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
-                    {% endif %}
-                </div>
-
-                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
-                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Distribución de ratings</h3>
-                    {% if chart_data.rating_distribution %}
-                        <div class="h-64"><canvas id="chart-rating-distribution"></canvas></div>
-                    {% else %}
-                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
-                    {% endif %}
-                </div>
-
-                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
-                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Rating medio por tipo</h3>
-                    {% if chart_data.ratings_by_type %}
-                        <div class="h-64"><canvas id="chart-ratings-by-type"></canvas></div>
-                    {% else %}
-                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
-                    {% endif %}
-                </div>
-
-                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
-                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Actividad anual</h3>
-                    {% if chart_data.yearly_activity %}
-                        <div class="h-64"><canvas id="chart-yearly-activity"></canvas></div>
-                    {% else %}
-                        <div class="flex h-64 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
-                    {% endif %}
-                </div>
-
-                <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5 lg:col-span-2">
-                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-zinc-400">Tipos de contenido a lo largo del tiempo</h3>
-                    {% if chart_data.type_over_time %}
-                        <div class="h-72"><canvas id="chart-type-over-time"></canvas></div>
-                    {% else %}
-                        <div class="flex h-72 items-center justify-center text-sm text-zinc-500">No hay suficientes datos todavía</div>
-                    {% endif %}
-                </div>
-            </div>
-        </section>
-
-        <div class="grid gap-8 lg:grid-cols-2">
-            <section data-reveal>
-                <h2 class="mb-4 text-lg font-black uppercase tracking-tight text-white">Por tipo de contenido</h2>
-                <div class="space-y-3 rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
-                    {% for value, data in stats.media_type_breakdown.items %}
-                        <div>
-                            <div class="mb-1 flex justify-between text-sm">
-                                <span class="text-zinc-200">{{ data.label }}</span>
-                                <span class="text-zinc-500">{{ data.count }} · {{ data.percentage }}%</span>
-                            </div>
-                            <div class="h-1.5 overflow-hidden rounded-full bg-zinc-800">
-                                <div class="h-full rounded-full bg-brand-500 transition-all duration-700" style="width: {{ data.percentage }}%"></div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </section>
-
-            <section data-reveal>
-                <h2 class="mb-4 text-lg font-black uppercase tracking-tight text-white">Puntuaciones</h2>
+            <div>
                 {% if stats.rating_stats.rated_count %}
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4 text-center">
-                            <p class="text-xl font-black text-amber-400">★ {{ stats.rating_stats.average }}</p>
-                            <p class="text-xs text-zinc-500">Nota media</p>
-                        </div>
-                        <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4 text-center">
-                            <p class="text-xl font-black text-white">{{ stats.rating_stats.best }}</p>
-                            <p class="text-xs text-zinc-500">Mejor nota</p>
-                        </div>
-                        <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4 text-center">
-                            <p class="text-xl font-black text-white">{{ stats.rating_stats.worst }}</p>
-                            <p class="text-xs text-zinc-500">Peor nota</p>
-                        </div>
-                    </div>
-                    <p class="mt-2 text-xs text-zinc-500">{{ stats.rating_stats.rated_count }} elementos puntuados</p>
+                    <p class="font-display text-6xl font-extrabold tracking-tight text-brand-500" data-counter="{{ stats.rating_stats.average }}" data-counter-decimals="1">0</p>
+                    <p class="mt-1 text-sm text-muted">nota media · {{ stats.rating_stats.rated_count }} puntuados</p>
                 {% else %}
-                    <div class="rounded-2xl border border-dashed border-zinc-800 px-4 py-8 text-center">
-                        <p class="text-sm text-zinc-500">Sin puntuaciones todavía.</p>
-                    </div>
-                {% endif %}
-            </section>
-        </div>
-
-        <section data-reveal class="mt-8">
-            <h2 class="mb-4 text-lg font-black uppercase tracking-tight text-white">Actividad</h2>
-            <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                    <p class="text-xl font-black text-white">{{ stats.temporal_stats.completed_this_month }}</p>
-                    <p class="text-xs text-zinc-500">Terminados este mes</p>
-                </div>
-                <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                    <p class="text-xl font-black text-white">{{ stats.temporal_stats.completed_this_year }}</p>
-                    <p class="text-xs text-zinc-500">Terminados este año</p>
-                </div>
-                {% if stats.temporal_stats.best_year %}
-                    <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                        <p class="text-xl font-black text-white">{{ stats.temporal_stats.best_year.year }}</p>
-                        <p class="text-xs text-zinc-500">Tu mejor año ({{ stats.temporal_stats.best_year.count }})</p>
-                    </div>
-                {% endif %}
-                {% if stats.average_watch_days is not None %}
-                    <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                        <p class="text-xl font-black text-white">{{ stats.average_watch_days }}</p>
-                        <p class="text-xs text-zinc-500">Días de media inicio→fin</p>
-                    </div>
+                    <p class="font-display text-6xl font-extrabold tracking-tight text-faint">—</p>
+                    <p class="mt-1 text-sm text-muted">nota media</p>
                 {% endif %}
             </div>
+            <div>
+                {% if stats.movie_watch_minutes %}
+                    <p class="font-display text-6xl font-extrabold tracking-tight text-ink" data-counter="{% widthratio stats.movie_watch_minutes 60 1 %}">0</p>
+                    <p class="mt-1 text-sm text-muted">horas de películas</p>
+                {% else %}
+                    <p class="font-display text-6xl font-extrabold tracking-tight text-faint">—</p>
+                    <p class="mt-1 text-sm text-muted">horas de películas</p>
+                {% endif %}
+            </div>
+        </section>
 
-            {% if stats.movie_watch_minutes %}
-                <p class="mt-4 text-sm text-zinc-400">
-                    <span class="font-semibold text-zinc-200">{{ stats.movie_watch_minutes }} min</span>
-                    de películas vistas (estimado, solo películas con duración conocida)
-                </p>
+        <section class="grid gap-6 border-b border-line pb-14 pt-4 lg:grid-cols-12">
+            {% if chart_data.monthly_activity %}
+                <div data-reveal class="flex flex-col gap-3.5 rounded-card bg-white p-8 ring-1 ring-inset ring-line-soft lg:col-span-8">
+                    <p class="font-mono text-[10px] uppercase tracking-[.1em] text-muted">Actividad mensual</p>
+                    <h3 class="font-display text-[22px] font-bold tracking-tight text-ink">Cuántos títulos terminaste cada mes</h3>
+                    <div class="h-56"><canvas id="chart-monthly-activity"></canvas></div>
+                </div>
+            {% endif %}
+
+            {% if chart_data.type_breakdown %}
+                <div data-reveal class="flex flex-col gap-3.5 rounded-card bg-ink p-8 text-white lg:col-span-4">
+                    <p class="font-mono text-[10px] uppercase tracking-[.1em] text-[#8E9096]">Por tipo</p>
+                    <h3 class="font-display text-[22px] font-bold tracking-tight">Qué ves más</h3>
+                    <div class="h-56"><canvas id="chart-type-breakdown"></canvas></div>
+                </div>
+            {% endif %}
+
+            {% if chart_data.rating_distribution %}
+                <div data-reveal class="flex flex-col gap-3.5 rounded-card bg-white p-8 ring-1 ring-inset ring-line-soft lg:col-span-5">
+                    <p class="font-mono text-[10px] uppercase tracking-[.1em] text-muted">Tus notas</p>
+                    <h3 class="font-display text-[22px] font-bold tracking-tight text-ink">Cómo puntúas</h3>
+                    <div class="h-56"><canvas id="chart-rating-distribution"></canvas></div>
+                </div>
+            {% endif %}
+
+            {% if chart_data.yearly_activity %}
+                <div data-reveal class="flex flex-col gap-3.5 rounded-card bg-white p-8 ring-1 ring-inset ring-line-soft lg:col-span-7">
+                    <p class="font-mono text-[10px] uppercase tracking-[.1em] text-muted">Evolución anual</p>
+                    <h3 class="font-display text-[22px] font-bold tracking-tight text-ink">Títulos terminados por año</h3>
+                    <div class="h-56"><canvas id="chart-yearly-activity"></canvas></div>
+                </div>
+            {% endif %}
+
+            {% if chart_data.ratings_by_type %}
+                <div data-reveal class="flex flex-col gap-3.5 rounded-card bg-white p-8 ring-1 ring-inset ring-line-soft lg:col-span-6">
+                    <p class="font-mono text-[10px] uppercase tracking-[.1em] text-muted">Rating medio por tipo</p>
+                    <h3 class="font-display text-[22px] font-bold tracking-tight text-ink">Qué puntúas mejor</h3>
+                    <div class="h-56"><canvas id="chart-ratings-by-type"></canvas></div>
+                </div>
+            {% endif %}
+
+            {% if chart_data.type_over_time %}
+                <div data-reveal class="flex flex-col gap-3.5 rounded-card bg-white p-8 ring-1 ring-inset ring-line-soft lg:col-span-6">
+                    <p class="font-mono text-[10px] uppercase tracking-[.1em] text-muted">A lo largo del tiempo</p>
+                    <h3 class="font-display text-[22px] font-bold tracking-tight text-ink">Tipos de contenido por mes</h3>
+                    <div class="h-56"><canvas id="chart-type-over-time"></canvas></div>
+                </div>
             {% endif %}
         </section>
 
-        {% if stats.recent_completed %}
-            <section data-reveal class="mt-8">
-                <h2 class="mb-4 text-lg font-black uppercase tracking-tight text-white">Últimos completados</h2>
-                <ul class="space-y-2">
-                    {% for entry in stats.recent_completed %}
-                        <li class="flex justify-between rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3 text-sm">
-                            <a href="{% url 'library:detail' entry.pk %}" class="font-medium text-white hover:text-brand-400">
-                                {{ entry.media.title }}
-                            </a>
-                            <span class="text-zinc-500">{{ entry.finished_at }}</span>
-                        </li>
+        <section class="grid gap-10 border-b border-line-soft py-14 lg:grid-cols-2">
+            <div data-reveal>
+                <h2 class="mb-4 font-display text-2xl font-bold tracking-tight text-ink">Por tipo de contenido</h2>
+                <div class="flex flex-col gap-3">
+                    {% for value, data in stats.media_type_breakdown.items %}
+                        <div>
+                            <div class="mb-1.5 flex justify-between text-sm">
+                                <span class="font-medium text-ink">{{ data.label }}</span>
+                                <span class="text-muted">{{ data.count }} · {{ data.percentage }}%</span>
+                            </div>
+                            <div class="h-1.5 overflow-hidden rounded-full bg-line-soft">
+                                <div class="h-full rounded-full bg-brand-500" style="width: {{ data.percentage }}%"></div>
+                            </div>
+                        </div>
                     {% endfor %}
-                </ul>
-            </section>
-        {% endif %}
+                </div>
+            </div>
 
-        {% if stats.anime_stats %}
-            <section data-reveal class="mt-8">
-                <h2 class="mb-4 text-lg font-black uppercase tracking-tight text-white">Anime</h2>
-                <div class="grid grid-cols-2 gap-3">
-                    {% if stats.anime_stats.top_studio %}
-                        <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                            <p class="text-sm font-bold text-white">{{ stats.anime_stats.top_studio.studio }}</p>
-                            <p class="text-xs text-zinc-500">Estudio más frecuente</p>
+            <div data-reveal>
+                <h2 class="mb-4 font-display text-2xl font-bold tracking-tight text-ink">Puntuaciones</h2>
+                {% if stats.rating_stats.rated_count %}
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="rounded-card bg-white px-4 py-4 text-center ring-1 ring-inset ring-line-soft">
+                            <p class="font-display text-xl font-bold text-brand-500">{{ stats.rating_stats.average }}</p>
+                            <p class="mt-0.5 text-xs text-muted">Nota media</p>
                         </div>
-                    {% endif %}
-                    {% if stats.anime_stats.top_source %}
-                        <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-4">
-                            <p class="text-sm font-bold text-white">{{ stats.anime_stats.top_source.source_material }}</p>
-                            <p class="text-xs text-zinc-500">Origen más frecuente</p>
+                        <div class="rounded-card bg-white px-4 py-4 text-center ring-1 ring-inset ring-line-soft">
+                            <p class="font-display text-xl font-bold text-ink">{{ stats.rating_stats.best }}</p>
+                            <p class="mt-0.5 text-xs text-muted">Mejor nota</p>
                         </div>
-                    {% endif %}
+                        <div class="rounded-card bg-white px-4 py-4 text-center ring-1 ring-inset ring-line-soft">
+                            <p class="font-display text-xl font-bold text-ink">{{ stats.rating_stats.worst }}</p>
+                            <p class="mt-0.5 text-xs text-muted">Peor nota</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-sm text-muted">Sin puntuaciones todavía.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section data-reveal class="border-b border-line-soft py-14">
+            <h2 class="mb-5 font-display text-2xl font-bold tracking-tight text-ink">Cómo ves.</h2>
+            <div class="flex flex-col">
+                {% if stats.average_watch_days is not None %}
+                    <div class="flex justify-between border-b border-line-soft py-3 text-sm"><span class="text-muted">Días de media para terminar</span><span class="font-semibold text-ink">{{ stats.average_watch_days }}</span></div>
+                {% endif %}
+                {% if stats.temporal_stats.best_year %}
+                    <div class="flex justify-between border-b border-line-soft py-3 text-sm"><span class="text-muted">Tu mejor año</span><span class="font-semibold text-ink">{{ stats.temporal_stats.best_year.year }} ({{ stats.temporal_stats.best_year.count }})</span></div>
+                {% endif %}
+                {% if stats.anime_stats.top_studio %}
+                    <div class="flex justify-between border-b border-line-soft py-3 text-sm"><span class="text-muted">Estudio de anime top</span><span class="font-semibold text-ink">{{ stats.anime_stats.top_studio.studio }}</span></div>
+                {% endif %}
+                {% if stats.anime_stats.top_source %}
+                    <div class="flex justify-between border-b border-line-soft py-3 text-sm"><span class="text-muted">Origen más frecuente</span><span class="font-semibold text-ink">{{ stats.anime_stats.top_source.source_material }}</span></div>
+                {% endif %}
+                <div class="flex justify-between py-3 text-sm"><span class="text-muted">Abandonados</span><span class="font-semibold text-ink">{{ stats.status_counts.dropped }} de {{ stats.total }}</span></div>
+            </div>
+        </section>
+
+        {% if stats.recent_completed %}
+            <section data-reveal class="border-b border-line-soft py-14">
+                <h2 class="mb-5 font-display text-2xl font-bold tracking-tight text-ink">Terminado recientemente</h2>
+                <div class="grid grid-cols-2 gap-6 sm:grid-cols-5">
+                    {% for entry in stats.recent_completed %}
+                        {% include "components/poster.html" with entry=entry %}
+                    {% endfor %}
                 </div>
             </section>
         {% endif %}
 
         {% if stats.advanced.monthly_completions or stats.advanced.rating_distribution %}
-            <div class="mt-10 border-t border-zinc-900 pt-8">
-                <p class="mb-1 text-sm font-semibold text-brand-400">Análisis avanzado (pandas)</p>
-                <h2 class="mb-6 text-xl font-black uppercase tracking-tight text-white">Más allá de lo básico</h2>
+            <section class="py-14">
+                <p class="font-mono text-[11px] uppercase tracking-[.1em] text-brand-500">Análisis avanzado · pandas</p>
+                <h2 class="mt-2 mb-8 font-display text-3xl font-bold tracking-tight text-ink">Más allá de lo básico</h2>
 
                 <div class="grid gap-8 lg:grid-cols-2">
                     {% if stats.advanced.monthly_completions %}
                         <section data-reveal>
                             <div class="mb-3 flex items-center justify-between">
-                                <h3 class="text-sm font-bold uppercase tracking-wide text-zinc-400">Actividad mensual</h3>
+                                <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Actividad mensual</h3>
                                 {% if stats.advanced.busiest_month %}
-                                    <span class="text-xs text-zinc-500">
-                                        Mes más activo: <span class="text-brand-400">{{ stats.advanced.busiest_month.month }}</span>
-                                        ({{ stats.advanced.busiest_month.count }})
-                                    </span>
+                                    <span class="text-xs text-muted">Mes más activo: <span class="font-semibold text-brand-500">{{ stats.advanced.busiest_month.month }}</span> ({{ stats.advanced.busiest_month.count }})</span>
                                 {% endif %}
                             </div>
-                            <div class="space-y-1.5 rounded-2xl border border-zinc-900 bg-zinc-900/50 p-4">
+                            <div class="flex flex-col gap-2 rounded-card bg-white p-5 ring-1 ring-inset ring-line-soft">
                                 {% for row in stats.advanced.monthly_completions %}
                                     <div class="flex items-center gap-3 text-sm">
-                                        <span class="w-20 shrink-0 text-zinc-400">{{ row.month }}</span>
-                                        <div class="h-2 flex-1 overflow-hidden rounded-full bg-zinc-800">
+                                        <span class="w-20 shrink-0 text-muted">{{ row.month }}</span>
+                                        <div class="h-2 flex-1 overflow-hidden rounded-full bg-brand-50">
                                             <div class="h-full rounded-full bg-brand-500" style="width: {% widthratio row.count stats.advanced.busiest_month.count 100 %}%"></div>
                                         </div>
-                                        <span class="w-6 text-right font-semibold text-white">{{ row.count }}</span>
+                                        <span class="w-6 text-right font-semibold text-ink">{{ row.count }}</span>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -247,12 +192,12 @@
 
                     {% if stats.advanced.yearly_activity %}
                         <section data-reveal>
-                            <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-zinc-400">Actividad por año</h3>
+                            <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">Actividad por año</h3>
                             <div class="grid grid-cols-3 gap-2">
                                 {% for row in stats.advanced.yearly_activity %}
-                                    <div class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-3 py-3 text-center">
-                                        <p class="text-lg font-black text-white">{{ row.count }}</p>
-                                        <p class="text-xs text-zinc-500">{{ row.year }}</p>
+                                    <div class="rounded-card bg-white px-3 py-3 text-center ring-1 ring-inset ring-line-soft">
+                                        <p class="font-display text-lg font-bold text-ink">{{ row.count }}</p>
+                                        <p class="text-xs text-muted">{{ row.year }}</p>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -261,17 +206,14 @@
 
                     {% if stats.advanced.ratings_by_type %}
                         <section data-reveal>
-                            <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-zinc-400">Ratings por tipo</h3>
-                            <div class="space-y-2">
+                            <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">Ratings por tipo</h3>
+                            <div class="flex flex-col gap-2">
                                 {% for row in stats.advanced.ratings_by_type %}
-                                    <div class="flex items-center justify-between rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-2.5 text-sm">
-                                        <span class="font-medium text-white">
+                                    <div class="flex items-center justify-between rounded-card bg-white px-4 py-2.5 text-sm ring-1 ring-inset ring-line-soft">
+                                        <span class="font-medium text-ink">
                                             {% if row.media_type == "movie" %}Película{% elif row.media_type == "series" %}Serie{% else %}Anime{% endif %}
                                         </span>
-                                        <span class="text-zinc-400">
-                                            <span class="text-amber-400">★ {{ row.average }}</span>
-                                            · mejor {{ row.best }} · peor {{ row.worst }} · {{ row.count }} valorados
-                                        </span>
+                                        <span class="text-muted"><span class="font-semibold text-brand-500">{{ row.average }}</span> · mejor {{ row.best }} · peor {{ row.worst }} · {{ row.count }} valorados</span>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -280,15 +222,15 @@
 
                     {% if stats.advanced.rating_distribution %}
                         <section data-reveal>
-                            <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-zinc-400">Distribución de ratings</h3>
-                            <div class="space-y-1.5 rounded-2xl border border-zinc-900 bg-zinc-900/50 p-4">
+                            <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">Distribución de ratings</h3>
+                            <div class="flex flex-col gap-2 rounded-card bg-white p-5 ring-1 ring-inset ring-line-soft">
                                 {% for row in stats.advanced.rating_distribution %}
                                     <div class="flex items-center gap-3 text-sm">
-                                        <span class="w-6 shrink-0 font-semibold text-amber-400">{{ row.rating }}</span>
-                                        <div class="h-2 flex-1 overflow-hidden rounded-full bg-zinc-800">
-                                            <div class="h-full rounded-full bg-amber-400" style="width: {% widthratio row.count stats.advanced.rating_distribution.0.count 100 %}%"></div>
+                                        <span class="w-6 shrink-0 font-semibold text-brand-500">{{ row.rating }}</span>
+                                        <div class="h-2 flex-1 overflow-hidden rounded-full bg-brand-50">
+                                            <div class="h-full rounded-full bg-brand-500" style="width: {% widthratio row.count stats.advanced.rating_distribution.0.count 100 %}%"></div>
                                         </div>
-                                        <span class="w-6 text-right font-semibold text-white">{{ row.count }}</span>
+                                        <span class="w-6 text-right font-semibold text-ink">{{ row.count }}</span>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -298,24 +240,24 @@
 
                 {% if stats.advanced.content_type_over_time %}
                     <section data-reveal class="mt-8">
-                        <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-zinc-400">Contenido terminado por mes y tipo</h3>
-                        <div class="overflow-x-auto rounded-2xl border border-zinc-900 bg-zinc-900/50">
+                        <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">Contenido terminado por mes y tipo</h3>
+                        <div class="overflow-x-auto rounded-card ring-1 ring-inset ring-line-soft">
                             <table class="w-full text-left text-sm">
                                 <thead>
-                                    <tr class="border-b border-zinc-800 text-xs uppercase tracking-wide text-zinc-500">
-                                        <th class="px-4 py-2">Mes</th>
-                                        <th class="px-4 py-2">Película</th>
-                                        <th class="px-4 py-2">Serie</th>
-                                        <th class="px-4 py-2">Anime</th>
+                                    <tr class="border-b border-ink font-mono text-[11px] uppercase tracking-[.08em] text-muted">
+                                        <th class="px-4 py-2.5">Mes</th>
+                                        <th class="px-4 py-2.5">Película</th>
+                                        <th class="px-4 py-2.5">Serie</th>
+                                        <th class="px-4 py-2.5">Anime</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for row in stats.advanced.content_type_over_time %}
-                                        <tr class="border-b border-zinc-900 last:border-0">
-                                            <td class="px-4 py-2 text-zinc-300">{{ row.month }}</td>
-                                            <td class="px-4 py-2 text-zinc-400">{{ row.movie|default:0 }}</td>
-                                            <td class="px-4 py-2 text-zinc-400">{{ row.series|default:0 }}</td>
-                                            <td class="px-4 py-2 text-zinc-400">{{ row.anime|default:0 }}</td>
+                                        <tr class="border-b border-line-soft last:border-0">
+                                            <td class="px-4 py-2.5 text-ink">{{ row.month }}</td>
+                                            <td class="px-4 py-2.5 text-muted">{{ row.movie|default:0 }}</td>
+                                            <td class="px-4 py-2.5 text-muted">{{ row.series|default:0 }}</td>
+                                            <td class="px-4 py-2.5 text-muted">{{ row.anime|default:0 }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -323,7 +265,7 @@
                         </div>
                     </section>
                 {% endif %}
-            </div>
+            </section>
         {% endif %}
 
         {{ chart_data.monthly_activity|json_script:"chart-data-monthly-activity" }}

@@ -8,22 +8,29 @@
   }
 
   var COLORS = {
-    pink: "#ec4899",
-    amber: "#fbbf24",
-    blue: "#60a5fa",
-    emerald: "#34d399",
-    purple: "#a78bfa",
-    grid: "rgba(255, 255, 255, 0.06)",
-    text: "#a1a1aa",
+    ink: "#0D0E12",
+    brand: "#0038BE",
+    brand300: "#7392DB",
+    brand200: "#A6B9E8",
+    text: "#6B6D73",
   };
 
-  var TYPE_COLORS = { Película: COLORS.blue, Serie: COLORS.emerald, Anime: COLORS.pink };
-  var TYPE_COLORS_BY_KEY = { movie: COLORS.blue, series: COLORS.emerald, anime: COLORS.pink };
+  var TYPE_COLORS = { Película: COLORS.ink, Serie: COLORS.brand300, Anime: COLORS.brand };
+  var TYPE_COLORS_BY_KEY = { movie: COLORS.ink, series: COLORS.brand300, anime: COLORS.brand };
+
+  if (window.Chart) {
+    window.Chart.defaults.font.family = "Geist, ui-sans-serif, system-ui, sans-serif";
+    window.Chart.defaults.color = COLORS.text;
+  }
+
+  function axisNoGrid() {
+    return { ticks: { color: COLORS.text }, grid: { display: false }, border: { display: false } };
+  }
 
   function commonScales() {
     return {
-      x: { ticks: { color: COLORS.text }, grid: { color: COLORS.grid } },
-      y: { ticks: { color: COLORS.text }, grid: { color: COLORS.grid }, beginAtZero: true },
+      x: axisNoGrid(),
+      y: Object.assign({ beginAtZero: true }, axisNoGrid()),
     };
   }
 
@@ -32,8 +39,8 @@
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: COLORS.text } },
-        tooltip: { backgroundColor: "#18181b", titleColor: "#ffffff", bodyColor: "#d4d4d8" },
+        legend: { display: false },
+        tooltip: { backgroundColor: "#0D0E12", titleColor: "#ffffff", bodyColor: "#DCE4FA", padding: 10, cornerRadius: 6 },
       },
     };
     return Object.assign(base, overrides || {});
@@ -47,7 +54,7 @@
   }
 
   function colorFor(label) {
-    return TYPE_COLORS[label] || COLORS.purple;
+    return TYPE_COLORS[label] || COLORS.brand300;
   }
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -57,11 +64,9 @@
         type: "bar",
         data: {
           labels: monthly.labels,
-          datasets: [
-            { label: "Terminados", data: monthly.data, backgroundColor: COLORS.pink, borderRadius: 4 },
-          ],
+          datasets: [{ label: "Terminados", data: monthly.data, backgroundColor: COLORS.brand, borderRadius: 3 }],
         },
-        options: commonOptions({ scales: commonScales(), plugins: { legend: { display: false } } }),
+        options: commonOptions({ scales: commonScales() }),
       });
     }
 
@@ -75,7 +80,7 @@
             {
               data: typeBreakdown.data,
               backgroundColor: typeBreakdown.labels.map(colorFor),
-              borderColor: "#09090b",
+              borderColor: "#FFFFFF",
               borderWidth: 2,
             },
           ],
@@ -90,11 +95,9 @@
         type: "bar",
         data: {
           labels: ratingDistribution.labels,
-          datasets: [
-            { label: "Elementos", data: ratingDistribution.data, backgroundColor: COLORS.amber, borderRadius: 4 },
-          ],
+          datasets: [{ label: "Elementos", data: ratingDistribution.data, backgroundColor: COLORS.brand, borderRadius: 3 }],
         },
-        options: commonOptions({ scales: commonScales(), plugins: { legend: { display: false } } }),
+        options: commonOptions({ scales: commonScales() }),
       });
     }
 
@@ -109,17 +112,16 @@
               label: "Rating medio",
               data: ratingsByType.data,
               backgroundColor: ratingsByType.labels.map(colorFor),
-              borderRadius: 4,
+              borderRadius: 3,
             },
           ],
         },
         options: commonOptions({
           indexAxis: "y",
           scales: {
-            x: { ticks: { color: COLORS.text }, grid: { color: COLORS.grid }, beginAtZero: true, max: 10 },
-            y: { ticks: { color: COLORS.text }, grid: { display: false } },
+            x: Object.assign({ beginAtZero: true, max: 10 }, axisNoGrid()),
+            y: axisNoGrid(),
           },
-          plugins: { legend: { display: false } },
         }),
       });
     }
@@ -130,11 +132,9 @@
         type: "bar",
         data: {
           labels: yearlyActivity.labels,
-          datasets: [
-            { label: "Terminados", data: yearlyActivity.data, backgroundColor: COLORS.emerald, borderRadius: 4 },
-          ],
+          datasets: [{ label: "Terminados", data: yearlyActivity.data, backgroundColor: COLORS.brand, borderRadius: 3 }],
         },
-        options: commonOptions({ scales: commonScales(), plugins: { legend: { display: false } } }),
+        options: commonOptions({ scales: commonScales() }),
       });
     }
 
@@ -145,15 +145,15 @@
         data: {
           labels: typeOverTime.labels,
           datasets: [
-            { label: "Película", data: typeOverTime.datasets.movie, backgroundColor: TYPE_COLORS_BY_KEY.movie },
-            { label: "Serie", data: typeOverTime.datasets.series, backgroundColor: TYPE_COLORS_BY_KEY.series },
-            { label: "Anime", data: typeOverTime.datasets.anime, backgroundColor: TYPE_COLORS_BY_KEY.anime },
+            { label: "Película", data: typeOverTime.datasets.movie, backgroundColor: TYPE_COLORS_BY_KEY.movie, borderRadius: 3 },
+            { label: "Serie", data: typeOverTime.datasets.series, backgroundColor: TYPE_COLORS_BY_KEY.series, borderRadius: 3 },
+            { label: "Anime", data: typeOverTime.datasets.anime, backgroundColor: TYPE_COLORS_BY_KEY.anime, borderRadius: 3 },
           ],
         },
         options: commonOptions({
           scales: {
-            x: { stacked: true, ticks: { color: COLORS.text }, grid: { color: COLORS.grid } },
-            y: { stacked: true, ticks: { color: COLORS.text }, grid: { color: COLORS.grid }, beginAtZero: true },
+            x: Object.assign({ stacked: true }, axisNoGrid()),
+            y: Object.assign({ stacked: true, beginAtZero: true }, axisNoGrid()),
           },
         }),
       });
