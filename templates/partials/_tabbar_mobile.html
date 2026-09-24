@@ -1,0 +1,58 @@
+{% load static %}
+{% with app=request.resolver_match.app_name url_name=request.resolver_match.url_name %}
+<header class="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-line bg-paper/95 px-5 backdrop-blur md:hidden">
+    <a href="{% url 'library:home' %}" class="flex items-center">
+        {% include "components/mascot.html" with variant="default" size="sticker" %}
+    </a>
+    <a href="{% url 'library:search' %}" aria-label="Buscar" class="flex h-11 w-11 items-center justify-center rounded-full bg-white ring-1 ring-inset ring-line">
+        <span class="h-3.5 w-3.5 rounded-full border-2 border-ink"></span>
+    </a>
+</header>
+
+{% if user.is_authenticated and not url_name == 'detail' and not app == 'assistant' %}
+    <nav class="fixed bottom-4 left-3 right-3 z-40 grid h-16 grid-cols-5 items-center rounded-[22px] bg-ink text-[11px] font-medium text-[#8E9096] shadow-[0_12px_32px_rgba(13,14,18,.3)] md:hidden">
+        <a href="{% url 'library:list' %}" class="flex flex-col items-center gap-1.5 {% if app == 'library' and url_name != 'home' %}text-white{% endif %}">
+            <span class="h-[3px] w-[18px] rounded {% if app == 'library' and url_name != 'home' %}bg-brand-400{% else %}bg-transparent{% endif %}"></span>
+            Biblioteca
+        </a>
+        <a href="{% url 'recommendations:form' %}" class="flex flex-col items-center gap-1.5 {% if app == 'recommendations' %}text-white{% endif %}">
+            <span class="h-[3px] w-[18px] rounded {% if app == 'recommendations' %}bg-brand-400{% else %}bg-transparent{% endif %}"></span>
+            Descubrir
+        </a>
+        <a href="{% url 'library:search' %}" aria-label="Añadir" class="flex justify-center">
+            <span class="-mt-7 flex h-[60px] w-[60px] items-center justify-center rounded-full bg-brand-500 shadow-[0_0_0_5px_#F6F6F3]">
+                {% include "components/mascot.html" with variant="default" size="sticker" line=True %}
+            </span>
+        </a>
+        <a href="{% url 'assistant:chat' %}" class="flex flex-col items-center gap-1.5 {% if app == 'assistant' %}text-white{% endif %}">
+            <span class="h-[3px] w-[18px] rounded {% if app == 'assistant' %}bg-brand-400{% else %}bg-transparent{% endif %}"></span>
+            Asistente
+        </a>
+        <button type="button" data-sheet-trigger="#more-sheet" class="flex flex-col items-center gap-1.5">
+            <span class="h-[3px] w-[18px] rounded bg-transparent"></span>
+            Más
+        </button>
+    </nav>
+
+    <div id="more-sheet" class="fixed inset-0 z-50 hidden md:hidden">
+        <div data-sheet-close class="absolute inset-0 bg-ink/40"></div>
+        <div class="absolute inset-x-0 bottom-0 flex flex-col gap-1 rounded-t-3xl bg-white px-5 pb-10 pt-3">
+            <span class="mx-auto mb-4 h-1 w-10 rounded-full bg-[#D6D6D1]"></span>
+            <a href="{% url 'accounts:profile' %}" class="mb-2 flex items-center gap-3.5 border-b border-line-soft pb-5">
+                <span class="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-ink font-display text-xl font-bold text-white">{{ user.username|first|upper }}</span>
+                <span>
+                    <span class="block text-base font-semibold text-ink">{{ user.username }}</span>
+                    <span class="mt-0.5 block font-mono text-[11px] uppercase tracking-[.1em] text-muted">Ver perfil →</span>
+                </span>
+            </a>
+            <a href="{% url 'analytics:dashboard' %}" class="flex h-14 items-center justify-between text-[17px] font-medium text-ink">Estadísticas <span class="text-faint">→</span></a>
+            <a href="{% url 'imports:start' %}" class="flex h-14 items-center justify-between text-[17px] font-medium text-ink">Importar lista <span class="text-faint">→</span></a>
+            <a href="{% url 'library:list' %}?favorite=1" class="flex h-14 items-center justify-between text-[17px] font-medium text-ink">Favoritos <span class="text-faint">→</span></a>
+            <form method="post" action="{% url 'accounts:logout' %}" class="mt-2 border-t border-line-soft pt-2">
+                {% csrf_token %}
+                <button type="submit" class="flex h-14 w-full items-center text-[17px] font-medium text-muted">Cerrar sesión</button>
+            </form>
+        </div>
+    </div>
+{% endif %}
+{% endwith %}

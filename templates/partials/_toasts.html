@@ -1,0 +1,23 @@
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div data-toast
+                 class="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full bg-ink py-1.5 pl-1.5 pr-5 text-white shadow-[0_12px_32px_rgba(13,14,18,.25)] transition-all duration-300 ease-out">
+                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-white">
+                    {% include "components/mascot.html" with variant="happy" size="sticker" %}
+                </span>
+                <span class="text-sm font-medium">{{ message }}</span>
+            </div>
+        {% else %}
+            <div class="mx-auto mb-4 flex max-w-[1360px] items-center gap-3 rounded-card px-4 py-3.5 text-sm font-medium
+                        {% if message.tags == 'error' %}bg-dropped-bg text-dropped-fg
+                        {% elif message.tags == 'warning' %}bg-planned-bg text-planned-fg
+                        {% else %}bg-brand-50 text-brand-700{% endif %}">
+                {% if message.tags == 'error' %}
+                    {% include "components/mascot.html" with variant="error" size="sticker" %}
+                {% endif %}
+                <span>{{ message }}</span>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}

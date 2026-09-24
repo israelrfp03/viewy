@@ -1,0 +1,124 @@
+{% load static %}
+{% with app=request.resolver_match.app_name url_name=request.resolver_match.url_name %}
+<header data-navbar
+        class="sticky top-0 z-40 hidden border-b border-transparent bg-paper/95 backdrop-blur transition-colors duration-200 lg:flex lg:h-[72px] lg:items-center lg:gap-10 lg:px-14">
+    <a href="{% url 'library:home' %}" class="flex items-center gap-2">
+        {% include "components/mascot.html" with variant="default" size="sticker" %}
+        {% if user.is_authenticated %}
+            <span class="h-6 w-[76px] bg-brand-500" style="mask:url({% static 'images/mascot/wordmark-white.png' %}) center/contain no-repeat;-webkit-mask:url({% static 'images/mascot/wordmark-white.png' %}) center/contain no-repeat"></span>
+        {% endif %}
+    </a>
+
+    {% if user.is_authenticated %}
+        <nav class="flex gap-7 text-sm font-medium">
+            <a href="{% url 'library:list' %}"
+               class="flex flex-col items-center gap-1 pt-2.5 {% if app == 'library' and url_name != 'home' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
+                Biblioteca
+                <span class="h-1 w-1 rounded-full {% if app == 'library' and url_name != 'home' %}bg-brand-500{% else %}bg-transparent{% endif %}"></span>
+            </a>
+            <a href="{% url 'recommendations:form' %}"
+               class="pb-2 {% if app == 'recommendations' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
+                Descubrir
+            </a>
+            <a href="{% url 'assistant:chat' %}"
+               class="pb-2 {% if app == 'assistant' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
+                Asistente
+            </a>
+            <a href="{% url 'analytics:dashboard' %}"
+               class="pb-2 {% if app == 'analytics' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
+                Estadísticas
+            </a>
+        </nav>
+
+        <div class="ml-auto flex items-center gap-3">
+            <form method="get" action="{% url 'library:search' %}" class="flex h-10 w-[280px] items-center gap-2.5 rounded-full bg-white pl-4 pr-1.5 ring-1 ring-inset ring-line">
+                <span class="h-3 w-3 shrink-0 rounded-full border-2 border-faint"></span>
+                <input type="search" name="q" data-search-input placeholder="Buscar películas, series, anime"
+                       class="w-full border-0 bg-transparent text-sm text-ink placeholder-faint focus:outline-none focus:ring-0">
+                <span class="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-[#F0F0EC] font-mono text-[11px] text-muted">/</span>
+            </form>
+
+            <a href="{% url 'library:search' %}"
+               class="flex h-10 items-center gap-2 rounded-full bg-brand-500 px-[18px] text-sm font-semibold text-white transition hover:-translate-y-px hover:bg-brand-600 hover:shadow-[0_6px_16px_rgba(0,56,190,.3)] active:scale-[.98]">
+                <span class="text-lg leading-none">+</span>Añadir
+            </a>
+
+            <div data-dropdown class="relative">
+                <button type="button" data-dropdown-trigger
+                        class="flex h-10 w-10 items-center justify-center rounded-full bg-ink font-display text-[15px] font-bold text-white shadow-[0_0_0_3px_#F6F6F3,0_0_0_5px_#0038be]">
+                    {{ user.username|first|upper }}
+                </button>
+                <div data-dropdown-panel class="absolute right-0 top-12 z-10 hidden w-[240px] rounded-card bg-white p-2 shadow-[0_12px_40px_rgba(13,14,18,.12)] ring-1 ring-line">
+                    <div class="border-b border-line-soft px-3 pb-3 pt-2.5">
+                        <p class="text-sm font-semibold text-ink">{{ user.username }}</p>
+                        <p class="mt-0.5 font-mono text-[11px] uppercase tracking-[.1em] text-muted">{{ user.library_entries.count }} títulos</p>
+                    </div>
+                    <a href="{% url 'accounts:profile' %}" class="mt-1.5 block rounded-md px-3 py-2.5 text-sm font-medium text-ink hover:bg-paper">Mi perfil</a>
+                    <a href="{% url 'imports:start' %}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-ink hover:bg-paper">Importar lista</a>
+                    <form method="post" action="{% url 'accounts:logout' %}" class="mt-1.5 border-t border-line-soft pt-1.5">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full rounded-md px-3 py-2.5 text-left text-sm font-medium text-muted hover:bg-paper">Cerrar sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <nav class="flex gap-7 text-sm font-medium text-ink">
+            <a href="{% url 'library:home' %}#how-it-works" class="hover:text-brand-500">Cómo funciona</a>
+            <a href="{% url 'library:home' %}#features" class="hover:text-brand-500">Funciones</a>
+            <a href="{% url 'library:home' %}#ai-recommendations" class="hover:text-brand-500">Recomendaciones IA</a>
+        </nav>
+        <div class="ml-auto flex items-center gap-5">
+            <a href="{% url 'accounts:login' %}" class="text-sm font-medium text-ink hover:text-brand-500">Iniciar sesión</a>
+            <a href="{% url 'accounts:register' %}"
+               class="flex h-10 items-center rounded-full bg-ink px-5 text-sm font-semibold text-white transition hover:bg-brand-500">
+                Crear mi biblioteca
+            </a>
+        </div>
+    {% endif %}
+</header>
+
+<header data-navbar
+        class="sticky top-0 z-40 hidden border-b border-transparent bg-paper/95 backdrop-blur transition-colors duration-200 md:flex md:h-16 md:items-center md:gap-7 md:px-8 lg:hidden">
+    <a href="{% url 'library:home' %}" class="flex items-center">
+        {% include "components/mascot.html" with variant="default" size="sticker" %}
+    </a>
+
+    {% if user.is_authenticated %}
+        <nav class="flex gap-6 text-sm font-medium text-muted">
+            <a href="{% url 'library:list' %}" class="py-[22px] {% if app == 'library' and url_name != 'home' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Biblioteca</a>
+            <a href="{% url 'recommendations:form' %}" class="py-[22px] {% if app == 'recommendations' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Descubrir</a>
+            <a href="{% url 'assistant:chat' %}" class="py-[22px] {% if app == 'assistant' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Asistente</a>
+            <a href="{% url 'analytics:dashboard' %}" class="py-[22px] {% if app == 'analytics' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Estadísticas</a>
+        </nav>
+        <div class="ml-auto flex items-center gap-2">
+            <a href="{% url 'library:search' %}" aria-label="Buscar" class="flex h-10 w-10 items-center justify-center rounded-full bg-white ring-1 ring-inset ring-line">
+                <span class="h-[13px] w-[13px] rounded-full border-2 border-ink"></span>
+            </a>
+            <a href="{% url 'library:search' %}" aria-label="Añadir" class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-xl leading-none text-white">+</a>
+            <div data-dropdown class="relative">
+                <button type="button" data-dropdown-trigger class="flex h-10 w-10 items-center justify-center rounded-full bg-ink font-display text-[15px] font-bold text-white">
+                    {{ user.username|first|upper }}
+                </button>
+                <div data-dropdown-panel class="absolute right-0 top-12 z-10 hidden w-[240px] rounded-card bg-white p-2 shadow-[0_12px_40px_rgba(13,14,18,.12)] ring-1 ring-line">
+                    <div class="border-b border-line-soft px-3 pb-3 pt-2.5">
+                        <p class="text-sm font-semibold text-ink">{{ user.username }}</p>
+                        <p class="mt-0.5 font-mono text-[11px] uppercase tracking-[.1em] text-muted">{{ user.library_entries.count }} títulos</p>
+                    </div>
+                    <a href="{% url 'accounts:profile' %}" class="mt-1.5 block rounded-md px-3 py-2.5 text-sm font-medium text-ink hover:bg-paper">Mi perfil</a>
+                    <a href="{% url 'imports:start' %}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-ink hover:bg-paper">Importar lista</a>
+                    <form method="post" action="{% url 'accounts:logout' %}" class="mt-1.5 border-t border-line-soft pt-1.5">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full rounded-md px-3 py-2.5 text-left text-sm font-medium text-muted hover:bg-paper">Cerrar sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="ml-auto flex items-center gap-3">
+            <a href="{% url 'accounts:login' %}" class="text-sm font-medium text-ink">Entrar</a>
+            <a href="{% url 'accounts:register' %}" class="flex h-10 items-center rounded-full bg-ink px-5 text-sm font-semibold text-white">Crear cuenta</a>
+        </div>
+    {% endif %}
+</header>
+{% endwith %}

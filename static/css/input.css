@@ -3,17 +3,42 @@
 @source "../../templates/**/*.html";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --animate-fade-in-up: fade-in-up 0.5s ease-out both;
-  --animate-float: float 6s ease-in-out infinite;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
 
-  /* Azul de marca extraído del logo (Viewy). Escala 200-500 calculada
-     mezclando el color exacto hacia blanco, mismo rol que tenía la escala
-     de pink-200/300/400/500 que sustituye. */
-  --color-brand-200: #a6b9e8;
-  --color-brand-300: #7392db;
-  --color-brand-400: #406ace;
-  --color-brand-500: #0038be;
+  --color-paper: #F6F6F3;
+  --color-surface: #FFFFFF;
+  --color-line: #E4E4DF;
+  --color-line-soft: #EEEEEA;
+  --color-faint: #A9ABB0;
+  --color-muted: #6B6D73;
+  --color-ink-2: #2A2C33;
+  --color-ink: #0D0E12;
+
+  --color-brand-50: #EEF2FD;
+  --color-brand-100: #DCE4FA;
+  --color-brand-200: #A6B9E8;
+  --color-brand-300: #7392DB;
+  --color-brand-400: #406ACE;
+  --color-brand-500: #0038BE;
+  --color-brand-600: #002FA0;
+  --color-brand-700: #00257D;
+
+  /* estados: misma luminosidad/croma, cambia el tono */
+  --color-watching: #0038BE;   --color-watching-bg: #E8EEFC;  --color-watching-fg: #0038BE;
+  --color-completed: #2E9E6A;  --color-completed-bg: #E4F4EB; --color-completed-fg: #1B6E47;
+  --color-planned: #C08F1E;    --color-planned-bg: #F7EFD9;   --color-planned-fg: #7A5A0C;
+  --color-dropped: #D0584A;    --color-dropped-bg: #F9E6E2;   --color-dropped-fg: #9A3325;
+
+  --text-display-xl: 9.75rem;  --text-display-xl--line-height: .84;  /* 156px hero home */
+  --text-display-lg: 8rem;     --text-display-lg--line-height: .85;  /* 128px título de página */
+  --text-display-md: 3.5rem;   --text-display-md--line-height: .9;   /* 56px secciones */
+
+  --radius-poster: 4px;
+  --radius-card: 10px;
+
+  --animate-fade-in-up: fade-in-up 0.5s ease-out both;
 }
 
 @keyframes fade-in-up {
@@ -24,19 +49,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Movimiento sutil para el collage de posters de la home. La rotación
-   estática vive en un wrapper aparte (inline style) para que no compita
-   por la propiedad `transform` con esta animación. */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-14px);
   }
 }
 
@@ -56,7 +68,7 @@ html {
   transform: translateY(0);
 }
 
-/* Estilo genérico para formularios renderizados con {{ form.as_p }} */
+/* Estilo genérico para formularios renderizados con {{ form.as_p }} (fuera en fase 10) */
 .styled-form p {
   margin-bottom: 1rem;
 }
@@ -87,8 +99,5 @@ html {
   .animate-fade-in-up {
     animation: none !important;
     opacity: 1 !important;
-  }
-  .animate-float {
-    animation: none !important;
   }
 }
