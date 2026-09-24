@@ -3,71 +3,60 @@
 {% block title %}Viewy — Buscar en TMDB{% endblock %}
 
 {% block content %}
-    <p class="text-sm font-semibold text-brand-400">TMDB</p>
-    <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Buscar película o serie</h1>
+    <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">TMDB</p>
+    <h1 class="mt-2 font-display text-5xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-6xl">Buscar película o serie.</h1>
 
-    <form method="get" class="mb-8 flex max-w-xl gap-2">
+    <form method="get" class="mt-8 flex max-w-xl gap-2">
         {{ form.q }}
-        <button type="submit"
-                class="shrink-0 rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-            Buscar
-        </button>
+        <button type="submit" class="btn-primary shrink-0">Buscar</button>
     </form>
 
     {% if searched %}
         {% if results %}
-            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            <div class="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
                 {% for result in results %}
-                    <div data-reveal style="transition-delay: {% widthratio forloop.counter0 1 60 %}ms"
-                         class="overflow-hidden rounded-xl border border-zinc-900 bg-zinc-900/50">
-                        <div class="relative aspect-2/3 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-emerald-900 to-teal-950' 'from-purple-900 to-fuchsia-950' 'from-rose-900 to-red-950' %}">
+                    <div data-reveal style="transition-delay: {% widthratio forloop.counter0 1 60 %}ms" class="flex flex-col gap-2.5">
+                        <div class="aspect-2/3 overflow-hidden rounded-[4px]">
                             {% if result.poster_url %}
-                                <img src="{{ result.poster_url }}" alt="{{ result.title }}" class="absolute inset-0 h-full w-full object-cover">
+                                <img src="{{ result.poster_url }}" alt="{{ result.title }}" class="h-full w-full object-cover">
                             {% else %}
-                                <span class="absolute inset-0 flex items-center justify-center text-5xl font-black text-white/10">
-                                    {{ result.title|slice:":1" }}
-                                </span>
+                                <div class="flex h-full w-full items-center justify-center bg-brand-500 text-3xl font-black text-white/20">{{ result.title|slice:":1" }}</div>
                             {% endif %}
                         </div>
-                        <div class="p-3">
-                            <h2 class="truncate text-sm font-bold text-white">{{ result.title }}</h2>
-                            <p class="mb-2 text-xs text-zinc-500">
-                                {% if result.media_type == "movie" %}Película{% else %}Serie{% endif %}
-                                {% if result.release_year %} · {{ result.release_year }}{% endif %}
-                            </p>
-                            {% if result.description %}
-                                <p class="mb-3 line-clamp-2 text-xs text-zinc-400">{{ result.description|truncatewords:20 }}</p>
-                            {% endif %}
-                            <form method="post" action="{% url 'library:add_from_tmdb' %}" class="space-y-2">
-                                {% csrf_token %}
-                                <input type="hidden" name="external_id" value="{{ result.external_id }}">
-                                <input type="hidden" name="source_type" value="{{ result.source_type }}">
-                                <select name="media_type"
-                                        class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
-                                    {% if result.media_type == "movie" %}
-                                        <option value="movie" {% if not result.is_anime_candidate %}selected{% endif %}>Película</option>
-                                    {% else %}
-                                        <option value="series" {% if not result.is_anime_candidate %}selected{% endif %}>Serie</option>
-                                    {% endif %}
-                                    <option value="anime" {% if result.is_anime_candidate %}selected{% endif %}>Anime</option>
-                                </select>
-                                <button type="submit"
-                                        class="w-full rounded-lg bg-brand-500 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-brand-400">
-                                    Añadir a mi biblioteca
-                                </button>
-                            </form>
-                        </div>
+                        <p class="truncate text-sm font-semibold text-ink">{{ result.title }}</p>
+                        <p class="-mt-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted">
+                            {% if result.media_type == "movie" %}Película{% else %}Serie{% endif %}
+                            {% if result.release_year %} · {{ result.release_year }}{% endif %}
+                        </p>
+                        {% if result.description %}
+                            <p class="line-clamp-2 text-xs text-muted">{{ result.description|truncatewords:20 }}</p>
+                        {% endif %}
+                        <form method="post" action="{% url 'library:add_from_tmdb' %}" class="mt-1 flex flex-col gap-1.5">
+                            {% csrf_token %}
+                            <input type="hidden" name="external_id" value="{{ result.external_id }}">
+                            <input type="hidden" name="source_type" value="{{ result.source_type }}">
+                            <select name="media_type" class="field-input h-9 text-xs">
+                                {% if result.media_type == "movie" %}
+                                    <option value="movie" {% if not result.is_anime_candidate %}selected{% endif %}>Película</option>
+                                {% else %}
+                                    <option value="series" {% if not result.is_anime_candidate %}selected{% endif %}>Serie</option>
+                                {% endif %}
+                                <option value="anime" {% if result.is_anime_candidate %}selected{% endif %}>Anime</option>
+                            </select>
+                            <button type="submit" class="btn-outline-brand w-full justify-center">Añadir</button>
+                        </form>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="rounded-xl border border-dashed border-zinc-800 px-6 py-16 text-center">
-                <p class="text-zinc-400">No se ha encontrado ningún resultado para esa búsqueda.</p>
+            {% url 'library:list' as list_url %}
+            <div class="mt-10">
+                {% include "components/empty_state.html" with variant="search" title="Nada con ese nombre." text="Prueba el título original o revisa la ortografía." cta_url=list_url cta_label="Volver a mi biblioteca" %}
             </div>
         {% endif %}
     {% endif %}
 
-    <a href="{% url 'library:list' %}" class="mt-8 inline-block text-sm text-zinc-400 transition-colors hover:text-white">
+    <a href="{% url 'library:list' %}" class="mt-10 inline-block text-sm font-medium text-muted hover:text-ink">
         ← Volver a mi biblioteca
     </a>
 {% endblock %}

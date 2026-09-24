@@ -96,25 +96,6 @@ html {
   transform: translateY(0);
 }
 
-/* Estilo genérico para formularios renderizados con {{ form.as_p }} (fuera en fase 10) */
-.styled-form p {
-  margin-bottom: 1rem;
-}
-.styled-form label {
-  display: block;
-  margin-bottom: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #d4d4d8;
-}
-.styled-form ul.errorlist {
-  margin-top: 0.25rem;
-  padding: 0;
-  list-style: none;
-  font-size: 0.75rem;
-  color: #f87171;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

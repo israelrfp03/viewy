@@ -3,47 +3,35 @@
 {% block title %}Viewy — Añadir contenido{% endblock %}
 
 {% block content %}
-    <div class="mx-auto max-w-2xl">
-        <p class="text-sm font-semibold text-brand-400">Añadir manualmente</p>
-        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Añadir contenido</h1>
+    <div class="mx-auto max-w-xl rounded-card bg-white p-8 ring-1 ring-inset ring-line-soft sm:p-10">
+        <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Añadir manualmente</p>
+        <h1 class="mt-2 font-display text-4xl font-bold tracking-tight text-ink">Añadir contenido</h1>
 
-        {% if media_form.errors or entry_form.errors %}
-            <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
-                <ul class="space-y-1 text-sm text-red-300">
-                    {% for field in media_form %}
-                        {% for error in field.errors %}
-                            <li>{{ field.label }}: {{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                    {% for field in entry_form %}
-                        {% for error in field.errors %}
-                            <li>{{ field.label }}: {{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                    {% for error in entry_form.non_field_errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
+        {% if media_form.non_field_errors or entry_form.non_field_errors %}
+            <div class="mt-6 rounded-card bg-dropped-bg px-4 py-3.5 text-sm font-medium text-dropped-fg">
+                {{ media_form.non_field_errors }}
+                {{ entry_form.non_field_errors }}
             </div>
         {% endif %}
 
-        <form method="post" class="styled-form space-y-8">
+        <form method="post" class="mt-8 flex flex-col gap-8">
             {% csrf_token %}
-            <div>
-                <h2 class="mb-4 text-lg font-bold text-white">Contenido</h2>
-                {{ media_form.as_p }}
+            <div class="flex flex-col gap-4">
+                <h2 class="text-lg font-semibold text-ink">Contenido</h2>
+                {% for field in media_form %}
+                    {% include "components/field.html" with field=field %}
+                {% endfor %}
             </div>
-            <div>
-                <h2 class="mb-4 text-lg font-bold text-white">Tu registro</h2>
-                {{ entry_form.as_p }}
+            <div class="flex flex-col gap-4 border-t border-line-soft pt-6">
+                <h2 class="text-lg font-semibold text-ink">Tu registro</h2>
+                {% for field in entry_form %}
+                    {% include "components/field.html" with field=field %}
+                {% endfor %}
             </div>
-            <button type="submit"
-                    class="rounded-full bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                Guardar
-            </button>
+            <button type="submit" class="btn-primary">Guardar</button>
         </form>
 
-        <a href="{% url 'library:list' %}" class="mt-6 inline-block text-sm text-zinc-400 transition-colors hover:text-white">
+        <a href="{% url 'library:list' %}" class="mt-6 inline-block text-sm font-medium text-muted hover:text-ink">
             ← Volver a mi biblioteca
         </a>
     </div>
