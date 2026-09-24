@@ -9,7 +9,7 @@
     </a>
 </header>
 
-{% if user.is_authenticated and not url_name == 'detail' and not app == 'assistant' %}
+{% if user.is_authenticated and not url_name == 'detail' and not app == 'assistant' and not url_name == 'preview' %}
     <nav class="fixed bottom-4 left-3 right-3 z-40 grid h-16 grid-cols-5 items-center rounded-[22px] bg-ink text-[11px] font-medium text-[#8E9096] shadow-[0_12px_32px_rgba(13,14,18,.3)] md:hidden">
         <a href="{% url 'library:list' %}" class="flex flex-col items-center gap-1.5 {% if app == 'library' and url_name != 'home' %}text-white{% endif %}">
             <span class="h-[3px] w-[18px] rounded {% if app == 'library' and url_name != 'home' %}bg-brand-400{% else %}bg-transparent{% endif %}"></span>

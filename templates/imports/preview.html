@@ -3,69 +3,74 @@
 {% block title %}Viewy — Vista previa de importación{% endblock %}
 
 {% block content %}
-    <p class="text-sm font-semibold text-brand-400">Revisa antes de confirmar</p>
-    <h1 class="mb-2 text-3xl font-black uppercase tracking-tight text-white">Vista previa</h1>
-    <p class="mb-6 text-sm text-zinc-400">
-        {{ rows|length }} línea{{ rows|length|pluralize }} detectada{{ rows|length|pluralize }}. Nada se ha guardado todavía —
-        corrige lo que haga falta y confirma al final.
+    <div class="mb-10 flex items-center gap-3 text-xs font-semibold text-muted">
+        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-white">✓</span>
+        <span>Pegar</span>
+        <span class="h-px w-8 bg-line"></span>
+        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-white">2</span>
+        <span class="text-ink">Revisar</span>
+        <span class="h-px w-8 bg-line"></span>
+        <span class="flex h-6 w-6 items-center justify-center rounded-full ring-1 ring-inset ring-[#D6D6D1]">3</span>
+        <span>Listo</span>
+    </div>
+
+    <h1 class="font-display text-5xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-6xl">Revisa antes de confirmar.</h1>
+    <p class="mt-4 max-w-xl text-[15px] leading-relaxed text-muted">
+        {{ rows|length }} línea{{ rows|length|pluralize }} detectada{{ rows|length|pluralize }}. Nada se ha guardado todavía — corrige lo que haga falta y confirma al final.
     </p>
 
-    <form method="post">
+    <form method="post" id="import-preview-form" class="mt-10 pb-28">
         {% csrf_token %}
-        <div class="space-y-4">
+        <div class="flex flex-col gap-5">
             {% for i, row in rows %}
-                <div class="rounded-2xl border {% if row.match_state == 'not_found' or row.match_state == 'invalid' %}border-amber-500/30{% else %}border-zinc-900{% endif %} bg-zinc-900/50 p-4">
-                    <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
-                        <span class="rounded-full bg-zinc-800 px-2 py-0.5 text-zinc-400">"{{ row.raw_text }}"</span>
+                <div class="rounded-card p-5 ring-1 ring-inset ring-line-soft {% if row.match_state == 'not_found' or row.match_state == 'invalid' %}bg-[#FBEFEC]{% elif row.match_state == 'ambiguous' %}bg-[#FBF6E8]{% elif row.already_in_library %}bg-white opacity-65{% else %}bg-white{% endif %}">
+                    <div class="mb-3 flex flex-wrap items-center gap-1.5 text-xs">
+                        <span class="rounded-full bg-paper px-2.5 py-1 font-mono text-[11px] text-muted">"{{ row.raw_text }}"</span>
                         {% if row.match_state == "matched" %}
-                            <span class="rounded-full bg-emerald-500/10 px-2 py-0.5 text-emerald-400">✓ Encontrado en TMDB</span>
+                            {% include "components/status_badge.html" with status="completed" %}
                         {% elif row.match_state == "ambiguous" %}
-                            <span class="rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-400">⚠ Varias coincidencias</span>
+                            <span class="rounded-full bg-planned-bg px-2.5 py-1 font-semibold text-planned-fg">Varias coincidencias</span>
                         {% elif row.match_state == "not_found" %}
-                            <span class="rounded-full bg-red-500/10 px-2 py-0.5 text-red-400">✗ No encontrado</span>
+                            <span class="rounded-full bg-dropped-bg px-2.5 py-1 font-semibold text-dropped-fg">No encontrado</span>
                         {% else %}
-                            <span class="rounded-full bg-red-500/10 px-2 py-0.5 text-red-400">✗ {{ row.invalid_reason }}</span>
+                            <span class="rounded-full bg-dropped-bg px-2.5 py-1 font-semibold text-dropped-fg">{{ row.invalid_reason }}</span>
                         {% endif %}
                         {% if row.already_in_library %}
-                            <span class="rounded-full bg-brand-500/10 px-2 py-0.5 text-brand-400">Ya está en tu biblioteca</span>
+                            <span class="rounded-full bg-brand-50 px-2.5 py-1 font-semibold text-brand-700">Ya está en tu biblioteca</span>
                         {% endif %}
                         {% if row.invalid_reason and row.match_state != "invalid" %}
-                            <span class="rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-400">{{ row.invalid_reason }}</span>
+                            <span class="rounded-full bg-planned-bg px-2.5 py-1 font-semibold text-planned-fg">{{ row.invalid_reason }}</span>
                         {% endif %}
                     </div>
 
                     <div class="grid gap-3 sm:grid-cols-[1fr_auto_auto] sm:items-end">
                         <label class="block">
-                            <span class="mb-1 block text-xs text-zinc-500">Título</span>
-                            <input type="text" name="title_{{ i }}" value="{{ row.title }}"
-                                   class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <span class="mb-1 block text-xs font-semibold text-ink">Título</span>
+                            <input type="text" name="title_{{ i }}" value="{{ row.title }}" class="field-input h-11">
                         </label>
                         <label class="block">
-                            <span class="mb-1 block text-xs text-zinc-500">Rating</span>
+                            <span class="mb-1 block text-xs font-semibold text-ink">Nota</span>
                             <input type="number" name="rating_{{ i }}" min="1" max="10" step="0.5"
-                                   value="{% if row.rating %}{{ row.rating }}{% endif %}"
-                                   class="w-20 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                   value="{% if row.rating %}{{ row.rating }}{% endif %}" class="field-input h-11 w-20">
                         </label>
-                        <label class="flex items-center gap-2 pb-2 text-xs text-zinc-400">
-                            <input type="checkbox" name="exclude_{{ i }}" class="h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-brand-500 focus:ring-brand-500">
-                            Excluir esta fila
+                        <label class="flex items-center gap-2 pb-2.5 text-xs font-medium text-muted">
+                            <input type="checkbox" name="exclude_{{ i }}" class="import-exclude h-5 w-5 rounded accent-brand-500">
+                            Excluir
                         </label>
                     </div>
 
                     <div class="mt-3 grid gap-3 sm:grid-cols-2">
                         <label class="block">
-                            <span class="mb-1 block text-xs text-zinc-500">Tipo</span>
-                            <select name="media_type_{{ i }}"
-                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <span class="mb-1 block text-xs font-semibold text-ink">Tipo</span>
+                            <select name="media_type_{{ i }}" class="field-input h-11">
                                 {% for value, label in media_types %}
                                     <option value="{{ value }}" {% if row.media_type == value %}selected{% endif %}>{{ label }}</option>
                                 {% endfor %}
                             </select>
                         </label>
                         <label class="block">
-                            <span class="mb-1 block text-xs text-zinc-500">Estado</span>
-                            <select name="status_{{ i }}"
-                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <span class="mb-1 block text-xs font-semibold text-ink">Estado</span>
+                            <select name="status_{{ i }}" class="field-input h-11">
                                 {% for value, label in statuses %}
                                     <option value="{{ value }}" {% if row.status == value %}selected{% endif %}>{{ label }}</option>
                                 {% endfor %}
@@ -75,9 +80,8 @@
 
                     {% if row.already_in_library %}
                         <label class="mt-3 block max-w-xs">
-                            <span class="mb-1 block text-xs text-zinc-500">Ya la tienes — ¿qué quieres hacer?</span>
-                            <select name="duplicate_action_{{ i }}"
-                                    class="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <span class="mb-1 block text-xs font-semibold text-ink">Ya la tienes — ¿qué hacemos?</span>
+                            <select name="duplicate_action_{{ i }}" class="field-input h-11">
                                 <option value="ignore" selected>Ignorar (no tocar lo que ya tengo)</option>
                                 <option value="update">Actualizar rating/estado con estos valores</option>
                             </select>
@@ -85,25 +89,21 @@
                     {% endif %}
 
                     {% if row.match_state == "matched" %}
-                        <div class="mt-3 flex items-center gap-3 rounded-lg bg-zinc-950 p-2 text-sm">
+                        <div class="mt-3 flex items-center gap-3 rounded-lg bg-paper p-2 text-sm">
                             {% with c=row.candidates|first %}
-                                {% if c.poster_url %}<img src="{{ c.poster_url }}" alt="" class="h-14 w-10 rounded object-cover">{% endif %}
-                                <span class="text-zinc-300">{{ c.title }} {% if c.release_year %}({{ c.release_year }}){% endif %}</span>
+                                {% if c.poster_url %}<img src="{{ c.poster_url }}" alt="" class="h-14 w-10 rounded-[4px] object-cover">{% endif %}
+                                <span class="text-ink-2">{{ c.title }} {% if c.release_year %}({{ c.release_year }}){% endif %}</span>
                             {% endwith %}
                         </div>
                     {% elif row.match_state == "ambiguous" and row.candidates %}
                         <div class="mt-3">
-                            <span class="mb-2 block text-xs text-zinc-500">Elige la coincidencia correcta:</span>
+                            <span class="mb-2 block text-xs font-semibold text-ink">Elige la coincidencia correcta:</span>
                             <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
                                 {% for c in row.candidates %}
-                                    <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 p-2 text-xs has-[:checked]:border-brand-500">
-                                        <input type="radio" name="candidate_{{ i }}" value="{{ c.external_id }}"
-                                               class="h-3.5 w-3.5 border-zinc-700 bg-zinc-900 text-brand-500 focus:ring-brand-500">
-                                        {% if c.poster_url %}<img src="{{ c.poster_url }}" alt="" class="h-12 w-8 shrink-0 rounded object-cover">{% endif %}
-                                        <span class="text-zinc-300">
-                                            {{ c.title }} {% if c.release_year %}({{ c.release_year }}){% endif %}
-                                            · {{ c.media_type }}
-                                        </span>
+                                    <label class="flex cursor-pointer items-center gap-2 rounded-lg bg-white p-2 text-xs ring-1 ring-inset ring-line has-[:checked]:ring-2 has-[:checked]:ring-brand-500">
+                                        <input type="radio" name="candidate_{{ i }}" value="{{ c.external_id }}" class="h-3.5 w-3.5 accent-brand-500">
+                                        {% if c.poster_url %}<img src="{{ c.poster_url }}" alt="" class="h-12 w-8 shrink-0 rounded-[4px] object-cover">{% endif %}
+                                        <span class="text-ink-2">{{ c.title }} {% if c.release_year %}({{ c.release_year }}){% endif %} · {{ c.media_type }}</span>
                                     </label>
                                 {% endfor %}
                             </div>
@@ -113,9 +113,34 @@
             {% endfor %}
         </div>
 
-        <button type="submit"
-                class="mt-6 rounded-full bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-            Confirmar importación
-        </button>
+        <div class="fixed inset-x-0 bottom-0 z-30 flex flex-wrap items-center justify-between gap-3 bg-ink px-5 py-4 sm:px-10 lg:px-14">
+            <div class="flex items-center gap-3">
+                <div class="w-8">{% include "components/mascot.html" with variant="default" size="sticker" line=True %}</div>
+                <p class="text-sm text-white">Se añadirán <strong id="import-will-add" class="font-semibold">{{ rows|length }}</strong> títulos.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="{% url 'imports:start' %}" class="text-sm font-medium text-brand-200 hover:text-white">← Volver a editar</a>
+                <button type="submit" class="btn-primary">Confirmar importación</button>
+            </div>
+        </div>
     </form>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        (function () {
+            var checkboxes = document.querySelectorAll(".import-exclude");
+            var counter = document.getElementById("import-will-add");
+            var total = checkboxes.length;
+
+            function update() {
+                var excluded = document.querySelectorAll(".import-exclude:checked").length;
+                counter.textContent = total - excluded;
+            }
+
+            checkboxes.forEach(function (box) {
+                box.addEventListener("change", update);
+            });
+        })();
+    </script>
 {% endblock %}
