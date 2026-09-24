@@ -1,30 +1,42 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Viewy — Iniciar sesión{% endblock %}
 
 {% block content %}
-    <div data-reveal class="mx-auto max-w-sm">
-        <p class="text-sm font-semibold text-brand-400">Bienvenido de nuevo</p>
-        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Iniciar sesión</h1>
-
-        {% if form.errors %}
-            <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
-                <p class="text-sm text-red-300">Usuario o contraseña incorrectos.</p>
+    <div data-reveal class="-mx-5 grid overflow-hidden rounded-none sm:-mx-10 lg:-mx-14 lg:my-8 lg:grid-cols-12 lg:rounded-card">
+        <div class="hidden flex-col justify-between gap-8 bg-brand-500 p-10 text-white lg:col-span-5 lg:flex lg:p-14">
+            <span class="h-8 w-28 bg-white" style="mask:url({% static 'images/mascot/wordmark-white.png' %}) left/contain no-repeat;-webkit-mask:url({% static 'images/mascot/wordmark-white.png' %}) left/contain no-repeat"></span>
+            <div class="w-44">{% include "components/mascot.html" with variant="default" size="hero" line=True %}</div>
+            <div>
+                <p class="font-display text-5xl font-extrabold leading-[0.95] tracking-tight">Vuelve a lo que estabas viendo.</p>
+                <p class="mt-4 font-mono text-[11px] uppercase tracking-[.1em] text-brand-100">Tu biblioteca te espera</p>
             </div>
-        {% endif %}
+        </div>
 
-        <form method="post" class="styled-form">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit"
-                    class="mt-2 w-full rounded-full bg-brand-500 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                Entrar
-            </button>
-        </form>
+        <div class="flex flex-col justify-center px-0 py-10 lg:col-span-7 lg:px-16">
+            <div class="mx-auto flex w-full max-w-[420px] flex-col gap-6">
+                <div class="flex items-baseline justify-between">
+                    <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Iniciar sesión</p>
+                    <a href="{% url 'accounts:register' %}" class="text-sm font-medium text-brand-500 hover:text-brand-600">¿Nuevo en Viewy? Crea tu cuenta</a>
+                </div>
+                <h1 class="font-display text-5xl font-bold tracking-tight text-ink">Hola de nuevo.</h1>
 
-        <p class="mt-6 text-center text-sm text-zinc-400">
-            ¿Todavía no tienes cuenta?
-            <a href="{% url 'accounts:register' %}" class="font-semibold text-brand-400 hover:text-brand-300">Crear cuenta</a>
-        </p>
+                {% if form.errors %}
+                    <div class="rounded-card bg-dropped-bg px-4 py-3.5 text-sm font-medium text-dropped-fg">
+                        Usuario o contraseña incorrectos.
+                    </div>
+                {% endif %}
+
+                <form method="post" class="flex flex-col gap-4">
+                    {% csrf_token %}
+                    {% include "components/field.html" with field=form.username %}
+                    {% include "components/field.html" with field=form.password %}
+                    <button type="submit" class="btn-primary mt-1 w-full">Entrar</button>
+                </form>
+
+                <p class="text-center text-xs text-muted">Tus datos solo los ves tú.</p>
+            </div>
+        </div>
     </div>
 {% endblock %}

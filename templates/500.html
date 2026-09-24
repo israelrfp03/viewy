@@ -1,0 +1,28 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viewy — Error del servidor</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Geist:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+<body class="flex min-h-screen flex-col justify-between bg-ink px-6 py-10 text-white sm:px-14 sm:py-14">
+    <p class="font-mono text-[11px] uppercase tracking-[.1em] text-[#8E9096]">Error 500</p>
+
+    <div class="flex flex-col gap-6">
+        <div class="relative w-36">
+            <img src="{% static 'images/mascot/line-white.png' %}" alt="" class="w-full" style="transform:rotate(-10deg) translateY(10px);opacity:.55">
+            <span class="absolute -right-2 -top-1 flex h-9 w-9 items-center justify-center rounded-full bg-white font-display text-xl font-extrabold text-ink">!</span>
+        </div>
+        <h1 class="font-display text-5xl font-extrabold leading-[0.9] tracking-tight sm:text-6xl">Se nos ha quemado la palomita.</h1>
+        <p class="max-w-md text-[15px] text-[#A9ABB0]">Algo ha fallado en nuestro lado. Tu biblioteca está a salvo.</p>
+    </div>
+
+    <a href="/" class="inline-flex h-12 w-fit items-center rounded-full bg-white px-[22px] text-[15px] font-semibold text-ink">
+        Volver al inicio
+    </a>
+</body>
+</html>

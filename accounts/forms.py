@@ -2,10 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from .models import User
 
-INPUT_CLASSES = (
-    "w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 "
-    "placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
-)
+INPUT_CLASSES = "field-input"
 
 
 class StyledFormMixin:

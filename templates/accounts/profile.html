@@ -3,34 +3,86 @@
 {% block title %}Viewy — Mi perfil{% endblock %}
 
 {% block content %}
-    <div data-reveal class="mx-auto max-w-lg">
-        <div class="mb-6 flex items-center gap-4">
-            <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-brand-500 text-2xl font-black text-white">
+    <div data-reveal class="flex flex-col gap-6 border-b border-line pb-10 sm:flex-row sm:items-end sm:justify-between">
+        <div class="flex items-center gap-5 sm:items-end">
+            <div class="flex h-40 w-40 shrink-0 items-center justify-center rounded-full bg-brand-500 font-display text-6xl font-extrabold text-white">
                 {{ user.username|first|upper }}
             </div>
             <div>
-                <h1 class="text-2xl font-black tracking-tight text-white">{{ user.username }}</h1>
-                <p class="text-sm text-zinc-500">Miembro desde {{ user.date_joined|date:"d M Y" }}</p>
+                <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Miembro desde {{ user.date_joined|date:"d M Y" }}</p>
+                <h1 class="mt-2 font-display text-6xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl">{{ user.username }}</h1>
             </div>
         </div>
-
-        <div class="mb-6 space-y-3 rounded-2xl border border-zinc-900 bg-zinc-900/50 p-5">
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Email</p>
-                <p class="text-sm text-zinc-200">{{ user.email }}</p>
-            </div>
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Bio</p>
-                <p class="text-sm text-zinc-200">{{ user.bio|default:"(sin biografía)" }}</p>
-            </div>
-        </div>
-
         <form method="post" action="{% url 'accounts:logout' %}">
             {% csrf_token %}
-            <button type="submit"
-                    class="rounded-full border border-zinc-800 px-5 py-2 text-sm font-semibold text-zinc-300 transition-colors hover:bg-zinc-900">
-                Cerrar sesión
-            </button>
+            <button type="submit" class="btn-ghost">Cerrar sesión</button>
         </form>
     </div>
+
+    <section data-reveal class="border-b border-line-soft py-10">
+        {% if stats.total %}
+            <p class="max-w-2xl font-display text-2xl font-medium leading-snug text-ink-2 sm:text-[32px]">
+                {% if most_watched_type %}Lo que más ves es <span class="text-brand-500">{{ most_watched_type.label|lower }}</span>.{% endif %}
+                {% if best_rated_type %}Lo que mejor puntúas es <span class="text-brand-500">{{ best_rated_type|lower }}</span>.{% endif %}
+                {% if top_studio %}Tu estudio de anime favorito parece ser <span class="text-brand-500">{{ top_studio }}</span>.{% endif %}
+                {% if dropout_rate %}Abandonas alrededor del <span class="text-brand-500">{{ dropout_rate }}%</span> de lo que empiezas.{% endif %}
+            </p>
+        {% else %}
+            <p class="text-lg text-muted">Todavía no hay suficiente actividad para un resumen.</p>
+        {% endif %}
+        {% if user.bio %}<p class="mt-4 max-w-xl text-sm text-muted">{{ user.bio }}</p>{% endif %}
+    </section>
+
+    <section data-reveal class="grid grid-cols-2 gap-6 border-b border-line-soft py-10 sm:grid-cols-4">
+        <div><p class="font-display text-6xl font-extrabold tracking-tight text-ink">{{ stats.total }}</p><p class="mt-1 text-sm text-muted">títulos</p></div>
+        <div><p class="font-display text-6xl font-extrabold tracking-tight text-ink">{{ stats.status_counts.completed }}</p><p class="mt-1 text-sm text-muted">terminados</p></div>
+        <div>
+            {% if stats.rating_stats.rated_count %}
+                <p class="font-display text-6xl font-extrabold tracking-tight text-brand-500">{{ stats.rating_stats.average }}</p>
+            {% else %}
+                <p class="font-display text-6xl font-extrabold tracking-tight text-faint">—</p>
+            {% endif %}
+            <p class="mt-1 text-sm text-muted">nota media</p>
+        </div>
+        <div><p class="font-display text-6xl font-extrabold tracking-tight text-ink">{{ stats.favorites }}</p><p class="mt-1 text-sm text-muted">favoritos</p></div>
+    </section>
+
+    {% if favorites %}
+        <section data-reveal class="border-b border-line-soft py-10">
+            <h2 class="mb-5 font-display text-3xl font-bold tracking-tight text-ink">Favoritos</h2>
+            <div class="grid grid-cols-2 gap-6 sm:grid-cols-5">
+                {% for entry in favorites %}
+                    <div class="{% if forloop.first %}col-span-2 sm:col-span-2{% endif %}">
+                        {% include "components/poster.html" with entry=entry %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    <section data-reveal class="py-10">
+        <h2 class="mb-5 font-display text-3xl font-bold tracking-tight text-ink">Actividad reciente</h2>
+        {% if recent_activity %}
+            <div class="flex flex-col">
+                {% for item in recent_activity %}
+                    <a href="{% url 'library:detail' item.entry.pk %}" class="flex items-center gap-4 border-b border-line-soft py-3.5 last:border-0">
+                        <span class="w-20 shrink-0 font-mono text-xs text-muted">{{ item.entry.updated_at|date:"d M" }}</span>
+                        <span class="h-14 w-10 shrink-0 overflow-hidden rounded-[4px] bg-brand-500">
+                            {% if item.entry.media.poster_url %}<img src="{{ item.entry.media.poster_url }}" alt="" class="h-full w-full object-cover">{% endif %}
+                        </span>
+                        <span class="min-w-0 flex-1 text-sm text-ink">{{ item.verb }} <span class="font-semibold">{{ item.entry.media.title }}</span>{% if item.entry.status == "watching" %} — ep. {{ item.entry.current_episode|default:0 }}{% endif %}</span>
+                        {% include "components/status_badge.html" with status=item.entry.status %}
+                    </a>
+                {% endfor %}
+            </div>
+            {% if not has_recent_activity %}
+                <div class="mt-6 flex items-center gap-3 rounded-card bg-paper px-4 py-3.5">
+                    <div class="w-9">{% include "components/mascot.html" with variant="sleep" size="sticker" %}</div>
+                    <p class="text-sm text-muted">Llevas un tiempo sin registrar nada. ¿Qué estás viendo?</p>
+                </div>
+            {% endif %}
+        {% else %}
+            <p class="text-sm text-muted">Todavía no hay actividad.</p>
+        {% endif %}
+    </section>
 {% endblock %}

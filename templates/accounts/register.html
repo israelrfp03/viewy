@@ -3,37 +3,48 @@
 {% block title %}Viewy — Registro{% endblock %}
 
 {% block content %}
-    <div data-reveal class="mx-auto max-w-sm">
-        <p class="text-sm font-semibold text-brand-400">Empieza gratis</p>
-        <h1 class="mb-6 text-3xl font-black uppercase tracking-tight text-white">Crear cuenta</h1>
+    <div data-reveal class="-mx-5 grid overflow-hidden sm:-mx-10 lg:-mx-14 lg:my-8 lg:grid-cols-12 lg:rounded-card">
+        <div class="flex flex-col justify-center px-0 py-10 lg:col-span-7 lg:px-16">
+            <div class="mx-auto flex w-full max-w-[420px] flex-col gap-6">
+                <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Crear cuenta</p>
+                <h1 class="font-display text-5xl font-bold tracking-tight text-ink">Empieza tu biblioteca.</h1>
 
-        {% if form.errors %}
-            <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
-                <ul class="space-y-1 text-sm text-red-300">
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li>{{ field.label }}: {{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                    {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
+                {% if form.errors %}
+                    <div class="rounded-card bg-dropped-bg px-4 py-3.5 text-sm font-medium text-dropped-fg">
+                        <ul class="flex flex-col gap-1">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form method="post" class="flex flex-col gap-4">
+                    {% csrf_token %}
+                    {% include "components/field.html" with field=form.username %}
+                    {% include "components/field.html" with field=form.email %}
+                    <div class="grid grid-cols-2 gap-4">
+                        {% include "components/field.html" with field=form.password1 %}
+                        {% include "components/field.html" with field=form.password2 %}
+                    </div>
+                    <button type="submit" class="btn-primary mt-1 w-full">Registrarse</button>
+                </form>
+
+                <p class="text-center text-sm text-muted">
+                    ¿Ya tienes cuenta? <a href="{% url 'accounts:login' %}" class="font-semibold text-brand-500 hover:text-brand-600">Inicia sesión</a>
+                </p>
             </div>
-        {% endif %}
+        </div>
 
-        <form method="post" class="styled-form">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit"
-                    class="mt-2 w-full rounded-full bg-brand-500 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                Registrarse
-            </button>
-        </form>
-
-        <p class="mt-6 text-center text-sm text-zinc-400">
-            ¿Ya tienes cuenta?
-            <a href="{% url 'accounts:login' %}" class="font-semibold text-brand-400 hover:text-brand-300">Inicia sesión</a>
-        </p>
+        <div class="hidden flex-col items-center justify-center gap-6 bg-ink p-14 text-center lg:col-span-5 lg:flex">
+            <div class="w-24">{% include "components/mascot.html" with variant="happy" size="spot" %}</div>
+            <p class="font-display text-2xl font-bold text-white">¿Traes una lista vieja?</p>
+            <p class="max-w-[260px] text-sm text-[#A9ABB0]">Cuando termines de registrarte podrás pegarla y la ordenamos por ti.</p>
+        </div>
     </div>
 {% endblock %}
