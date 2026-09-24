@@ -84,8 +84,40 @@
     });
   }
 
+  function initParallax() {
+    var elements = document.querySelectorAll("[data-parallax]");
+    if (!elements.length) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var ticking = false;
+
+    function update() {
+      var viewportMid = window.innerHeight / 2;
+      elements.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        var elMid = rect.top + rect.height / 2;
+        var ratio = Math.max(-1, Math.min(1, (elMid - viewportMid) / viewportMid));
+        el.style.transform = "translateY(" + (ratio * 8).toFixed(1) + "px)";
+      });
+      ticking = false;
+    }
+
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          window.requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+    update();
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initScrollReveal();
     initCounters();
+    initParallax();
   });
 })();

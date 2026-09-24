@@ -4,151 +4,266 @@
 {% block title %}Viewy{% endblock %}
 
 {% block content %}
-    <section class="relative isolate mb-16 overflow-hidden">
-        <span aria-hidden="true"
-              class="pointer-events-none absolute -left-4 -top-6 select-none text-[22vw] font-black leading-none tracking-tighter text-brand-500/[0.22] sm:text-[16vw] lg:-top-10 lg:text-[12rem]">
-            VIEWY
-        </span>
+{% if user.is_authenticated %}
 
-        <div class="relative grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-center">
-            <div data-reveal>
-                <p class="mb-3 text-sm font-semibold text-brand-400">Hecho para quienes siempre tienen algo pendiente</p>
-                <h1 class="text-[clamp(2.5rem,4vw+1.25rem,4.75rem)] font-black uppercase leading-[0.95] tracking-tight text-white">
-                    Tu próxima<br>obsesión<br>empieza aquí
-                </h1>
-
-                {% if not user.is_authenticated %}
-                    <div class="mt-8 flex flex-wrap gap-3">
-                        <a href="{% url 'accounts:register' %}"
-                           class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                            Crear mi biblioteca →
-                        </a>
-                        <a href="{% url 'accounts:login' %}"
-                           class="rounded-full border border-zinc-800 px-6 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:bg-zinc-900">
-                            Iniciar sesión
-                        </a>
-                    </div>
-                    <ul class="mt-8 space-y-2 text-sm text-zinc-400">
-                        <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Películas, series y anime</li>
-                        <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Estados y puntuaciones</li>
-                        <li class="flex items-center gap-2"><span class="text-brand-400">✔</span> Favoritos siempre a mano</li>
-                    </ul>
-                {% else %}
-                    <div class="mt-8 flex flex-wrap gap-3">
-                        <a href="{% url 'library:search' %}"
-                           class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-                            Buscar algo nuevo →
-                        </a>
-                        <a href="{% url 'library:list' %}"
-                           class="rounded-full border border-zinc-800 px-6 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:bg-zinc-900">
-                            Ver mi biblioteca
-                        </a>
-                    </div>
-                {% endif %}
+    <section data-reveal class="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
+        <div class="rounded-card bg-white p-8 ring-1 ring-inset ring-line-soft">
+            <p class="font-display text-6xl font-extrabold tracking-tight text-ink" data-counter="{{ quick_stats.total }}">0</p>
+            <p class="mt-2 text-base text-muted">títulos en tu biblioteca</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3 lg:grid-cols-1">
+            <div class="flex items-center justify-between rounded-card bg-white px-5 py-4 ring-1 ring-inset ring-line-soft">
+                <p class="text-sm text-muted">Favoritos</p>
+                <p class="font-display text-2xl font-bold text-ink" data-counter="{{ quick_stats.favorites }}">0</p>
             </div>
-
-            <div data-reveal style="transition-delay: 120ms" class="relative hidden h-[420px] lg:block">
-                {% if user.is_authenticated and watchlist %}
-                    {% for entry in watchlist|slice:":4" %}
-                        <div class="absolute {% if forloop.counter == 1 %}right-[10%] top-0 z-30{% elif forloop.counter == 2 %}right-[38%] top-14 z-20{% elif forloop.counter == 3 %}right-0 top-44 z-10{% else %}right-[26%] top-60 z-0{% endif %}">
-                            <div style="transform: rotate({% if forloop.counter == 1 %}-6{% elif forloop.counter == 2 %}4{% elif forloop.counter == 3 %}8{% else %}-9{% endif %}deg)">
-                                <div class="animate-float" style="animation-delay: {% widthratio forloop.counter0 1 700 %}ms">
-                                    <div class="relative aspect-2/3 {% if forloop.counter == 1 %}w-44 sm:w-52{% elif forloop.counter == 3 %}w-40 sm:w-48{% else %}w-32 sm:w-40{% endif %} overflow-hidden rounded-2xl border border-zinc-800 shadow-2xl shadow-black/50 transition-transform duration-300 hover:scale-105">
-                                        {% if entry.media.poster_url %}
-                                            <img src="{{ entry.media.poster_url }}" alt="{{ entry.media.title }}" class="h-full w-full object-cover">
-                                        {% else %}
-                                            <div class="flex h-full w-full items-center justify-center bg-zinc-900 text-3xl font-black text-white/10">
-                                                {{ entry.media.title|slice:":1" }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+            <div class="flex items-center justify-between rounded-card bg-white px-5 py-4 ring-1 ring-inset ring-line-soft">
+                <p class="text-sm text-muted">Completados</p>
+                <p class="font-display text-2xl font-bold text-ink" data-counter="{{ quick_stats.completed }}">0</p>
+            </div>
+            <div class="flex items-center justify-between rounded-card bg-white px-5 py-4 ring-1 ring-inset ring-line-soft">
+                <p class="text-sm text-muted">Nota media</p>
+                {% if quick_stats.average_rating %}
+                    <p class="font-display text-2xl font-bold text-brand-500" data-counter="{{ quick_stats.average_rating|floatformat:1 }}" data-counter-decimals="1">0</p>
                 {% else %}
-                    {% for slot in "1234" %}
-                        <div class="absolute {% if forloop.counter == 1 %}right-[10%] top-0 z-30{% elif forloop.counter == 2 %}right-[38%] top-14 z-20{% elif forloop.counter == 3 %}right-0 top-44 z-10{% else %}right-[26%] top-60 z-0{% endif %}">
-                            <div style="transform: rotate({% if forloop.counter == 1 %}-6{% elif forloop.counter == 2 %}4{% elif forloop.counter == 3 %}8{% else %}-9{% endif %}deg)">
-                                <div class="animate-float" style="animation-delay: {% widthratio forloop.counter0 1 700 %}ms">
-                                    <div class="relative aspect-2/3 {% if forloop.counter == 1 %}w-44 sm:w-52{% elif forloop.counter == 3 %}w-40 sm:w-48{% else %}w-32 sm:w-40{% endif %} overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-purple-900 to-fuchsia-950' 'from-emerald-900 to-teal-950' 'from-rose-900 to-red-950' %} shadow-2xl shadow-black/50">
-                                        <img src="{% static 'images/logo-icon-transparent.png' %}" alt="" class="absolute inset-0 m-auto h-10 w-10 opacity-30">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+                    <p class="font-display text-2xl font-bold text-faint">—</p>
                 {% endif %}
             </div>
         </div>
     </section>
 
-    {% if user.is_authenticated %}
-        <div class="mb-16 grid gap-4 lg:grid-cols-[1.2fr_1fr]">
-            <div data-reveal class="rounded-2xl border border-zinc-900 bg-zinc-900/50 p-8">
-                <p class="text-6xl font-black text-white" data-counter="{{ quick_stats.total }}">0</p>
-                <p class="mt-2 text-lg text-zinc-400">títulos en tu biblioteca</p>
-            </div>
-            <div class="grid grid-cols-3 gap-4 lg:grid-cols-1">
-                <div data-reveal style="transition-delay: 60ms" class="flex items-center justify-between rounded-2xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
-                    <p class="text-sm text-zinc-500">Favoritos</p>
-                    <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.favorites }}">0</p>
-                </div>
-                <div data-reveal style="transition-delay: 120ms" class="flex items-center justify-between rounded-2xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
-                    <p class="text-sm text-zinc-500">Completados</p>
-                    <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.completed }}">0</p>
-                </div>
-                <div data-reveal style="transition-delay: 180ms" class="flex items-center justify-between rounded-2xl border border-zinc-900 bg-zinc-900/50 px-5 py-4">
-                    <p class="text-sm text-zinc-500">Rating medio</p>
-                    {% if quick_stats.average_rating %}
-                        <p class="text-2xl font-black text-white" data-counter="{{ quick_stats.average_rating|floatformat:1 }}" data-counter-decimals="1">0</p>
-                    {% else %}
-                        <p class="text-2xl font-black text-white">—</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
-    {% if user.is_authenticated and watchlist %}
-        <section data-reveal>
-            <div class="mb-4 flex items-end justify-between">
+    {% if watchlist %}
+        <section data-reveal class="mt-14">
+            <div class="mb-5 flex items-end justify-between">
                 <div>
-                    <p class="text-sm font-semibold text-brand-400">Selección personal</p>
-                    <h2 class="text-2xl font-black uppercase tracking-tight text-white">Tu watchlist</h2>
+                    <p class="font-mono text-[11px] uppercase tracking-[.1em] text-brand-500">Selección personal</p>
+                    <h2 class="font-display text-3xl font-extrabold tracking-tight text-ink">Tu watchlist</h2>
                 </div>
-                <a href="{% url 'library:list' %}" class="text-sm font-medium text-zinc-400 transition-colors hover:text-white">
-                    Ver todo →
-                </a>
+                <a href="{% url 'library:list' %}" class="text-sm font-medium text-muted hover:text-ink">Ver todo →</a>
             </div>
-
-            <div class="flex flex-wrap gap-4">
+            <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
                 {% for entry in watchlist %}
-                    <a href="{% url 'library:detail' entry.pk %}"
-                       class="group {% if forloop.first %}w-[45%] sm:w-56{% else %}w-[27%] sm:w-36{% endif %} animate-fade-in-up"
-                       style="animation-delay: {% widthratio forloop.counter0 1 100 %}ms">
-                        <div class="relative aspect-2/3 overflow-hidden rounded-xl border border-zinc-900 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-emerald-900 to-teal-950' 'from-purple-900 to-fuchsia-950' 'from-rose-900 to-red-950' 'from-amber-900 to-orange-950' %} transition-transform duration-300 ease-out group-hover:scale-[1.03] group-hover:shadow-xl group-hover:shadow-brand-500/10">
-                            {% if entry.media.poster_url %}
-                                <img src="{{ entry.media.poster_url }}" alt="{{ entry.media.title }}"
-                                     class="absolute inset-0 h-full w-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-70">
-                            {% else %}
-                                <span class="absolute inset-0 flex items-center justify-center text-6xl font-black text-white/10">
-                                    {{ entry.media.title|slice:":1" }}
-                                </span>
-                            {% endif %}
-                            {% if entry.favorite %}
-                                <span class="absolute right-2 top-2 text-lg text-brand-400">♥</span>
-                            {% endif %}
-                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent px-3 pb-3 pt-8">
-                                <p class="truncate text-sm font-bold text-white">{{ entry.media.title }}</p>
-                                <p class="text-xs text-zinc-400">
-                                    {{ entry.media.get_media_type_display }}{% if entry.media.release_year %} · {{ entry.media.release_year }}{% endif %}
-                                </p>
-                            </div>
-                        </div>
-                    </a>
+                    {% include "components/poster.html" with entry=entry %}
                 {% endfor %}
             </div>
         </section>
+    {% else %}
+        {% url 'library:search' as search_url %}
+        <section data-reveal class="mt-14">
+            {% include "components/empty_state.html" with variant="default" title="Tu biblioteca está vacía." text="Busca una película, serie o anime y empieza a registrar." cta_url=search_url cta_label="Buscar un título" %}
+        </section>
     {% endif %}
+
+{% else %}
+    {# Home pública — página de marketing, sin sesión iniciada #}
+
+    <section class="relative isolate grid gap-8 pt-8 lg:grid-cols-12 lg:gap-6 lg:pt-16">
+        <div data-reveal class="flex flex-col gap-8 lg:col-span-8">
+            <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Películas · Series · Anime</p>
+            <h1 class="font-display text-[3.5rem] font-extrabold leading-[0.86] tracking-tight text-ink sm:text-[5.5rem] lg:text-display-xl">
+                Todo lo<br>que <span class="text-brand-500">ves</span>,<br>en orden.
+            </h1>
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-end">
+                <p class="max-w-[340px] text-lg leading-relaxed text-ink-2">
+                    Registra lo que has visto, lo que estás viendo y lo que tienes pendiente. Puntúa, escribe, recuerda. Y deja que Viewy te diga qué sigue.
+                </p>
+                <div class="flex flex-wrap gap-2.5">
+                    <a href="{% url 'accounts:register' %}" class="btn-primary h-[52px] px-[26px]">Crear mi biblioteca →</a>
+                    <a href="{% url 'accounts:login' %}" class="btn-secondary h-[52px]">Ya tengo cuenta</a>
+                </div>
+            </div>
+        </div>
+
+        <div data-reveal style="transition-delay:120ms" class="relative hidden h-[420px] lg:col-span-4 lg:block">
+            <div data-parallax class="absolute right-[34%] top-0 w-[190px]">
+                <div class="aspect-2/3 rounded-[4px] shadow-[0_24px_48px_rgba(13,14,18,.18)]" style="transform:rotate(-7deg);background:repeating-linear-gradient(135deg,#1D2B4F 0 10px,#22325A 10px 20px)"></div>
+            </div>
+            <div data-parallax class="absolute right-0 top-16 w-[220px]">
+                <div class="flex aspect-2/3 items-end rounded-[4px] p-3.5 shadow-[0_24px_48px_rgba(13,14,18,.2)]" style="transform:rotate(4deg);background:repeating-linear-gradient(135deg,#3A2A22 0 10px,#432F26 10px 20px)">
+                    <span class="font-mono text-[10px] uppercase tracking-[.1em] text-white/60">Póster destacado</span>
+                </div>
+            </div>
+            <div class="absolute bottom-4 left-0 w-[210px]">
+                {% include "components/mascot.html" with variant="default" size="hero" %}
+            </div>
+        </div>
+    </section>
+
+    <section data-reveal class="mt-24 flex flex-col gap-6 lg:mt-40">
+        <div class="flex items-baseline justify-between">
+            <h2 class="font-display text-2xl font-bold tracking-tight text-ink sm:text-[28px]">Lo que la gente está registrando</h2>
+            <span class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Ejemplo</span>
+        </div>
+        <div class="flex gap-5 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:overflow-visible lg:grid-cols-6">
+            <div class="flex w-32 shrink-0 flex-col gap-2.5 sm:w-auto">
+                <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#1F3A33 0 10px,#244239 10px 20px)"></div>
+                <p class="text-sm font-semibold text-ink">Frieren</p>
+                <p class="-mt-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted">Anime · 2023</p>
+            </div>
+            <div class="flex w-32 shrink-0 flex-col gap-2.5 sm:w-auto">
+                <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#452634 0 10px,#4F2C3C 10px 20px)"></div>
+                <p class="text-sm font-semibold text-ink">Dune: Parte Dos</p>
+                <p class="-mt-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted">Película · 2024</p>
+            </div>
+            <div class="flex w-32 shrink-0 flex-col gap-2.5 sm:w-auto">
+                <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#2A2C33 0 10px,#31333B 10px 20px)"></div>
+                <p class="text-sm font-semibold text-ink">Severance</p>
+                <p class="-mt-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted">Serie · 2022</p>
+            </div>
+            <div class="flex w-32 shrink-0 flex-col gap-2.5 sm:w-auto">
+                <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#0038BE 0 10px,#0A42C8 10px 20px)"></div>
+                <p class="text-sm font-semibold text-ink">Perfect Days</p>
+                <p class="-mt-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted">Película · 2023</p>
+            </div>
+            <div class="flex w-32 shrink-0 flex-col gap-2.5 sm:w-auto">
+                <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#4A3B1C 0 10px,#544322 10px 20px)"></div>
+                <p class="text-sm font-semibold text-ink">Shōgun</p>
+                <p class="-mt-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted">Serie · 2024</p>
+            </div>
+            <div class="flex w-32 shrink-0 flex-col gap-2.5 sm:w-auto">
+                <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#233044 0 10px,#29384F 10px 20px)"></div>
+                <p class="text-sm font-semibold text-ink">Vinland Saga</p>
+                <p class="-mt-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted">Anime · 2019</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" data-reveal class="mt-24 grid gap-10 lg:mt-40 lg:grid-cols-12">
+        <h2 class="font-display text-5xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-[5.5rem] lg:col-span-6">
+            Registra.<br>Puntúa.<br><span class="text-brand-500">Recuerda.</span>
+        </h2>
+        <div class="flex flex-col gap-6 lg:col-span-5 lg:col-start-8 lg:pt-3">
+            <div class="grid grid-cols-[40px_1fr] gap-3 border-b border-line pb-6">
+                <span class="font-mono text-xs font-medium text-brand-500">01</span>
+                <div><p class="mb-1.5 text-lg font-semibold text-ink">Búscalo y añádelo</p><p class="text-[15px] leading-relaxed text-muted">Pósters, años y episodios llegan solos desde TMDB y AniList.</p></div>
+            </div>
+            <div class="grid grid-cols-[40px_1fr] gap-3 border-b border-line pb-6">
+                <span class="font-mono text-xs font-medium text-brand-500">02</span>
+                <div><p class="mb-1.5 text-lg font-semibold text-ink">Marca por dónde vas</p><p class="text-[15px] leading-relaxed text-muted">Pendiente, viendo, terminado o abandonado. Episodio a episodio.</p></div>
+            </div>
+            <div class="grid grid-cols-[40px_1fr] gap-3">
+                <span class="font-mono text-xs font-medium text-brand-500">03</span>
+                <div><p class="mb-1.5 text-lg font-semibold text-ink">Dale tu nota</p><p class="text-[15px] leading-relaxed text-muted">Del 1 al 10, con reseña si te apetece. Tu biblioteca, tu criterio.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" data-reveal class="mt-24 grid gap-6 lg:mt-40 lg:grid-cols-12">
+        <div class="flex min-h-[380px] flex-col gap-6 rounded-card bg-white p-10 lg:col-span-7">
+            <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Biblioteca</p>
+            <p class="max-w-[420px] font-display text-[2.5rem] font-bold leading-[1] tracking-tight text-ink">Cuatro estados. Cero listas perdidas en notas del móvil.</p>
+            <div class="mt-auto flex items-end gap-4">
+                <div class="flex flex-1 flex-col gap-2.5">
+                    <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#2A2C33 0 10px,#31333B 10px 20px)"></div>
+                    {% include "components/status_badge.html" with status="watching" %}
+                </div>
+                <div class="flex flex-1 flex-col gap-2.5">
+                    <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#1F3A33 0 10px,#244239 10px 20px)"></div>
+                    {% include "components/status_badge.html" with status="completed" %}
+                </div>
+                <div class="flex flex-1 flex-col gap-2.5">
+                    <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#4A3B1C 0 10px,#544322 10px 20px)"></div>
+                    {% include "components/status_badge.html" with status="planned" %}
+                </div>
+                <div class="flex flex-1 flex-col gap-2.5">
+                    <div class="aspect-2/3 rounded-[4px]" style="background:repeating-linear-gradient(135deg,#452634 0 10px,#4F2C3C 10px 20px)"></div>
+                    {% include "components/status_badge.html" with status="dropped" %}
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-6 lg:col-span-5">
+            <div class="flex flex-col gap-4 rounded-card bg-white p-8">
+                <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Progreso</p>
+                <p class="text-xl font-semibold text-ink">Frieren · episodio 18 de 28</p>
+                <div class="h-2 overflow-hidden rounded-full bg-brand-50"><div class="h-full rounded-full bg-brand-500" style="width:64%"></div></div>
+                <div class="flex justify-between font-mono text-[11px] text-muted"><span>64%</span><span>+1 episodio</span></div>
+            </div>
+            <div class="flex flex-1 items-center gap-6 rounded-card bg-ink p-8 text-white">
+                <div class="relative w-24 shrink-0">
+                    {% include "components/mascot.html" with variant="default" size="spot" line=True %}
+                </div>
+                <div>
+                    <p class="mb-2.5 font-mono text-[11px] uppercase tracking-[.1em] text-[#8E9096]">Importar</p>
+                    <p class="text-xl font-semibold leading-snug">¿Tienes una lista vieja? Pégala. Nosotros la ordenamos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section data-reveal class="relative mt-24 overflow-hidden bg-brand-500 px-5 py-16 text-white sm:px-10 lg:mt-40 lg:grid lg:grid-cols-12 lg:gap-6 lg:px-14 lg:py-24">
+        <p class="mb-8 font-mono text-[11px] uppercase tracking-[.1em] text-brand-100 lg:col-span-12">Estadísticas · un usuario real, 2025</p>
+        <div class="mb-10 lg:col-span-4 lg:mb-0">
+            <p class="font-display text-7xl font-extrabold tracking-tight sm:text-8xl lg:text-[9rem]" data-counter="248">0</p>
+            <p class="mt-1 text-base text-brand-100">títulos registrados</p>
+        </div>
+        <div class="mb-10 lg:col-span-4 lg:col-start-5 lg:mb-0 lg:pt-16">
+            <p class="font-display text-7xl font-extrabold tracking-tight sm:text-8xl lg:text-[9rem]" data-counter="1204">0</p>
+            <p class="mt-1 text-base text-brand-100">horas de películas</p>
+        </div>
+        <div class="flex flex-col gap-4 lg:col-span-4 lg:col-start-9">
+            <div class="flex h-24 items-end gap-1.5">
+                <span class="flex-1 rounded-t bg-white/35" style="height:40%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:55%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:35%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:70%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:60%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:90%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:75%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:50%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:65%"></span>
+                <span class="flex-1 rounded-t bg-white" style="height:100%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:80%"></span>
+                <span class="flex-1 rounded-t bg-white/35" style="height:58%"></span>
+            </div>
+            <div class="flex justify-between font-mono text-[10px] text-brand-100"><span>ENE</span><span>JUN</span><span>DIC</span></div>
+            <p class="text-base leading-relaxed">Tu mes más intenso, tu género mejor puntuado y tu estudio de anime favorito. Calculado, no inventado.</p>
+        </div>
+        <div class="pointer-events-none absolute -bottom-10 right-8 hidden w-[150px] opacity-90 sm:block">
+            {% include "components/mascot.html" with variant="default" size="hero" line=True %}
+        </div>
+    </section>
+
+    <section id="ai-recommendations" data-reveal class="mt-24 grid items-center gap-10 lg:mt-40 lg:grid-cols-12">
+        <div class="relative lg:col-span-5">
+            <div class="aspect-2/3 rounded-[4px] shadow-[0_32px_64px_rgba(13,14,18,.18)]" style="background:repeating-linear-gradient(135deg,#233044 0 10px,#29384F 10px 20px)"></div>
+            <div class="absolute -right-6 -top-6 w-24">
+                {% include "components/mascot.html" with variant="ai" size="spot" %}
+            </div>
+        </div>
+        <div class="flex flex-col gap-6 lg:col-span-6 lg:col-start-7">
+            <p class="font-mono text-[11px] uppercase tracking-[.1em] text-brand-500">Recomendaciones con IA</p>
+            <p class="font-display text-5xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-6xl">No otra lista. <span class="text-brand-500">Tu</span> siguiente.</p>
+            <div class="flex flex-col gap-3 rounded-card bg-white p-7">
+                <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Por qué encaja contigo</p>
+                <p class="text-xl leading-relaxed text-ink-2">"Diste un 10 a Mushishi y un 9 a Aftersun: te gustan las historias lentas que duelen bonito. Esta es de las dos cosas."</p>
+            </div>
+            <a href="{% url 'accounts:register' %}" class="btn-ink self-start">Pruébalo con tu biblioteca</a>
+        </div>
+    </section>
+
+    <section data-reveal class="mt-28 flex flex-col items-center gap-8 py-20 text-center lg:mt-40 lg:py-32">
+        <div class="w-32">{% include "components/mascot.html" with variant="default" size="hero" %}</div>
+        <p class="font-display text-6xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-8xl">¿Qué estás<br>viendo ahora?</p>
+        <a href="{% url 'accounts:register' %}" class="btn-primary h-14 px-8 text-base">Empieza gratis →</a>
+    </section>
+
+    <footer class="-mx-5 mt-16 grid gap-10 bg-ink px-5 py-12 text-sm text-faint sm:-mx-10 sm:px-10 lg:-mx-14 lg:grid-cols-12 lg:px-14 lg:py-14">
+        <div class="flex flex-col gap-4 lg:col-span-5">
+            <span class="h-8 w-[100px] bg-white" style="mask:url({% static 'images/mascot/wordmark-white.png' %}) left/contain no-repeat;-webkit-mask:url({% static 'images/mascot/wordmark-white.png' %}) left/contain no-repeat"></span>
+            <span>Tu tracker personal de películas, series y anime.</span>
+        </div>
+        <div class="flex flex-col gap-2.5 lg:col-span-2 lg:col-start-7">
+            <span class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Producto</span>
+            <span>Biblioteca</span><span>Estadísticas</span><span>Recomendaciones</span>
+        </div>
+        <div class="flex flex-col gap-2.5 lg:col-span-2 lg:col-start-9">
+            <span class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Cuenta</span>
+            <span>Crear cuenta</span><span>Iniciar sesión</span>
+        </div>
+        <div class="flex items-end justify-start gap-2 lg:col-span-2 lg:col-start-11 lg:flex-col lg:items-end lg:justify-end">
+            <span class="w-9 opacity-60">{% include "components/mascot.html" with variant="default" size="sticker" line=True %}</span>
+            <span class="font-mono text-[11px] text-muted">© 2026 VIEWY</span>
+        </div>
+    </footer>
+
+{% endif %}
 {% endblock %}
