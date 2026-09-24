@@ -1,176 +1,148 @@
 {% extends "base.html" %}
+{% load badges %}
 
 {% block title %}Viewy — Mi biblioteca{% endblock %}
 
 {% block content %}
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-            <p class="text-sm font-semibold text-brand-400">Mi colección personal</p>
-            <h1 class="text-3xl font-black uppercase tracking-tight text-white">Mi biblioteca</h1>
-        </div>
-        <a href="{% url 'library:create' %}"
-           class="rounded-full bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-brand-400">
-            + Añadir título
-        </a>
+    <div class="flex flex-col gap-6 border-b border-line pb-10 lg:flex-row lg:items-end lg:justify-between">
+        <h1 class="font-display text-6xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl lg:text-display-lg">Biblioteca</h1>
+        <p class="max-w-md text-[15px] leading-relaxed text-ink-2 lg:pb-3">
+            <strong class="font-semibold text-ink">{{ quick_stats.total }} título{{ quick_stats.total|pluralize }}.</strong>
+            {{ quick_stats.watching }} viendo, {{ quick_stats.planned }} pendiente{{ quick_stats.planned|pluralize }},
+            {{ quick_stats.favorites }} favorito{{ quick_stats.favorites|pluralize }}{% if quick_stats.average_rating %}
+            y una nota media de <strong class="font-semibold text-brand-500">{{ quick_stats.average_rating|floatformat:1 }}</strong>{% endif %}.
+        </p>
     </div>
 
-    <div class="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <div data-reveal class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
-            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.total }}">0</p>
-            <p class="text-xs text-zinc-500">Total</p>
-        </div>
-        <div data-reveal style="transition-delay: 40ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
-            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.favorites }}">0</p>
-            <p class="text-xs text-zinc-500">Favoritos</p>
-        </div>
-        <div data-reveal style="transition-delay: 80ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
-            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.completed }}">0</p>
-            <p class="text-xs text-zinc-500">Terminados</p>
-        </div>
-        <div data-reveal style="transition-delay: 120ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
-            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.watching }}">0</p>
-            <p class="text-xs text-zinc-500">Viendo</p>
-        </div>
-        <div data-reveal style="transition-delay: 160ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
-            <p class="text-xl font-black text-white" data-counter="{{ quick_stats.planned }}">0</p>
-            <p class="text-xs text-zinc-500">Pendiente</p>
-        </div>
-        <div data-reveal style="transition-delay: 200ms" class="rounded-xl border border-zinc-900 bg-zinc-900/50 px-4 py-3">
-            {% if quick_stats.average_rating %}
-                <p class="text-xl font-black text-white" data-counter="{{ quick_stats.average_rating|floatformat:1 }}" data-counter-decimals="1">0</p>
-            {% else %}
-                <p class="text-xl font-black text-white">—</p>
-            {% endif %}
-            <p class="text-xs text-zinc-500">Rating</p>
-        </div>
-    </div>
-
-    <form method="get" class="mb-4">
-        <input type="hidden" name="status" value="{{ current_status }}">
-        <input type="hidden" name="media_type" value="{{ current_media_type }}">
-        <input type="hidden" name="favorite" value="{{ current_favorite }}">
-        <input type="text" name="q" value="{{ current_query }}" placeholder="Buscar por título..."
-               class="w-full rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-brand-500">
-    </form>
-
-    <div class="mb-6 flex flex-wrap items-center gap-4">
-        <div class="flex flex-wrap items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Estado</span>
+    <div class="flex flex-wrap items-center gap-3 border-b border-line-soft py-3.5">
+        <div class="flex flex-wrap items-center gap-1.5">
             <a href="{% querystring status=None page=None %}"
-               class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if not current_status %}bg-brand-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+               class="rounded-full px-3 py-1.5 text-xs font-semibold {% if not current_status %}bg-ink text-white{% else %}text-muted hover:text-ink{% endif %}">
                 Todos
             </a>
             {% for value, label in statuses %}
                 <a href="{% querystring status=value page=None %}"
-                   class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if current_status == value %}bg-brand-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+                   class="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold {% if current_status == value %}bg-ink text-white{% else %}text-muted hover:text-ink{% endif %}">
+                    <span class="h-1.5 w-1.5 rounded-full {{ value|status_dot }}"></span>
                     {{ label }}
+                    {% if value == "watching" %}<span class="font-mono text-[10px] opacity-70">{{ quick_stats.watching }}</span>
+                    {% elif value == "planned" %}<span class="font-mono text-[10px] opacity-70">{{ quick_stats.planned }}</span>
+                    {% elif value == "completed" %}<span class="font-mono text-[10px] opacity-70">{{ quick_stats.completed }}</span>{% endif %}
                 </a>
             {% endfor %}
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Tipo</span>
+        <span class="h-5 w-px bg-line"></span>
+
+        <div class="flex flex-wrap items-center gap-1.5">
             <a href="{% querystring media_type=None page=None %}"
-               class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if not current_media_type %}bg-brand-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
-                Todos
+               class="rounded-full px-3 py-1.5 text-xs font-semibold {% if not current_media_type %}ring-1 ring-inset ring-ink text-ink{% else %}text-muted hover:text-ink{% endif %}">
+                Todo
             </a>
             {% for value, label in media_types %}
                 <a href="{% querystring media_type=value page=None %}"
-                   class="rounded-full px-3 py-1.5 text-xs font-medium transition-colors {% if current_media_type == value %}bg-brand-500 text-white{% else %}bg-zinc-900 text-zinc-400 hover:text-white{% endif %}">
+                   class="rounded-full px-3 py-1.5 text-xs font-semibold {% if current_media_type == value %}ring-1 ring-inset ring-ink text-ink{% else %}text-muted hover:text-ink{% endif %}">
                     {{ label }}
                 </a>
             {% endfor %}
         </div>
 
-        {% if current_favorite == "1" %}
-            <a href="{% querystring favorite=None page=None %}"
-               class="ml-auto flex items-center gap-1.5 rounded-full bg-brand-500 px-3 py-1.5 text-xs font-medium text-white transition-colors">
-                <span>♥</span> Favoritos
-            </a>
-        {% else %}
-            <a href="{% querystring favorite="1" page=None %}"
-               class="ml-auto flex items-center gap-1.5 rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:text-white">
-                <span>♡</span> Favoritos
-            </a>
-        {% endif %}
+        <div class="ml-auto flex flex-wrap items-center gap-3">
+            {% if current_favorite == "1" %}
+                <a href="{% querystring favorite=None page=None %}" class="flex items-center gap-1.5 text-xs font-semibold text-brand-500">♥ Favoritos</a>
+            {% else %}
+                <a href="{% querystring favorite="1" page=None %}" class="flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-ink">♡ Favoritos</a>
+            {% endif %}
+
+            <form method="get" class="flex items-center">
+                <input type="hidden" name="status" value="{{ current_status }}">
+                <input type="hidden" name="media_type" value="{{ current_media_type }}">
+                <input type="hidden" name="favorite" value="{{ current_favorite }}">
+                <input type="hidden" name="sort" value="{{ current_sort }}">
+                <input type="search" name="q" value="{{ current_query }}" placeholder="En mi biblioteca…"
+                       class="h-9 w-[200px] rounded-full bg-white px-3.5 text-sm text-ink ring-1 ring-inset ring-line placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </form>
+
+            <form method="get">
+                <input type="hidden" name="q" value="{{ current_query }}">
+                <input type="hidden" name="status" value="{{ current_status }}">
+                <input type="hidden" name="media_type" value="{{ current_media_type }}">
+                <input type="hidden" name="favorite" value="{{ current_favorite }}">
+                <select name="sort" onchange="this.form.submit()" class="h-9 rounded-full bg-white px-3 text-xs font-medium text-ink ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    {% for value, label in sort_options %}
+                        <option value="{{ value }}" {% if current_sort == value %}selected{% endif %}>Orden: {{ label }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
     </div>
 
-    <div class="mb-8 flex items-center justify-between">
-        <p class="text-sm text-zinc-500">{{ page.paginator.count }} título{{ page.paginator.count|pluralize }}</p>
-        <form method="get">
-            <input type="hidden" name="q" value="{{ current_query }}">
-            <input type="hidden" name="status" value="{{ current_status }}">
-            <input type="hidden" name="media_type" value="{{ current_media_type }}">
-            <input type="hidden" name="favorite" value="{{ current_favorite }}">
-            <select name="sort" onchange="this.form.submit()"
-                    class="rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
-                {% for value, label in sort_options %}
-                    <option value="{{ value }}" {% if current_sort == value %}selected{% endif %}>{{ label }}</option>
-                {% endfor %}
-            </select>
-        </form>
-    </div>
-
-    {% if page.object_list %}
-        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {% for entry in page %}
-                <a href="{% url 'library:detail' entry.pk %}"
-                   class="group animate-fade-in-up"
-                   style="animation-delay: {% widthratio forloop.counter0 1 60 %}ms">
-                    <div class="relative aspect-2/3 overflow-hidden rounded-xl border border-zinc-900 bg-gradient-to-br {% cycle 'from-blue-900 to-indigo-950' 'from-emerald-900 to-teal-950' 'from-purple-900 to-fuchsia-950' 'from-rose-900 to-red-950' 'from-amber-900 to-orange-950' %} transition-transform duration-300 ease-out group-hover:scale-[1.03] group-hover:shadow-xl group-hover:shadow-brand-500/10">
-                        {% if entry.media.poster_url %}
-                            <img src="{{ entry.media.poster_url }}" alt="{{ entry.media.title }}"
-                                 class="absolute inset-0 h-full w-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-70">
-                        {% else %}
-                            <span class="absolute inset-0 flex items-center justify-center text-6xl font-black text-white/10">
-                                {{ entry.media.title|slice:":1" }}
-                            </span>
-                        {% endif %}
-
-                        <span class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-sm {% if entry.favorite %}text-brand-400{% else %}text-zinc-400{% endif %}">
-                            {% if entry.favorite %}♥{% else %}♡{% endif %}
-                        </span>
-
-                        <div class="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-black/90 to-transparent px-2 pb-2 pt-6">
-                            <span class="truncate rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-medium text-zinc-200">
-                                {{ entry.get_status_display }}
-                            </span>
-                            {% if entry.rating %}
-                                <span class="flex shrink-0 items-center gap-0.5 rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-semibold text-amber-400">
-                                    ★ {{ entry.rating }}
-                                </span>
+    {% if watching_now %}
+        <section class="border-b border-line-soft py-10">
+            <h2 class="mb-5 font-display text-[2.5rem] font-bold leading-[0.9] tracking-tight text-ink">Viendo ahora</h2>
+            <div class="grid gap-5 lg:grid-cols-[1.3fr_1fr_1fr]">
+                {% for entry in watching_now %}
+                    <div class="flex gap-4 rounded-card bg-white p-5 ring-1 ring-inset ring-line-soft">
+                        <a href="{% url 'library:detail' entry.pk %}" class="w-20 shrink-0">
+                            <div class="aspect-2/3 overflow-hidden rounded-[4px]">
+                                {% if entry.media.poster_url %}
+                                    <img src="{{ entry.media.poster_url }}" alt="{{ entry.media.title }}" class="h-full w-full object-cover">
+                                {% else %}
+                                    <div class="flex h-full w-full items-center justify-center bg-brand-500 text-xs font-bold text-white">{{ entry.media.title|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="flex min-w-0 flex-1 flex-col gap-2">
+                            <p class="font-mono text-[10px] uppercase tracking-[.08em] text-muted">{{ entry.media.get_media_type_display }}{% if entry.media.release_year %} · {{ entry.media.release_year }}{% endif %}</p>
+                            <a href="{% url 'library:detail' entry.pk %}" class="truncate font-display text-2xl font-bold tracking-tight text-ink">{{ entry.media.title }}</a>
+                            {% if entry.media.episodes %}
+                                <p class="text-sm text-muted">Ep. {{ entry.current_episode|default:0 }} de {{ entry.media.episodes }}</p>
+                                <div class="h-1.5 overflow-hidden rounded-full bg-brand-50">
+                                    <div class="h-full rounded-full bg-brand-500" style="width:{% widthratio entry.current_episode|default:0 entry.media.episodes 100 %}%"></div>
+                                </div>
                             {% endif %}
+                            <form method="post" action="{% url 'library:update' entry.pk %}" class="mt-auto">
+                                {% csrf_token %}
+                                <input type="hidden" name="status" value="{{ entry.status }}">
+                                <input type="hidden" name="rating" value="{{ entry.rating|default_if_none:'' }}">
+                                <input type="hidden" name="review" value="{{ entry.review }}">
+                                <input type="hidden" name="started_at" value="{{ entry.started_at|date:'Y-m-d'|default_if_none:'' }}">
+                                <input type="hidden" name="finished_at" value="{{ entry.finished_at|date:'Y-m-d'|default_if_none:'' }}">
+                                <input type="hidden" name="current_episode" value="{{ entry.current_episode|default:0|add:1 }}">
+                                {% if entry.favorite %}<input type="hidden" name="favorite" value="on">{% endif %}
+                                <button type="submit" class="btn-outline-brand">+1 episodio</button>
+                            </form>
                         </div>
                     </div>
-
-                    <p class="mt-2 truncate text-sm font-bold text-white">{{ entry.media.title }}</p>
-                    <p class="text-xs text-zinc-500">
-                        {{ entry.media.get_media_type_display }}{% if entry.media.release_year %} · {{ entry.media.release_year }}{% endif %}
-                    </p>
-                </a>
-            {% endfor %}
-        </div>
-
-        <nav class="mt-8 flex items-center justify-center gap-2 text-sm">
-            {% if page.has_previous %}
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page=1"
-                   class="rounded-full border border-zinc-800 px-3 py-1.5 text-zinc-300 hover:bg-zinc-900">« Primera</a>
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.previous_page_number }}"
-                   class="rounded-full border border-zinc-800 px-3 py-1.5 text-zinc-300 hover:bg-zinc-900">Anterior</a>
-            {% endif %}
-
-            <span class="px-3 py-1.5 text-zinc-500">Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
-
-            {% if page.has_next %}
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.next_page_number }}"
-                   class="rounded-full border border-zinc-800 px-3 py-1.5 text-zinc-300 hover:bg-zinc-900">Siguiente</a>
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.paginator.num_pages }}"
-                   class="rounded-full border border-zinc-800 px-3 py-1.5 text-zinc-300 hover:bg-zinc-900">Última »</a>
-            {% endif %}
-        </nav>
-    {% else %}
-        <div class="rounded-xl border border-dashed border-zinc-800 px-6 py-16 text-center">
-            <p class="text-zinc-400">No se ha encontrado ningún contenido con esos filtros.</p>
-        </div>
+                {% endfor %}
+            </div>
+        </section>
     {% endif %}
+
+    <section class="py-10">
+        <div class="mb-6 flex items-baseline justify-between">
+            <h2 class="font-display text-2xl font-bold tracking-tight text-ink">Todo</h2>
+            <p class="font-mono text-[11px] uppercase tracking-[.08em] text-muted">{{ page.paginator.count }} título{{ page.paginator.count|pluralize }} · página {{ page.number }} de {{ page.paginator.num_pages }}</p>
+        </div>
+
+        {% if page.object_list %}
+            <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6">
+                {% for entry in page %}
+                    {% include "components/poster.html" with entry=entry %}
+                {% endfor %}
+            </div>
+
+            {% include "components/pagination.html" with page_obj=page %}
+        {% else %}
+            {% if current_query or current_status or current_media_type or current_favorite %}
+                {% url 'library:list' as list_url %}
+                {% include "components/empty_state.html" with variant="search" title="Nada con esos filtros." text="Prueba a quitar alguno para ver más resultados." cta_url=list_url cta_label="Quitar filtros" %}
+            {% else %}
+                {% url 'library:search' as search_url %}
+                {% url 'imports:start' as imports_url %}
+                {% include "components/empty_state.html" with variant="default" title="No has añadido nada todavía." text="Busca tu primer título o importa una lista antigua." cta_url=search_url cta_label="Buscar un título" %}
+                <a href="{{ imports_url }}" class="mt-3 inline-block text-sm font-medium text-muted hover:text-ink">o importar una lista →</a>
+            {% endif %}
+        {% endif %}
+    </section>
 {% endblock %}

@@ -55,6 +55,17 @@ def library_list(request):
         average_rating=Avg("rating"),
     )
 
+    # CONTEXTO NUEVO (fase 4 del rediseño): hasta 3 entradas "watching" para
+    # la sección "Viendo ahora", solo en la vista sin filtro de estado y en
+    # la primera página.
+    watching_now = None
+    if not request.GET.get("status") and page.number == 1:
+        watching_now = list(
+            all_entries.filter(status=UserMedia.Status.WATCHING)
+            .select_related("media")
+            .order_by("-updated_at")[:3]
+        )
+
     context = {
         "page": page,
         "querystring": querystring.urlencode(),
@@ -67,6 +78,7 @@ def library_list(request):
         "current_media_type": request.GET.get("media_type", ""),
         "current_favorite": request.GET.get("favorite", ""),
         "quick_stats": quick_stats,
+        "watching_now": watching_now,
     }
     return render(request, "library/list.html", context)
 
