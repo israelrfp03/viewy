@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#ECECE8;font-family:'Geist',system-ui,sans-serif;color:#0D0E12;-webkit-font-smoothing:antialiased}a{color:#0038be;text-decoration:none}a:hover{color:#002FA0}*{box-sizing:border-box}</style>
+</helmet>
+<section id="t1" style="padding:56px;display:flex;flex-direction:column;gap:24px">
+  <div style="display:flex;align-items:baseline;gap:12px"><span style="font:600 11px 'Geist Mono',monospace;padding:4px 8px;background:#0D0E12;color:#fff;border-radius:4px">COMPONENTES</span><span style="font:600 14px 'Geist',sans-serif">templates/components/* · estados · errores 404/500</span><a href="Viewy Design System.dc.html" style="font:500 12px 'Geist',sans-serif;margin-left:auto">← Sistema</a></div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,420px);gap:24px;align-items:start">
+
+    <div style="background:#fff;border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:18px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">BUTTONS · components/button.html</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <span style="height:48px;padding:0 22px;border-radius:99px;background:#0038be;color:#fff;display:flex;align-items:center;font:600 15px 'Geist',sans-serif">Primario</span>
+        <span style="height:48px;padding:0 22px;border-radius:99px;background:#002FA0;color:#fff;display:flex;align-items:center;font:600 15px 'Geist',sans-serif;transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,56,190,.3)">Hover</span>
+        <span style="height:48px;padding:0 22px;border-radius:99px;background:#0D0E12;color:#fff;display:flex;align-items:center;font:600 15px 'Geist',sans-serif">Tinta</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <span style="height:48px;padding:0 20px;border-radius:99px;box-shadow:inset 0 0 0 1.5px #0D0E12;display:flex;align-items:center;font:600 15px 'Geist',sans-serif">Secundario</span>
+        <span style="height:48px;padding:0 16px;display:flex;align-items:center;font:600 15px 'Geist',sans-serif">Ghost</span>
+        <span style="height:48px;padding:0 16px;display:flex;align-items:center;font:600 15px 'Geist',sans-serif;color:#9A3325">Eliminar</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <span style="height:36px;padding:0 14px;border-radius:99px;box-shadow:inset 0 0 0 1.5px #0038be;color:#0038be;display:flex;align-items:center;font:600 13px 'Geist',sans-serif">+1 episodio</span>
+        <span style="width:44px;height:44px;border-radius:50%;background:#0038be;color:#fff;text-align:center;font:400 18px/44px 'Geist',sans-serif">♥</span>
+        <span style="width:44px;height:44px;border-radius:50%;box-shadow:inset 0 0 0 1px #D6D6D1;text-align:center;font:400 18px/44px 'Geist',sans-serif">♡</span>
+        <span style="height:48px;padding:0 22px;border-radius:99px;background:#A6B9E8;color:#fff;display:flex;align-items:center;gap:10px;font:600 15px 'Geist',sans-serif"><span style="display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#fff"></span><span style="width:6px;height:6px;border-radius:50%;background:#fff;opacity:.6"></span><span style="width:6px;height:6px;border-radius:50%;background:#fff;opacity:.3"></span></span>Pensando</span>
+      </div>
+      <div style="font:400 12px/1.5 'Geist',sans-serif;color:#6B6D73">Alturas 36 / 44 / 48 / 52. Hover: −1px + sombra azul. Active: scale(.98). Reemplaza el <span style="font:500 11px 'Geist Mono',monospace">hover:scale-105</span> actual.</div>
+    </div>
+
+    <div style="background:#fff;border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:18px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">BADGES · TAGS · RATING</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:99px;background:#E8EEFC;color:#0038be;font:600 12px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#0038be"></span>Viendo</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:99px;background:#E4F4EB;color:#1B6E47;font:600 12px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#2E9E6A"></span>Terminado</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:99px;background:#F7EFD9;color:#7A5A0C;font:600 12px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#C08F1E"></span>Pendiente</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:99px;background:#F9E6E2;color:#9A3325;font:600 12px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#D0584A"></span>Abandonado</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px"><span style="height:28px;padding:0 12px;border-radius:99px;box-shadow:inset 0 0 0 1px #D6D6D1;display:flex;align-items:center;font:500 12px 'Geist',sans-serif">Fantasía</span><span style="height:28px;padding:0 12px;border-radius:99px;box-shadow:inset 0 0 0 1px #D6D6D1;display:flex;align-items:center;font:500 12px 'Geist',sans-serif">Drama</span><span style="height:24px;padding:0 8px;border-radius:4px;background:#0D0E12;color:#fff;display:flex;align-items:center;font:500 10px 'Geist Mono',monospace;letter-spacing:.08em">ANIME</span><span style="height:24px;padding:0 8px;border-radius:4px;background:#F0F0EC;display:flex;align-items:center;font:500 10px 'Geist Mono',monospace;letter-spacing:.08em">2023</span></div>
+      <div style="display:flex;align-items:center;gap:20px;padding-top:6px;border-top:1px solid #EEEEEA">
+        <span style="font:800 56px/0.8 'Bricolage Grotesque',sans-serif;color:#0038be;letter-spacing:-0.04em">9</span>
+        <div style="flex:1;display:grid;grid-template-columns:repeat(10,1fr);gap:3px"><sc-for list="{{ scale }}" as="s" hint-placeholder-count="10"><span style="height:24px;border-radius:3px;background:{{ s.bg }};color:{{ s.fg }};font:600 10px/24px 'Geist',sans-serif;text-align:center">{{ s.n }}</span></sc-for></div>
+      </div>
+      <div style="display:flex;gap:16px;font:700 18px 'Bricolage Grotesque',sans-serif"><span style="color:#0038be">9</span><span>7</span><span style="color:#D0584A">3</span><span style="color:#A9ABB0">—</span><span style="font:400 12px 'Geist',sans-serif;color:#6B6D73;align-self:center">nota compacta (≥8 · 5–7 · ≤4 · sin nota)</span></div>
+    </div>
+
+    <div style="background:#fff;border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:14px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">INPUTS · components/field.html</div>
+      <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 13px 'Geist',sans-serif">Por defecto</label><div style="height:48px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;padding:0 14px;display:flex;align-items:center;font:400 15px 'Geist',sans-serif;color:#A9ABB0">Placeholder</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 13px 'Geist',sans-serif">Foco</label><div style="height:48px;border-radius:8px;box-shadow:inset 0 0 0 2px #0038be,0 0 0 4px #DCE4FA;padding:0 14px;display:flex;align-items:center;font:400 15px 'Geist',sans-serif">Frieren</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 13px 'Geist',sans-serif">Error</label><div style="height:48px;border-radius:8px;box-shadow:inset 0 0 0 1.5px #D0584A;padding:0 14px;display:flex;align-items:center;font:400 15px 'Geist',sans-serif">11</div><span style="font:500 12px 'Geist',sans-serif;color:#9A3325">La nota va del 1 al 10.</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="height:48px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font:500 14px 'Geist',sans-serif">Serie<span style="color:#8E9096">▾</span></div>
+        <div style="height:48px;border-radius:99px;box-shadow:inset 0 0 0 1px #E4E4DF;padding:0 14px;display:flex;align-items:center;gap:8px;font:400 14px 'Geist',sans-serif;color:#8E9096"><span style="width:11px;height:11px;border-radius:50%;border:2px solid #8E9096"></span>Buscar</div>
+      </div>
+      <div style="display:flex;gap:20px;align-items:center;font:500 14px 'Geist',sans-serif"><span style="display:flex;align-items:center;gap:8px"><span style="width:44px;height:26px;border-radius:99px;background:#0038be;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span>Toggle</span><span style="display:flex;align-items:center;gap:8px"><span style="width:20px;height:20px;border-radius:5px;background:#0038be;color:#fff;font:600 12px/20px 'Geist',sans-serif;text-align:center">✓</span>Checkbox</span><span style="display:flex;align-items:center;gap:8px"><span style="width:20px;height:20px;border-radius:50%;border:6px solid #0038be"></span>Radio</span></div>
+    </div>
+
+    <div style="background:#fff;border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:18px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">POSTERS · components/poster.html</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="aspect-ratio:2/3;border-radius:4px;background:{{ p0 }}"></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">DEFAULT</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="aspect-ratio:2/3;border-radius:4px;background:{{ p1 }};transform:translateY(-4px);box-shadow:0 14px 28px rgba(13,14,18,.22);position:relative"><span style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:#fff;color:#0038be;font:400 11px/22px 'Geist',sans-serif;text-align:center">♥</span></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">HOVER · FAV</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="aspect-ratio:2/3;border-radius:4px;background:#0038be;padding:10px;display:flex;flex-direction:column;justify-content:space-between;color:#fff"><img src="assets/mascot-line-white.png" alt="" style="width:26px;opacity:.7"><span style="font:800 18px/0.95 'Bricolage Grotesque',sans-serif;letter-spacing:-0.02em">Sin póster todavía</span></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">SIN POSTER_URL</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px"><div style="aspect-ratio:2/3;border-radius:4px;background:linear-gradient(100deg,#EFEFEB 30%,#F7F7F4 50%,#EFEFEB 70%)"></div><div style="aspect-ratio:2/3;border-radius:4px;background:#EFEFEB"></div><div style="display:flex;flex-direction:column;gap:6px;justify-content:flex-end"><span style="height:10px;border-radius:3px;background:#EFEFEB"></span><span style="height:10px;width:60%;border-radius:3px;background:#EFEFEB"></span><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73;margin-top:4px">SKELETON</span></div></div>
+      <div style="font:400 12px/1.5 'Geist',sans-serif;color:#6B6D73">Radio 4px siempre, ratio 2:3, sin borde. El fallback sustituye los degradados <span style="font:500 11px 'Geist Mono',monospace">{% cycle %}</span> de colores.</div>
+    </div>
+
+    <div style="background:#fff;border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">ALERTS · TOASTS · partials/_toasts.html</div>
+      <div style="display:flex;align-items:center;gap:12px;background:#0D0E12;color:#fff;border-radius:99px;padding:6px 18px 6px 6px"><span style="width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center"><img src="assets/mascot.png" alt="" style="width:28px;transform:rotate(-8deg)"></span><span style="font:500 14px 'Geist',sans-serif">Añadido a tu biblioteca</span><span style="margin-left:auto;font:600 13px 'Geist',sans-serif;color:#a6b9e8">Deshacer</span></div>
+      <div style="display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:10px;background:#E4F4EB;color:#1B6E47;font:500 14px/1.4 'Geist',sans-serif"><img src="assets/mascot.png" alt="" style="width:28px;transform:rotate(-8deg)">Importación completada: 6 títulos.</div>
+      <div style="display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:10px;background:#F7EFD9;color:#7A5A0C;font:500 14px/1.4 'Geist',sans-serif"><img src="assets/mascot.png" alt="" style="width:28px;transform:rotate(7deg)">AniList no responde. Los datos básicos siguen aquí.</div>
+      <div style="display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:10px;background:#F9E6E2;color:#9A3325;font:500 14px/1.4 'Geist',sans-serif"><img src="assets/mascot.png" alt="" style="width:28px;filter:grayscale(1);opacity:.8">No se ha podido guardar. Inténtalo otra vez.</div>
+      <div style="display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:10px;background:#EEF2FD;color:#00257D;font:500 14px/1.4 'Geist',sans-serif"><span style="width:28px;height:28px;border-radius:50%;background:#0038be;color:#fff;font:700 14px/28px 'Bricolage Grotesque',sans-serif;text-align:center">i</span>Cada pregunta al asistente es independiente.</div>
+      <div style="font:400 12px/1.5 'Geist',sans-serif;color:#6B6D73"><span style="font:500 11px 'Geist Mono',monospace">message.tags</span> → variante. success = toast negro abajo-derecha, 4s; resto inline arriba del contenido.</div>
+    </div>
+
+    <div style="background:#fff;border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:18px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">PAGINATION · LOADERS</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;font:500 14px 'Geist',sans-serif"><span style="color:#A9ABB0">←</span><div style="display:flex;gap:2px"><span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">1</span><span style="width:36px;height:36px;border-radius:50%;background:#0D0E12;color:#fff;display:flex;align-items:center;justify-content:center">2</span><span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">3</span><span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#8E9096">…</span><span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">9</span></div><span>→</span></div>
+      <div style="font:500 12px 'Geist',sans-serif;color:#6B6D73;text-align:center;margin-top:-8px">Móvil: "← 2 / 9 →"</div>
+      <div style="display:flex;align-items:center;justify-content:space-around;padding:20px 0;border-top:1px solid #EEEEEA">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px"><img src="assets/mascot.png" alt="" style="width:64px;transform:translateY(-3px)"><span style="display:flex;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#0038be"></span><span style="width:6px;height:6px;border-radius:50%;background:#406ace"></span><span style="width:6px;height:6px;border-radius:50%;background:#A6B9E8"></span></span><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">PÁGINA</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px"><span style="width:36px;height:36px;border-radius:50%;border:3px solid #DCE4FA;border-top-color:#0038be"></span><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">INLINE</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px"><span style="width:120px;height:4px;border-radius:2px;background:#EEF2FD;overflow:hidden"><span style="display:block;width:40%;height:100%;background:#0038be"></span></span><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">TOP BAR</span></div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:16px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">CHART CONTAINER · components/chart_card.html</div>
+      <div style="border-radius:10px;box-shadow:inset 0 0 0 1px #EEEEEA;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">EYEBROW · MÉTRICA</div>
+        <div style="font:700 22px/1.1 'Bricolage Grotesque',sans-serif;letter-spacing:-0.02em">Titular con la conclusión</div>
+        <div style="height:110px;display:flex;align-items:flex-end;gap:6px;border-bottom:1px solid #E4E4DF"><span style="flex:1;height:40%;background:#0D0E12;border-radius:3px 3px 0 0"></span><span style="flex:1;height:65%;background:#0D0E12;border-radius:3px 3px 0 0"></span><span style="flex:1;height:100%;background:#0038be;border-radius:3px 3px 0 0"></span><span style="flex:1;height:55%;background:#0D0E12;border-radius:3px 3px 0 0"></span><span style="flex:1;height:30%;background:#0D0E12;border-radius:3px 3px 0 0"></span></div>
+        <div style="font:500 11px 'Geist Mono',monospace;color:#A9ABB0">FUENTE / NOTA AL PIE</div>
+      </div>
+      <div style="font:400 12px/1.5 'Geist',sans-serif;color:#6B6D73">Slots: eyebrow, title, canvas, footnote. Un dato destacado en azul; el resto tinta.</div>
+    </div>
+
+    <div style="background:rgba(13,14,18,.45);border-radius:10px;padding:32px;display:flex;align-items:center;justify-content:center">
+      <div style="background:#fff;border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:16px;width:100%;box-shadow:0 24px 64px rgba(13,14,18,.3)">
+        <img src="assets/mascot.png" alt="" style="width:72px;transform:rotate(-10deg);filter:grayscale(1);opacity:.85">
+        <div style="font:800 30px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em">¿Quitar Frieren de tu biblioteca?</div>
+        <div style="font:400 14px/1.5 'Geist',sans-serif;color:#6B6D73">Se borrarán tu nota, la reseña y el progreso. No se puede deshacer.</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end"><span style="height:44px;padding:0 18px;border-radius:99px;display:flex;align-items:center;font:600 14px 'Geist',sans-serif">Cancelar</span><span style="height:44px;padding:0 20px;border-radius:99px;background:#D0584A;color:#fff;display:flex;align-items:center;font:600 14px 'Geist',sans-serif">Sí, quitar</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px;margin-top:24px">
+    <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">EMPTY STATE · receta · components/empty_state.html with variant= title= text= cta=</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1308px">
+      <sc-for list="{{ empties }}" as="e" hint-placeholder-count="4">
+        <div style="background:#F6F6F3;border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:12px;border:1px solid #E4E4DF">
+          <img src="assets/mascot.png" alt="" style="width:80px;transform:{{ e.tf }};filter:{{ e.f }}">
+          <div style="font:500 10px 'Geist Mono',monospace;color:#0038be">{{ e.v }}</div>
+          <div style="font:800 26px/0.95 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em">{{ e.t }}</div>
+          <div style="font:400 13px/1.45 'Geist',sans-serif;color:#6B6D73">{{ e.d }}</div>
+          <span style="align-self:flex-start;height:36px;padding:0 14px;border-radius:99px;background:#0D0E12;color:#fff;display:flex;align-items:center;font:600 13px 'Geist',sans-serif">{{ e.cta }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:32px;margin-top:24px">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 12px 'Geist',sans-serif;color:#6B6D73">templates/404.html</div>
+      <div style="width:900px;height:560px;background:#F6F6F3;border-radius:10px;overflow:hidden;padding:56px;display:grid;grid-template-columns:repeat(12,1fr);gap:24px;align-items:center;position:relative">
+        <div style="grid-column:1 / span 7;display:flex;flex-direction:column;gap:20px;position:relative;z-index:2">
+          <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">ERROR 404</div>
+          <div style="font:800 96px/0.86 'Bricolage Grotesque',sans-serif;letter-spacing:-0.05em">Esta escena se cortó en montaje.</div>
+          <p style="margin:0;font:400 16px/1.5 'Geist',sans-serif;color:#2A2C33">La página que buscas no existe o ya no es tuya.</p>
+          <div style="display:flex;gap:8px"><span style="height:48px;padding:0 22px;border-radius:99px;background:#0038be;color:#fff;display:flex;align-items:center;font:600 15px 'Geist',sans-serif">Ir a mi biblioteca</span><span style="height:48px;padding:0 20px;border-radius:99px;box-shadow:inset 0 0 0 1.5px #0D0E12;display:flex;align-items:center;font:600 15px 'Geist',sans-serif">Buscar</span></div>
+        </div>
+        <div style="grid-column:8 / span 5;position:relative;height:100%">
+          <span style="position:absolute;top:20px;right:-20px;font:800 220px/0.8 'Bricolage Grotesque',sans-serif;letter-spacing:-0.06em;color:#E4E4DF">404</span>
+          <div style="position:absolute;bottom:20px;left:30px;width:230px;height:230px"><img src="assets/mascot.png" alt="" style="width:100%;transform:rotate(-4deg) translateX(-10px)"><span style="position:absolute;bottom:26px;right:14px;width:84px;height:84px;border-radius:50%;border:10px solid #0D0E12;background:rgba(232,238,252,.55)"></span><span style="position:absolute;bottom:6px;right:-2px;width:38px;height:13px;border-radius:7px;background:#0D0E12;transform:rotate(45deg)"></span><span style="position:absolute;top:-6px;right:40px;font:800 44px 'Bricolage Grotesque',sans-serif;color:#0038be">?</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 12px 'Geist',sans-serif;color:#6B6D73">templates/500.html · autónomo, sin depender de base.html</div>
+      <div style="width:560px;height:560px;background:#0D0E12;color:#fff;border-radius:10px;padding:48px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#8E9096">ERROR 500</div>
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="position:relative;width:140px"><img src="assets/mascot-line-white.png" alt="" style="width:140px;transform:rotate(-10deg) translateY(10px);opacity:.55"><span style="position:absolute;top:-4px;right:-10px;width:38px;height:38px;border-radius:50%;background:#fff;color:#0D0E12;font:800 22px/38px 'Bricolage Grotesque',sans-serif;text-align:center">!</span></div>
+          <div style="font:800 64px/0.88 'Bricolage Grotesque',sans-serif;letter-spacing:-0.05em">Se nos ha quemado la palomita.</div>
+          <p style="margin:0;font:400 15px/1.5 'Geist',sans-serif;color:#A9ABB0">Algo ha fallado en nuestro lado. Tu biblioteca está a salvo.</p>
+        </div>
+        <span style="align-self:flex-start;height:48px;padding:0 22px;border-radius:99px;background:#fff;color:#0D0E12;display:flex;align-items:center;font:600 15px 'Geist',sans-serif">Volver al inicio</span>
+      </div>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const bg = (a, b) => `repeating-linear-gradient(135deg,${a} 0 10px,${b} 10px 20px)`;
+    return {
+      p0: bg('#1D2B4F', '#22325A'), p1: bg('#452634', '#4F2C3C'),
+      scale: Array.from({ length: 10 }, (_, i) => ({ n: i + 1, bg: i < 9 ? (i === 8 ? '#0038be' : '#DCE4FA') : '#F0F0EC', fg: i === 8 ? '#fff' : i < 9 ? '#0038be' : '#A9ABB0' })),
+      empties: [
+        { v: 'mascot-favorite', t: 'Sin favoritos aún.', d: 'Pulsa ♥ en lo que no olvidarías nunca.', cta: 'Ir a biblioteca', tf: 'translateY(4px)', f: 'none' },
+        { v: 'mascot-search', t: 'Nada con ese nombre.', d: 'Prueba el título original o búscalo en TMDB.', cta: 'Buscar en TMDB', tf: 'rotate(-4deg)', f: 'none' },
+        { v: 'mascot-sleep', t: 'Todo muy tranquilo.', d: 'Sin actividad en 14 días. ¿Qué estás viendo?', cta: 'Registrar algo', tf: 'rotate(12deg)', f: 'saturate(.55)' },
+        { v: 'mascot-error', t: 'Sin conexión con TMDB.', d: 'Puedes añadirlo a mano mientras vuelve.', cta: 'Añadir a mano', tf: 'rotate(-10deg)', f: 'grayscale(1)' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

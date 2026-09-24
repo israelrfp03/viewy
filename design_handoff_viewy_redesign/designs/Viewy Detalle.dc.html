@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#ECECE8;font-family:'Geist',system-ui,sans-serif;color:#0D0E12;-webkit-font-smoothing:antialiased}a{color:#0038be;text-decoration:none}a:hover{color:#002FA0}*{box-sizing:border-box}</style>
+</helmet>
+<section id="t1" style="padding:56px;display:flex;flex-direction:column;gap:24px">
+  <div style="display:flex;align-items:baseline;gap:12px"><span style="font:600 11px 'Geist Mono',monospace;padding:4px 8px;background:#0D0E12;color:#fff;border-radius:4px">DETALLE</span><span style="font:600 14px 'Geist',sans-serif">library/detail.html · anime con metadata AniList · editar · móvil</span><a href="Viewy Design System.dc.html" style="font:500 12px 'Geist',sans-serif;margin-left:auto">← Sistema</a></div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+  <div style="width:1280px;background:#F6F6F3;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);position:relative">
+    <header style="height:72px;padding:0 56px;display:flex;align-items:center;gap:40px;border-bottom:1px solid #E4E4DF">
+      <div style="display:flex;align-items:center;gap:8px"><img src="assets/mascot.png" alt="" style="width:34px"><span style="width:76px;height:24px;background:#0038be;-webkit-mask:url(assets/wordmark-white.png) center/contain no-repeat;mask:url(assets/wordmark-white.png) center/contain no-repeat"></span></div>
+      <nav style="display:flex;gap:28px;font:500 14px 'Geist',sans-serif;color:#6B6D73"><span style="color:#0D0E12;display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:10px">Biblioteca<span style="width:4px;height:4px;border-radius:50%;background:#0038be"></span></span><span>Descubrir</span><span>Asistente</span><span>Estadísticas</span></nav>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px"><div style="width:280px;height:40px;border-radius:99px;background:#fff;box-shadow:inset 0 0 0 1px #E4E4DF"></div><span style="height:40px;padding:0 18px;border-radius:99px;background:#0038be;color:#fff;display:flex;align-items:center;font:600 14px 'Geist',sans-serif">+ Añadir</span><span style="width:40px;height:40px;border-radius:50%;background:#0D0E12;color:#fff;font:700 15px/40px 'Bricolage Grotesque',sans-serif;text-align:center">I</span></div>
+    </header>
+
+    <div style="padding:32px 56px 0;font:500 13px 'Geist',sans-serif;color:#6B6D73">← Biblioteca</div>
+
+    <div style="padding:32px 56px 0;display:grid;grid-template-columns:repeat(12,1fr);gap:24px">
+      <div style="grid-column:1 / span 4;display:flex;flex-direction:column;gap:16px">
+        <div style="aspect-ratio:2/3;border-radius:4px;background:{{ hero }};box-shadow:0 32px 64px rgba(13,14,18,.2);display:flex;align-items:flex-end;padding:16px"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:rgba(255,255,255,.6)">POSTER_URL</span></div>
+        <div style="display:flex;gap:8px"><span style="flex:1;height:48px;border-radius:99px;background:#0038be;color:#fff;display:flex;align-items:center;justify-content:center;font:600 14px 'Geist',sans-serif">Editar registro</span><span style="width:48px;height:48px;border-radius:50%;background:#0038be;color:#fff;text-align:center;font:400 18px/48px 'Geist',sans-serif">♥</span></div>
+        <span style="align-self:center;font:500 13px 'Geist',sans-serif;color:#9A3325">Eliminar de mi biblioteca</span>
+      </div>
+      <div style="grid-column:6 / span 7;display:flex;flex-direction:column;gap:28px">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="font:500 12px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">ANIME · 2023 · 28 EPISODIOS · 24 MIN</div>
+          <h1 style="margin:0;font:800 152px/0.82 'Bricolage Grotesque',sans-serif;letter-spacing:-0.055em">Frieren</h1>
+          <div style="font:400 17px/1.4 'Geist',sans-serif;color:#6B6D73">Sousou no Frieren · Frieren: Beyond Journey's End</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span style="height:28px;padding:0 12px;border-radius:99px;box-shadow:inset 0 0 0 1px #D6D6D1;display:flex;align-items:center;font:500 12px 'Geist',sans-serif">Aventura</span><span style="height:28px;padding:0 12px;border-radius:99px;box-shadow:inset 0 0 0 1px #D6D6D1;display:flex;align-items:center;font:500 12px 'Geist',sans-serif">Fantasía</span><span style="height:28px;padding:0 12px;border-radius:99px;box-shadow:inset 0 0 0 1px #D6D6D1;display:flex;align-items:center;font:500 12px 'Geist',sans-serif">Drama</span></div>
+        </div>
+        <p style="margin:0;max-width:600px;font:400 18px/1.6 'Geist',sans-serif;color:#2A2C33">Tras derrotar al Rey Demonio, la maga elfa Frieren sobrevive a sus compañeros humanos y emprende un nuevo viaje para entender lo que significaron para ella.</p>
+
+        <div style="background:#fff;border-radius:10px;padding:32px;display:grid;grid-template-columns:auto 1fr;gap:32px 40px">
+          <div style="grid-column:1 / -1;display:flex;justify-content:space-between;align-items:center"><span style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">TU REGISTRO</span><span style="display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:99px;background:#E8EEFC;color:#0038be;font:600 13px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#0038be"></span>Viendo ▾</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><span style="font:800 96px/0.8 'Bricolage Grotesque',sans-serif;letter-spacing:-0.05em;color:#0038be">10</span><span style="font:500 11px 'Geist Mono',monospace;color:#6B6D73">TU NOTA / 10</span></div>
+          <div style="display:flex;flex-direction:column;gap:14px;justify-content:flex-end">
+            <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px"><sc-for list="{{ scale }}" as="s" hint-placeholder-count="10"><span style="height:28px;border-radius:4px;background:{{ s.bg }};color:{{ s.fg }};font:600 11px/28px 'Geist',sans-serif;text-align:center">{{ s.n }}</span></sc-for></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font:500 13px 'Geist',sans-serif"><span>Episodio <b>18</b> de 28</span><span style="color:#0038be;font-weight:600">+1 episodio</span></div><div style="height:8px;border-radius:99px;background:#EEF2FD"><div style="width:64%;height:100%;border-radius:99px;background:#0038be"></div></div></div>
+          </div>
+          <div style="grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding-top:24px;border-top:1px solid #EEEEEA">
+            <div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">EMPEZADO</div><div style="font:600 16px 'Geist',sans-serif;margin-top:6px">12 ago 2026</div></div>
+            <div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">TERMINADO</div><div style="font:500 16px 'Geist',sans-serif;margin-top:6px;color:#A9ABB0">—</div></div>
+            <div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">AÑADIDO</div><div style="font:600 16px 'Geist',sans-serif;margin-top:6px">3 jun 2026</div></div>
+          </div>
+          <blockquote style="grid-column:1 / -1;margin:0;padding-top:24px;border-top:1px solid #EEEEEA;font:500 24px/1.35 'Bricolage Grotesque',sans-serif;letter-spacing:-0.01em;color:#0D0E12">"No es un anime de batallas, es un anime sobre el tiempo. Lloré en el episodio 10 y no me avergüenza."</blockquote>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin:120px 56px 0;padding-top:24px;border-top:1px solid #0D0E12;display:grid;grid-template-columns:repeat(12,1fr);gap:24px">
+      <div style="grid-column:1 / span 4;display:flex;flex-direction:column;gap:14px"><div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">FICHA · ANILIST</div><div style="font:800 56px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.045em">Detrás de la serie</div></div>
+      <div style="grid-column:6 / span 7;display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">ESTUDIO</div><div style="font:700 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em;margin-top:8px">Madhouse</div></div>
+        <div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">ORIGEN</div><div style="font:700 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em;margin-top:8px">Manga</div></div>
+        <div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">EPISODIOS</div><div style="font:700 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em;margin-top:8px">28</div></div>
+      </div>
+    </div>
+
+    <div style="padding:72px 56px 0;display:flex;flex-direction:column;gap:20px">
+      <div style="font:700 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em">Personajes</div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:24px">
+        <sc-for list="{{ chars }}" as="c" hint-placeholder-count="6"><div style="display:flex;flex-direction:column;gap:10px"><div style="aspect-ratio:1;border-radius:50%;background:{{ c.bg }}"></div><div><div style="font:600 14px 'Geist',sans-serif">{{ c.name }}</div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.08em;color:#6B6D73;margin-top:4px">{{ c.role }}</div></div></div></sc-for>
+      </div>
+    </div>
+
+    <div style="padding:72px 56px 0;display:grid;grid-template-columns:repeat(12,1fr);gap:24px">
+      <div style="grid-column:1 / span 5;display:flex;flex-direction:column;gap:16px"><div style="font:700 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em">Staff</div>
+        <sc-for list="{{ staff }}" as="s" hint-placeholder-count="4"><div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid #E4E4DF;font:400 15px 'Geist',sans-serif"><span style="font-weight:600">{{ s.name }}</span><span style="color:#6B6D73">{{ s.role }}</span></div></sc-for>
+      </div>
+      <div style="grid-column:7 / span 6;display:flex;flex-direction:column;gap:16px"><div style="font:700 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em">Relacionado</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px"><sc-for list="{{ rel }}" as="r" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:8px"><div style="aspect-ratio:2/3;border-radius:4px;background:{{ r.bg }}"></div><div style="font:600 14px 'Geist',sans-serif">{{ r.title }}</div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.08em;color:#0038be">{{ r.type }}</div></div></sc-for></div>
+      </div>
+    </div>
+
+    <div style="padding:72px 56px 96px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:700 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em">Episodios</span><span style="font:500 13px 'Geist',sans-serif;color:#0038be">Ver los 28 ↓</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 40px">
+        <sc-for list="{{ eps }}" as="e" hint-placeholder-count="6"><div style="display:grid;grid-template-columns:40px 1fr auto;gap:12px;padding:14px 0;border-bottom:1px solid #E4E4DF;font:400 15px 'Geist',sans-serif;color:{{ e.c }}"><span style="font:500 12px 'Geist Mono',monospace;color:#8E9096">{{ e.n }}</span><span>{{ e.t }}</span><span style="font:500 11px 'Geist Mono',monospace;color:#0038be">{{ e.seen }}</span></div></sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 12px 'Geist',sans-serif;color:#6B6D73">Editar registro · modal (desktop) / hoja (móvil) — reemplaza library/edit.html sin cambiar el form</div>
+      <div style="width:620px;background:rgba(13,14,18,.45);border-radius:10px;padding:48px 40px">
+        <div style="background:#fff;border-radius:14px;padding:32px;display:flex;flex-direction:column;gap:22px;box-shadow:0 24px 64px rgba(13,14,18,.3)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">EDITAR</div><div style="font:800 40px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em;margin-top:6px">Frieren</div></div><span style="width:36px;height:36px;border-radius:50%;background:#F6F6F3;text-align:center;font:400 18px/36px 'Geist',sans-serif">×</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:600 13px 'Geist',sans-serif">Estado</label>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font:500 13px 'Geist',sans-serif"><span style="height:40px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;justify-content:center">Pendiente</span><span style="height:40px;border-radius:8px;background:#0038be;color:#fff;display:flex;align-items:center;justify-content:center">Viendo</span><span style="height:40px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;justify-content:center">Terminado</span><span style="height:40px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;justify-content:center">Abandonado</span></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:600 13px 'Geist',sans-serif">Nota (1–10)</label><div style="height:48px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;padding:0 14px;font:600 15px 'Geist',sans-serif">10</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:600 13px 'Geist',sans-serif">Episodio actual</label><div style="height:48px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 14px;font:600 15px 'Geist',sans-serif">18<span style="display:flex;gap:4px"><span style="width:36px;height:36px;border-radius:6px;background:#F6F6F3;text-align:center;line-height:36px">−</span><span style="width:36px;height:36px;border-radius:6px;background:#0038be;color:#fff;text-align:center;line-height:36px">+</span></span></div></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:600 13px 'Geist',sans-serif">Inicio</label><div style="height:48px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;padding:0 14px;font:400 15px 'Geist',sans-serif">12/08/2026</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:600 13px 'Geist',sans-serif">Fin</label><div style="height:48px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;padding:0 14px;font:400 15px 'Geist',sans-serif;color:#A9ABB0">dd/mm/aaaa</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:600 13px 'Geist',sans-serif">Reseña</label><div style="height:96px;border-radius:8px;box-shadow:inset 0 0 0 1px #E4E4DF;padding:12px 14px;font:400 15px/1.5 'Geist',sans-serif;color:#2A2C33">No es un anime de batallas, es un anime sobre el tiempo…</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="display:flex;align-items:center;gap:10px;font:500 14px 'Geist',sans-serif"><span style="width:44px;height:26px;border-radius:99px;background:#0038be;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span>Favorito</span><div style="display:flex;gap:8px"><span style="height:44px;padding:0 18px;border-radius:99px;display:flex;align-items:center;font:600 14px 'Geist',sans-serif">Cancelar</span><span style="height:44px;padding:0 22px;border-radius:99px;background:#0038be;color:#fff;display:flex;align-items:center;font:600 14px 'Geist',sans-serif">Guardar</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 12px 'Geist',sans-serif;color:#6B6D73">Al llegar al último episodio · celebración</div>
+      <div style="width:620px;background:#0038be;color:#fff;border-radius:14px;padding:32px;display:flex;align-items:center;gap:28px;position:relative;overflow:hidden">
+        <div style="position:relative;width:130px;height:130px;flex:none">
+          <img src="assets/mascot-line-white.png" alt="" style="width:130px;transform:translateY(8px)">
+          <span style="position:absolute;top:0;left:8px;width:6px;height:14px;border-radius:2px;background:#fff;transform:rotate(-30deg)"></span><span style="position:absolute;top:-8px;left:60px;width:6px;height:14px;border-radius:2px;background:#A6B9E8;transform:rotate(40deg)"></span><span style="position:absolute;top:6px;right:4px;width:6px;height:12px;border-radius:2px;background:#fff;transform:rotate(-50deg)"></span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px"><div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#DCE4FA">28 DE 28 · TERMINADO</div><div style="font:800 40px/0.95 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Frieren, completado.</div><div style="display:flex;gap:8px;margin-top:6px"><span style="height:40px;padding:0 18px;border-radius:99px;background:#fff;color:#0038be;display:flex;align-items:center;font:600 14px 'Geist',sans-serif">Ponerle nota</span><span style="height:40px;padding:0 16px;border-radius:99px;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6);display:flex;align-items:center;font:600 14px 'Geist',sans-serif">¿Qué veo ahora?</span></div></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:32px;align-items:flex-start">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font:400 12px 'Geist',sans-serif;color:#6B6D73">Móvil · 390</div>
+        <div style="width:390px;height:820px;background:#F6F6F3;border-radius:28px;overflow:hidden;position:relative;box-shadow:0 0 0 8px #0D0E12">
+          <div style="height:420px;background:{{ hero }};position:relative">
+            <div style="position:absolute;top:52px;left:16px;right:16px;display:flex;justify-content:space-between"><span style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.9);text-align:center;font:500 18px/44px 'Geist',sans-serif">←</span><span style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.9);color:#0038be;text-align:center;font:400 18px/44px 'Geist',sans-serif">♥</span></div>
+            <div style="position:absolute;inset:auto 0 0 0;height:160px;background:linear-gradient(to top,#F6F6F3,rgba(246,246,243,0))"></div>
+          </div>
+          <div style="padding:0 20px;margin-top:-72px;position:relative;display:flex;flex-direction:column;gap:12px">
+            <div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">ANIME · 2023 · 28 EPS</div>
+            <div style="font:800 76px/0.82 'Bricolage Grotesque',sans-serif;letter-spacing:-0.055em">Frieren</div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:6px"><span style="font:800 48px/0.8 'Bricolage Grotesque',sans-serif;color:#0038be">10</span><div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font:500 12px 'Geist',sans-serif"><span>Ep. 18 de 28</span><span style="display:inline-flex;align-items:center;gap:5px;color:#0038be"><span style="width:6px;height:6px;border-radius:50%;background:#0038be"></span>Viendo</span></div><div style="height:6px;border-radius:99px;background:#EEF2FD"><div style="width:64%;height:100%;border-radius:99px;background:#0038be"></div></div></div></div>
+            <p style="margin:8px 0 0;font:400 15px/1.55 'Geist',sans-serif;color:#2A2C33">Tras derrotar al Rey Demonio, Frieren emprende un nuevo viaje para entender a sus compañeros…</p>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 16px 30px;background:#fff;box-shadow:0 -1px 0 #E4E4DF;display:flex;gap:8px"><span style="flex:1;height:52px;border-radius:99px;box-shadow:inset 0 0 0 1.5px #0D0E12;display:flex;align-items:center;justify-content:center;font:600 15px 'Geist',sans-serif">Editar</span><span style="flex:1.3;height:52px;border-radius:99px;background:#0038be;color:#fff;display:flex;align-items:center;justify-content:center;font:600 15px 'Geist',sans-serif">+1 episodio</span></div>
+        </div>
+      </div>
+      <div style="width:340px;background:#fff;border-radius:10px;padding:24px;font:400 13px/1.55 'Geist',sans-serif;color:#2A2C33;display:flex;flex-direction:column;gap:10px">
+        <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">DECISIONES</div>
+        <div><b>Póster sticky</b> (4 col) con acciones pegadas; el título a 152px ocupa las otras 7.</div>
+        <div><b>Tu registro</b> es un solo bloque blanco: nota gigante, escala 1–10, progreso, fechas y reseña como cita.</div>
+        <div><b>Metadata anime</b> separada por una regla negra de 1px, como una sección de revista. Si no hay AniList: empty state con mascot-search + "Buscar en AniList".</div>
+        <div><b>Proveedor caído</b>: alert ámbar con Popi desaturada, igual que hoy pero con el sistema.</div>
+        <div><b>Móvil</b>: póster a sangre con fundido, barra de acciones fija abajo (sustituye la tab bar en esta vista). Personajes en scroll horizontal.</div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const tones = [['#1D2B4F','#22325A'],['#3A2A22','#432F26'],['#1F3A33','#244239'],['#452634','#4F2C3C'],['#2A2C33','#31333B'],['#0038BE','#0A42C8'],['#4A3B1C','#544322'],['#233044','#29384F']];
+    const bg = i => { const [a, b] = tones[i % 8]; return `repeating-linear-gradient(135deg,${a} 0 10px,${b} 10px 20px)`; };
+    return {
+      hero: bg(0),
+      scale: Array.from({ length: 10 }, (_, i) => ({ n: i + 1, bg: i < 10 ? (i === 9 ? '#0038be' : '#DCE4FA') : '#F0F0EC', fg: i === 9 ? '#fff' : '#0038be' })),
+      chars: [['Frieren','PROTAGONISTA'],['Fern','PROTAGONISTA'],['Stark','PRINCIPAL'],['Himmel','SECUNDARIO'],['Heiter','SECUNDARIO'],['Eisen','SECUNDARIO']].map((c, i) => ({ name: c[0], role: c[1], bg: bg(i + 2) })),
+      staff: [['Keiichirō Saitō','Dirección'],['Tomohiro Suzuki','Guion'],['Evan Call','Música'],['Reiko Nagasawa','Diseño de personajes']].map(s => ({ name: s[0], role: s[1] })),
+      rel: [['Frieren (manga)','ADAPTACIÓN'],['Frieren T2','SECUELA'],['Mini anime','SPIN-OFF']].map((r, i) => ({ title: r[0], type: r[1], bg: bg(i + 4) })),
+      eps: [['01','El fin del viaje'],['02','No tenía por qué ser magia…'],['03','Matar con magia'],['04','La tierra donde descansan las almas'],['05','Fantasmas de los muertos'],['06','Aldea de los héroes']].map((e, i) => ({ n: e[0], t: e[1], seen: 'VISTO', c: '#0D0E12' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

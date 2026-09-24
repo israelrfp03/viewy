@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#ECECE8;font-family:'Geist',system-ui,sans-serif;color:#0D0E12;-webkit-font-smoothing:antialiased}a{color:#0038be;text-decoration:none}a:hover{color:#002FA0}*{box-sizing:border-box}</style>
+</helmet>
+
+<section id="t2" style="padding:56px 56px 48px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid rgba(0,0,0,.08)">
+  <div style="display:flex;align-items:baseline;gap:12px"><a href="#t2" style="font:600 11px 'Geist Mono',monospace;padding:4px 8px;background:#0D0E12;color:#fff;border-radius:4px">2</a><span style="font:600 14px 'Geist',sans-serif">Todas las pantallas · navbar <a href="#1a" style="font:600 10.5px 'Geist Mono',monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#0D0E12;border-radius:5px">1a</a> aplicada</span></div>
+  <div style="display:grid;grid-template-columns:repeat(5,220px);gap:16px">
+    <a href="Viewy Home.dc.html" style="background:#0038be;color:#fff;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#fff;transform:translateY(-2px)"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#DCE4FA">01 · templates/home.html</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Home</span></a>
+    <a href="Viewy Auth.dc.html" style="background:#fff;color:#0D0E12;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#0038be"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">02 · accounts/login, register</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Auth</span></a>
+    <a href="Viewy Biblioteca.dc.html" style="background:#fff;color:#0D0E12;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#0038be"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">03 · library/list.html</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Biblioteca</span></a>
+    <a href="Viewy Detalle.dc.html" style="background:#fff;color:#0D0E12;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#0038be"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">04 · library/detail, edit</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Detalle</span></a>
+    <a href="Viewy Analytics.dc.html" style="background:#fff;color:#0D0E12;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#0038be"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">05 · analytics/dashboard</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Analytics</span></a>
+    <a href="Viewy Recomendaciones.dc.html" style="background:#fff;color:#0D0E12;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#0038be"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">06 · recommendations/form</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Descubrir</span></a>
+    <a href="Viewy Asistente.dc.html" style="background:#fff;color:#0D0E12;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#0038be"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">07 · assistant/chat.html</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Asistente</span></a>
+    <a href="Viewy Importar.dc.html" style="background:#fff;color:#0D0E12;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#0038be"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">08 · imports/*</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Importar</span></a>
+    <a href="Viewy Perfil.dc.html" style="background:#fff;color:#0D0E12;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#0038be"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#6B6D73">09 · accounts/profile</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Perfil</span></a>
+    <a href="Viewy Componentes.dc.html" style="background:#0D0E12;color:#fff;border-radius:10px;padding:20px;height:150px;display:flex;flex-direction:column;justify-content:space-between" style-hover="color:#fff"><span style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;color:#8E9096">10 · components/* · 404 · 500</span><span style="font:800 36px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Componentes</span></a>
+  </div>
+  <p style="margin:0;font:12px/1.5 'Geist',sans-serif;color:#6B6D73">Orden de implementación sugerido: input.css + base.html + partials → componentes → pantallas en este orden. Cada pantalla lista sus decisiones y los pocos cambios de contexto que necesita.</p>
+</section>
+
+<section id="t1" style="padding:56px 56px 72px;display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <a href="#t1" style="font:600 11px 'Geist Mono',monospace;padding:4px 8px;background:#0D0E12;color:#fff;border-radius:4px">1</a>
+    <span style="font:600 14px 'Geist',sans-serif">Fundamentos · Sistema de mascota · Base layout + Navbar</span>
+  </div>
+
+  <!-- A · Dirección + color + tipo -->
+  <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+
+    <div style="width:560px;background:#F6F6F3;border-radius:10px;padding:48px;display:flex;flex-direction:column;gap:28px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">01 · Dirección visual</div>
+      <div style="font:800 64px/0.92 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em;text-wrap:balance">Tu cine,<br>en página<br><span style="color:#0038be">completa.</span></div>
+      <p style="margin:0;font:400 16px/1.55 'Geist',sans-serif;color:#2A2C33;text-wrap:pretty">Papel cálido, tinta casi negra y un único azul que manda. El póster es la imagen; la tipografía es la voz; la mascota es el guiño. Cada pantalla tiene <b>un protagonista</b> y todo lo demás se retira.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;font:400 13px/1.45 'Geist',sans-serif;color:#2A2C33">
+        <div><div style="font:600 13px 'Geist',sans-serif;color:#0D0E12;margin-bottom:4px">Escala extrema</div>Títulos de 64–160px junto a UI de 13–15px. Nada en tamaños intermedios.</div>
+        <div><div style="font:600 13px 'Geist',sans-serif;color:#0D0E12;margin-bottom:4px">Asimetría 7/5</div>Grid de 12 columnas; los bloques se descuadran a propósito.</div>
+        <div><div style="font:600 13px 'Geist',sans-serif;color:#0D0E12;margin-bottom:4px">Azul con intención</div>Solo acción primaria, estado activo y mascota. Nunca decorativo.</div>
+        <div><div style="font:600 13px 'Geist',sans-serif;color:#0D0E12;margin-bottom:4px">Metadata en mono</div>Año, tipo, episodios: etiquetas técnicas, como créditos de película.</div>
+      </div>
+    </div>
+
+    <div style="width:520px;background:#FFFFFF;border-radius:10px;padding:40px;display:flex;flex-direction:column;gap:24px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">02 · Color</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font:600 13px 'Geist',sans-serif">brand · azul Viewy (del logo, #0038BE)</div>
+        <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px">
+          <sc-for list="{{ brand }}" as="s" hint-placeholder-count="8">
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:4px;background:{{ s.hex }}"></div><div style="font:500 10px/1.3 'Geist Mono',monospace;color:#6B6D73">{{ s.name }}<br>{{ s.hex }}</div></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font:600 13px 'Geist',sans-serif">neutros · papel y tinta</div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+          <sc-for list="{{ neutrals }}" as="s" hint-placeholder-count="7">
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:4px;background:{{ s.hex }};box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)"></div><div style="font:500 10px/1.3 'Geist Mono',monospace;color:#6B6D73">{{ s.name }}<br>{{ s.hex }}</div></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font:600 13px 'Geist',sans-serif">estados · misma luminosidad y croma, cambia el tono</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:99px;background:#E8EEFC;color:#0038be;font:600 12px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#0038be"></span>Viendo</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:99px;background:#E4F4EB;color:#1B6E47;font:600 12px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#2E9E6A"></span>Terminado</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:99px;background:#F7EFD9;color:#7A5A0C;font:600 12px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#C08F1E"></span>Pendiente</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:99px;background:#F9E6E2;color:#9A3325;font:600 12px 'Geist',sans-serif"><span style="width:6px;height:6px;border-radius:50%;background:#D0584A"></span>Abandonado</span>
+        </div>
+      </div>
+      <p style="margin:0;font:400 12px/1.5 'Geist',sans-serif;color:#6B6D73">Proporción objetivo por pantalla: 80% papel · 15% tinta · 5% azul. La home rompe la regla con un bloque azul a sangre.</p>
+    </div>
+
+    <div style="width:560px;background:#FFFFFF;border-radius:10px;padding:40px;display:flex;flex-direction:column;gap:20px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">03 · Tipografía</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding-bottom:20px;border-bottom:1px solid #E4E4DF">
+        <div><div style="font:800 40px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Aa</div><div style="font:500 11px/1.4 'Geist Mono',monospace;color:#6B6D73;margin-top:8px">Bricolage Grotesque<br>display · 700/800</div></div>
+        <div><div style="font:500 40px/1 'Geist',sans-serif;letter-spacing:-0.02em">Aa</div><div style="font:500 11px/1.4 'Geist Mono',monospace;color:#6B6D73;margin-top:8px">Geist<br>interfaz · 400–700</div></div>
+        <div><div style="font:400 40px/1 'Geist Mono',monospace;letter-spacing:-0.02em">Aa</div><div style="font:500 11px/1.4 'Geist Mono',monospace;color:#6B6D73;margin-top:8px">Geist Mono<br>metadata · 400/500</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="width:84px;flex:none;font:500 10px 'Geist Mono',monospace;color:#6B6D73">display-xl<br>160/0.85</span><span style="font:800 72px/0.9 'Bricolage Grotesque',sans-serif;letter-spacing:-0.045em">Dune</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="width:84px;flex:none;font:500 10px 'Geist Mono',monospace;color:#6B6D73">display-lg<br>96/0.9</span><span style="font:800 48px/0.95 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Biblioteca</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="width:84px;flex:none;font:500 10px 'Geist Mono',monospace;color:#6B6D73">display-md<br>56/0.95</span><span style="font:700 34px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-0.03em">Viendo ahora</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="width:84px;flex:none;font:500 10px 'Geist Mono',monospace;color:#6B6D73">title<br>22/1.2</span><span style="font:600 22px/1.2 'Geist',sans-serif;letter-spacing:-0.01em">Frieren: Beyond Journey's End</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="width:84px;flex:none;font:500 10px 'Geist Mono',monospace;color:#6B6D73">body<br>16/1.55</span><span style="font:400 16px/1.55 'Geist',sans-serif;color:#2A2C33">Una elfa aprende qué significa el tiempo.</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="width:84px;flex:none;font:500 10px 'Geist Mono',monospace;color:#6B6D73">ui<br>14/1.4</span><span style="font:500 14px/1.4 'Geist',sans-serif">Añadir a biblioteca</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="width:84px;flex:none;font:500 10px 'Geist Mono',monospace;color:#6B6D73">meta<br>11 · +0.1em</span><span style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">Anime · 2023 · 28 eps · Madhouse</span></div>
+      </div>
+    </div>
+
+    <div style="width:400px;background:#FFFFFF;border-radius:10px;padding:40px;display:flex;flex-direction:column;gap:20px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">04 · Espaciado y grid</div>
+      <div style="display:flex;align-items:flex-end;gap:10px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:4px;height:4px;background:#0038be"></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">1</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:8px;height:8px;background:#0038be"></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">2</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:16px;height:16px;background:#0038be"></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">4</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:24px;height:24px;background:#0038be"></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">6</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:40px;height:40px;background:#0038be"></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">10</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:64px;height:64px;background:#0038be"></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">16</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:96px;height:96px;background:#0038be"></div><span style="font:500 10px 'Geist Mono',monospace;color:#6B6D73">24</span></div>
+      </div>
+      <div style="font:400 13px/1.55 'Geist',sans-serif;color:#2A2C33;display:flex;flex-direction:column;gap:10px">
+        <div><b style="font-weight:600">Base 4px</b> (escala Tailwind por defecto). Componentes viven en 2–6; secciones en 24–40.</div>
+        <div><b style="font-weight:600">Contenedor</b> max-w-[1360px] · px-5 / md:px-10 / xl:px-14.</div>
+        <div><b style="font-weight:600">Grid</b> 4 col móvil · 8 tablet · 12 desktop · gap 24px.</div>
+        <div><b style="font-weight:600">Aire vertical</b> entre secciones: 96px móvil, 160px desktop. Si dudas, más.</div>
+        <div><b style="font-weight:600">Radios</b> 4px (pósters, inputs) · 10px (cards) · full (chips, botones).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B · Mascota -->
+  <div style="background:#F6F6F3;border-radius:10px;padding:48px;display:flex;flex-direction:column;gap:32px;max-width:1720px">
+    <div style="display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:end">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">05 · Sistema de mascota — «Popi»</div>
+        <div style="font:800 64px/0.92 'Bricolage Grotesque',sans-serif;letter-spacing:-0.04em">Una forma.<br>Muchos papeles.</div>
+      </div>
+      <div style="font:400 14px/1.6 'Geist',sans-serif;color:#2A2C33;display:grid;grid-template-columns:1fr 1fr;gap:16px 28px">
+        <div><b style="font-weight:600;color:#0D0E12">Nunca se redibuja.</b> Todas las variantes usan el mismo PNG base; cambian pose (rotación, escala, desplazamiento), filtro y un accesorio superpuesto.</div>
+        <div><b style="font-weight:600;color:#0D0E12">Accesorios geométricos</b> en azul marca o tinta, grosor fijo 6/120 del ancho, esquinas redondas: igual que el trazo del logo.</div>
+        <div><b style="font-weight:600;color:#0D0E12">Tamaños</b>: sticker 24–40px · spot 96–160px · hero 280–520px. Máximo una mascota visible por pantalla.</div>
+        <div><b style="font-weight:600;color:#0D0E12">Partial Django</b>: <span style="font:500 12px 'Geist Mono',monospace;color:#0038be">{% include "components/mascot.html" with variant="search" size="spot" %}</span></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px">
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center"><img src="assets/mascot.png" alt="" style="width:140px"></div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-default</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Logo, favicon, footer, splash.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:140px;transform:rotate(-8deg) translateY(-6px)">
+          <span style="position:absolute;top:8px;right:4px;padding:5px 10px;border-radius:99px;background:#0038be;color:#fff;font:700 12px 'Geist',sans-serif;transform:rotate(8deg)">+1</span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-happy</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Añadido, guardado, toasts de éxito.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:130px;transform:rotate(7deg) translate(-10px,8px)">
+          <span style="position:absolute;top:58px;right:34px;width:8px;height:8px;border-radius:50%;border:2.5px solid #0038be;background:#fff"></span>
+          <span style="position:absolute;top:38px;right:22px;width:12px;height:12px;border-radius:50%;border:3px solid #0038be;background:#fff"></span>
+          <span style="position:absolute;top:4px;right:0;height:30px;padding:0 12px;border-radius:99px;border:3px solid #0038be;background:#fff;display:flex;align-items:center;gap:4px"><span style="width:5px;height:5px;border-radius:50%;background:#0038be"></span><span style="width:5px;height:5px;border-radius:50%;background:#0038be"></span><span style="width:5px;height:5px;border-radius:50%;background:#0038be"></span></span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-thinking</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Generando recomendaciones, asistente escribiendo.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:130px;transform:rotate(-4deg) translateX(-12px)">
+          <span style="position:absolute;bottom:26px;right:14px;width:58px;height:58px;border-radius:50%;border:7px solid #0D0E12;background:rgba(232,238,252,.55)"></span>
+          <span style="position:absolute;bottom:12px;right:4px;width:26px;height:9px;border-radius:5px;background:#0D0E12;transform:rotate(45deg)"></span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-search</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Buscador vacío, búsqueda TMDB, sin resultados.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:130px;transform:rotate(-10deg) translateY(12px);filter:grayscale(1) contrast(1.1);opacity:.85">
+          <span style="position:absolute;top:12px;right:22px;width:34px;height:34px;border-radius:50%;background:#0D0E12;color:#fff;font:800 20px/34px 'Bricolage Grotesque',sans-serif;text-align:center">!</span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-error</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">404, 500, fallo de API. Desaturada: el azul "se apaga".</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:140px;transform:translateY(8px) scale(1.04)">
+          <span style="position:absolute;top:10px;left:22px;width:6px;height:14px;border-radius:2px;background:#0038be;transform:rotate(-30deg)"></span>
+          <span style="position:absolute;top:24px;left:52px;width:6px;height:12px;border-radius:2px;background:#2E9E6A;transform:rotate(20deg)"></span>
+          <span style="position:absolute;top:4px;left:92px;width:6px;height:14px;border-radius:2px;background:#C08F1E;transform:rotate(60deg)"></span>
+          <span style="position:absolute;top:18px;right:40px;width:6px;height:12px;border-radius:2px;background:#D0584A;transform:rotate(-50deg)"></span>
+          <span style="position:absolute;top:6px;right:16px;width:6px;height:14px;border-radius:2px;background:#0038be;transform:rotate(15deg)"></span>
+          <span style="position:absolute;top:40px;right:6px;width:7px;height:7px;border-radius:50%;background:#2E9E6A"></span>
+          <span style="position:absolute;top:44px;left:8px;width:7px;height:7px;border-radius:50%;background:#C08F1E"></span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-celebrate</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Serie terminada, importación completada, hitos.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:130px;transform:rotate(12deg) translate(-8px,14px);filter:saturate(.55)">
+          <span style="position:absolute;top:44px;right:40px;font:800 16px 'Bricolage Grotesque',sans-serif;color:#7392db">z</span>
+          <span style="position:absolute;top:22px;right:22px;font:800 22px 'Bricolage Grotesque',sans-serif;color:#406ace">z</span>
+          <span style="position:absolute;top:-2px;right:2px;font:800 30px 'Bricolage Grotesque',sans-serif;color:#0038be">Z</span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-sleep</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Sin actividad reciente, "Viendo" vacío.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:130px;transform:translateX(-18px)">
+          <span style="position:absolute;bottom:14px;right:4px;width:66px;height:58px;border-radius:8px;border:3px solid #0D0E12;background:#fff;display:flex;align-items:flex-end;justify-content:center;gap:5px;padding:8px;transform:rotate(6deg)"><span style="width:10px;height:14px;border-radius:2px;background:#a6b9e8"></span><span style="width:10px;height:30px;border-radius:2px;background:#0038be"></span><span style="width:10px;height:22px;border-radius:2px;background:#406ace"></span></span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-analytics</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Estadísticas sin datos, resumen anual.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:130px;transform:rotate(-3deg) translateY(10px)">
+          <span style="position:absolute;top:0;right:24px;font:700 34px/1 'Geist',sans-serif;color:#0038be">✦</span>
+          <span style="position:absolute;top:34px;right:6px;font:700 18px/1 'Geist',sans-serif;color:#406ace">✦</span>
+          <span style="position:absolute;top:14px;left:18px;font:700 22px/1 'Geist',sans-serif;color:#7392db">✦</span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-ai</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Recomendaciones y avatar del asistente.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:130px;transform:translateX(18px) rotate(4deg)">
+          <span style="position:absolute;bottom:12px;left:4px;width:58px;height:72px;border-radius:6px;border:3px solid #0D0E12;background:#fff;display:flex;flex-direction:column;gap:7px;padding:12px 8px 8px;transform:rotate(-8deg)">
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#0038be"></span><span style="flex:1;height:3px;border-radius:2px;background:#0D0E12"></span></span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#0038be"></span><span style="flex:1;height:3px;border-radius:2px;background:#0D0E12"></span></span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;border:1.5px solid #0D0E12"></span><span style="flex:1;height:3px;border-radius:2px;background:#A9ABB0"></span></span>
+          </span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-import</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Pegar lista, preview, confirmación.</div></div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;align-items:center;justify-content:center">
+          <img src="assets/mascot.png" alt="" style="width:130px;transform:translateY(12px)">
+          <span style="position:absolute;top:2px;left:30px;font:400 26px/1 'Geist',sans-serif;color:#0038be;transform:rotate(-14deg)">★</span>
+          <span style="position:absolute;top:-6px;left:50%;margin-left:-14px;font:400 32px/1 'Geist',sans-serif;color:#0038be">★</span>
+          <span style="position:absolute;top:2px;right:30px;font:400 26px/1 'Geist',sans-serif;color:#0038be;transform:rotate(14deg)">★</span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#0038be">mascot-favorite</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#6B6D73;margin-top:4px">Favoritos vacío, al marcar ♥ (sticker 24px).</div></div>
+      </div>
+
+      <div style="background:#0038be;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px">
+          <img src="assets/mascot-line-white.png" alt="" style="width:110px">
+          <span style="display:flex;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#fff"></span><span style="width:8px;height:8px;border-radius:50%;background:#fff;opacity:.6"></span><span style="width:8px;height:8px;border-radius:50%;background:#fff;opacity:.3"></span></span>
+        </div>
+        <div><div style="font:500 12px 'Geist Mono',monospace;color:#fff">mascot-loader · inverse</div><div style="font:400 12px/1.4 'Geist',sans-serif;color:#DCE4FA;margin-top:4px">Versión de línea blanca para fondos azules. Rebote 2px + palomitas en cola.</div></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:28px;padding-top:24px;border-top:1px solid #E4E4DF;font:400 13px/1.55 'Geist',sans-serif;color:#2A2C33">
+      <div><div style="font:600 13px 'Geist',sans-serif;color:#0D0E12;margin-bottom:6px">Siguiente paso de ilustración</div>Los accesorios cubren el 80% de contextos. Para expresiones reales encargar 4 caras sobre el mismo cubo (sorpresa, pensativa, triste, dormida) y exportarlas como <span style="font:500 12px 'Geist Mono',monospace">mascot-face-*.svg</span>. El partial ya acepta la capa.</div>
+      <div><div style="font:600 13px 'Geist',sans-serif;color:#0D0E12;margin-bottom:6px">Movimiento (≤ 400ms, ease-out)</div>happy: salto 6px + rotación · thinking: burbuja con puntos en secuencia · sleep: Z flotando en bucle 3s · loader: rebote 2px. Todo desactivado con prefers-reduced-motion.</div>
+      <div><div style="font:600 13px 'Geist',sans-serif;color:#0D0E12;margin-bottom:6px">Dónde NO aparece</div>Dentro de pósters, en tablas de datos, junto a otra mascota o en botones secundarios. Si compite con un póster, pierde la mascota.</div>
+    </div>
+  </div>
+
+  <!-- C · Navbar desktop: opciones -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">06 · Base layout + navbar · desktop 1280</div>
+    <p style="margin:0;max-width:760px;font:400 14px/1.55 'Geist',sans-serif;color:#2A2C33">Decisión: la sidebar actual de <span style="font:500 12px 'Geist Mono',monospace">base.html</span> pasa a <b>barra superior</b>. Libera 240px para pósters y da la composición horizontal de revista. 4 destinos primarios; Importar, Perfil y Salir viven en el menú de avatar. Búsqueda global siempre visible con atajo <span style="font:500 12px 'Geist Mono',monospace">/</span>.</p>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+
+    <div id="1a" style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 12px 'Geist',sans-serif;color:#6B6D73"><a href="#1a" style="font:600 10.5px 'Geist Mono',monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#0D0E12;border-radius:5px">1a</a>Papel · sesión iniciada · menú de avatar abierto · toast con mascota</div>
+      <div style="width:1280px;height:760px;background:#F6F6F3;border-radius:10px;overflow:hidden;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+        <sc-if value="{{ showGrid }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0 56px;display:grid;grid-template-columns:repeat(12,1fr);gap:24px;pointer-events:none;z-index:5">
+            <sc-for list="{{ cols }}" as="c" hint-placeholder-count="12"><div style="background:rgba(0,56,190,.06)"></div></sc-for>
+          </div>
+        </sc-if>
+        <header style="height:72px;padding:0 56px;display:flex;align-items:center;gap:40px;border-bottom:1px solid #E4E4DF">
+          <a href="#1a" style="display:flex;align-items:center;gap:8px"><img src="assets/mascot.png" alt="" style="width:34px"><span style="width:76px;height:24px;background:#0038be;-webkit-mask:url(assets/wordmark-white.png) center/contain no-repeat;mask:url(assets/wordmark-white.png) center/contain no-repeat"></span></a>
+          <nav style="display:flex;gap:28px;font:500 14px 'Geist',sans-serif">
+            <a href="#1a" style="color:#0D0E12;display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:10px">Biblioteca<span style="width:4px;height:4px;border-radius:50%;background:#0038be"></span></a>
+            <a href="#1a" style="color:#6B6D73;padding-bottom:8px" style-hover="color:#0D0E12">Descubrir</a>
+            <a href="#1a" style="color:#6B6D73;padding-bottom:8px" style-hover="color:#0D0E12">Asistente</a>
+            <a href="#1a" style="color:#6B6D73;padding-bottom:8px" style-hover="color:#0D0E12">Estadísticas</a>
+          </nav>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+            <div style="width:280px;height:40px;border-radius:99px;background:#fff;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;padding:0 6px 0 16px;gap:10px;font:400 14px 'Geist',sans-serif;color:#8E9096">
+              <span style="width:12px;height:12px;border-radius:50%;border:2px solid #8E9096;flex:none"></span>Buscar películas, series, anime<span style="margin-left:auto;width:26px;height:26px;border-radius:99px;background:#F0F0EC;font:500 11px/26px 'Geist Mono',monospace;text-align:center;color:#6B6D73">/</span>
+            </div>
+            <a href="#1a" style="height:40px;padding:0 18px;border-radius:99px;background:#0038be;color:#fff;display:flex;align-items:center;gap:8px;font:600 14px 'Geist',sans-serif" style-hover="background:#002FA0;color:#fff"><span style="font:500 18px/1 'Geist',sans-serif">+</span>Añadir</a>
+            <div style="width:40px;height:40px;border-radius:50%;background:#0D0E12;color:#fff;font:700 15px/40px 'Bricolage Grotesque',sans-serif;text-align:center;box-shadow:0 0 0 3px #F6F6F3,0 0 0 5px #0038be">I</div>
+          </div>
+        </header>
+
+        <div style="position:absolute;top:80px;right:56px;width:240px;background:#fff;border-radius:10px;box-shadow:0 12px 40px rgba(13,14,18,.12),0 0 0 1px #E4E4DF;padding:8px;z-index:10">
+          <div style="padding:10px 12px 12px;border-bottom:1px solid #EEEEEA;margin-bottom:6px"><div style="font:600 14px 'Geist',sans-serif">israel</div><div style="font:500 11px 'Geist Mono',monospace;color:#6B6D73;margin-top:2px">248 TÍTULOS · 31 FAVORITOS</div></div>
+          <div style="padding:10px 12px;border-radius:6px;font:500 14px 'Geist',sans-serif;background:#F6F6F3">Mi perfil</div>
+          <div style="padding:10px 12px;border-radius:6px;font:500 14px 'Geist',sans-serif">Importar lista</div>
+          <div style="padding:10px 12px;border-radius:6px;font:500 14px 'Geist',sans-serif;color:#6B6D73;border-top:1px solid #EEEEEA;margin-top:6px">Cerrar sesión</div>
+        </div>
+
+        <div style="position:absolute;bottom:32px;right:56px;display:flex;align-items:center;gap:12px;background:#0D0E12;color:#fff;border-radius:99px;padding:6px 20px 6px 6px;z-index:10;box-shadow:0 12px 32px rgba(13,14,18,.25)">
+          <span style="width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center"><img src="assets/mascot.png" alt="" style="width:30px;transform:rotate(-8deg)"></span>
+          <span style="font:500 14px 'Geist',sans-serif"><b style="font-weight:600">Dune: Parte Dos</b> añadida a Pendiente</span>
+          <span style="font:600 13px 'Geist',sans-serif;color:#a6b9e8;margin-left:8px">Deshacer</span>
+        </div>
+
+        <main style="padding:72px 56px 0;display:grid;grid-template-columns:repeat(12,1fr);gap:24px">
+          <div style="grid-column:1 / span 7;display:flex;flex-direction:column;gap:18px">
+            <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">Mi biblioteca · 248 títulos</div>
+            <div style="font:800 128px/0.85 'Bricolage Grotesque',sans-serif;letter-spacing:-0.05em">Biblioteca</div>
+          </div>
+          <div style="grid-column:9 / span 4;align-self:end;font:400 15px/1.55 'Geist',sans-serif;color:#2A2C33;padding-bottom:10px">Bloque de página tipo: eyebrow en mono, título display a 7 columnas, entradilla desplazada a la derecha. Cada pantalla hereda este encabezado.</div>
+          <div style="grid-column:1 / -1;display:grid;grid-template-columns:repeat(6,1fr);gap:24px;margin-top:40px">
+            <sc-for list="{{ posters }}" as="p" hint-placeholder-count="6">
+              <div style="aspect-ratio:2/3;border-radius:4px;background:repeating-linear-gradient(135deg,#E6E6E1 0 8px,#EFEFEB 8px 16px);display:flex;align-items:flex-end;padding:10px;font:500 10px 'Geist Mono',monospace;color:#8E9096">póster {{ p }}</div>
+            </sc-for>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div id="1b" style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 12px 'Geist',sans-serif;color:#6B6D73"><a href="#1b" style="font:600 10.5px 'Geist Mono',monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#0D0E12;border-radius:5px">1b</a>Barra azul a sangre · wordmark blanco · más marca, menos aire</div>
+      <div style="width:1280px;height:360px;background:#F6F6F3;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+        <header style="height:72px;padding:0 56px;display:flex;align-items:center;gap:40px;background:#0038be">
+          <a href="#1b" style="display:flex;align-items:center;gap:10px"><img src="assets/mascot-line-white.png" alt="" style="width:34px"><img src="assets/wordmark-white.png" alt="Viewy" style="height:24px"></a>
+          <nav style="display:flex;gap:6px;font:500 14px 'Geist',sans-serif">
+            <a href="#1b" style="color:#0038be;background:#fff;height:34px;padding:0 14px;border-radius:99px;display:flex;align-items:center">Biblioteca</a>
+            <a href="#1b" style="color:#DCE4FA;height:34px;padding:0 14px;display:flex;align-items:center" style-hover="color:#fff">Descubrir</a>
+            <a href="#1b" style="color:#DCE4FA;height:34px;padding:0 14px;display:flex;align-items:center" style-hover="color:#fff">Asistente</a>
+            <a href="#1b" style="color:#DCE4FA;height:34px;padding:0 14px;display:flex;align-items:center" style-hover="color:#fff">Estadísticas</a>
+          </nav>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+            <div style="width:280px;height:40px;border-radius:99px;background:rgba(255,255,255,.12);display:flex;align-items:center;padding:0 16px;gap:10px;font:400 14px 'Geist',sans-serif;color:#DCE4FA"><span style="width:12px;height:12px;border-radius:50%;border:2px solid #DCE4FA"></span>Buscar…</div>
+            <a href="#1b" style="height:40px;padding:0 18px;border-radius:99px;background:#fff;color:#0038be;display:flex;align-items:center;gap:8px;font:600 14px 'Geist',sans-serif"><span style="font:500 18px/1 'Geist',sans-serif">+</span>Añadir</a>
+            <div style="width:40px;height:40px;border-radius:50%;background:#0D0E12;color:#fff;font:700 15px/40px 'Bricolage Grotesque',sans-serif;text-align:center">I</div>
+          </div>
+        </header>
+        <div style="padding:64px 56px;display:flex;flex-direction:column;gap:16px">
+          <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">Estadísticas · 2026</div>
+          <div style="font:800 112px/0.85 'Bricolage Grotesque',sans-serif;letter-spacing:-0.05em">Tu año</div>
+        </div>
+      </div>
+      <div style="width:1280px;height:300px;background:#F6F6F3;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+        <header style="height:72px;padding:0 56px;display:flex;align-items:center;gap:40px">
+          <a href="#1b" style="display:flex;align-items:center;gap:8px"><img src="assets/mascot.png" alt="" style="width:34px"><span style="width:76px;height:24px;background:#0038be;-webkit-mask:url(assets/wordmark-white.png) center/contain no-repeat;mask:url(assets/wordmark-white.png) center/contain no-repeat"></span></a>
+          <nav style="display:flex;gap:28px;font:500 14px 'Geist',sans-serif;color:#2A2C33"><span>Cómo funciona</span><span>Funciones</span><span>Recomendaciones IA</span></nav>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:20px">
+            <a href="#1b" style="font:500 14px 'Geist',sans-serif;color:#0D0E12">Iniciar sesión</a>
+            <a href="#1b" style="height:40px;padding:0 20px;border-radius:99px;background:#0D0E12;color:#fff;display:flex;align-items:center;font:600 14px 'Geist',sans-serif" style-hover="background:#0038be;color:#fff">Crear mi biblioteca</a>
+          </div>
+        </header>
+        <div style="padding:40px 56px;display:flex;align-items:flex-end;justify-content:space-between">
+          <div style="font:800 96px/0.85 'Bricolage Grotesque',sans-serif;letter-spacing:-0.05em">Variante pública</div>
+          <div style="font:400 13px/1.5 'Geist',sans-serif;color:#6B6D73;max-width:300px">Sin sesión: anclas de la home + CTA en tinta (el azul se reserva para el hero). Transparente sobre el hero, papel al hacer scroll.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D · Responsive -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">07 · Navegación responsive</div>
+    <p style="margin:0;max-width:760px;font:400 14px/1.55 'Geist',sans-serif;color:#2A2C33">No es la misma barra encogida. <b>Tablet</b> conserva los 4 destinos y convierte búsqueda y Añadir en iconos. <b>Móvil</b> sube la navegación al pulgar: tab bar inferior con Popi como botón central de Añadir; el resto va a una hoja "Más".</p>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 12px 'Geist',sans-serif;color:#6B6D73">Tablet · 834</div>
+      <div style="width:834px;height:520px;background:#F6F6F3;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+        <header style="height:64px;padding:0 32px;display:flex;align-items:center;gap:28px;border-bottom:1px solid #E4E4DF">
+          <img src="assets/mascot.png" alt="Viewy" style="width:32px">
+          <nav style="display:flex;gap:22px;font:500 14px 'Geist',sans-serif;color:#6B6D73"><span style="color:#0D0E12;box-shadow:inset 0 -2px 0 #0038be;padding:22px 0">Biblioteca</span><span style="padding:22px 0">Descubrir</span><span style="padding:22px 0">Asistente</span><span style="padding:22px 0">Estadísticas</span></nav>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+            <span style="width:40px;height:40px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;justify-content:center"><span style="width:13px;height:13px;border-radius:50%;border:2px solid #0D0E12"></span></span>
+            <span style="width:40px;height:40px;border-radius:50%;background:#0038be;color:#fff;font:500 22px/40px 'Geist',sans-serif;text-align:center">+</span>
+            <span style="width:40px;height:40px;border-radius:50%;background:#0D0E12;color:#fff;font:700 15px/40px 'Bricolage Grotesque',sans-serif;text-align:center">I</span>
+          </div>
+        </header>
+        <div style="padding:48px 32px;display:flex;flex-direction:column;gap:14px">
+          <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">Mi biblioteca · 248</div>
+          <div style="font:800 96px/0.85 'Bricolage Grotesque',sans-serif;letter-spacing:-0.05em">Biblioteca</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:28px">
+            <sc-for list="{{ postersShort }}" as="p" hint-placeholder-count="4">
+              <div style="aspect-ratio:2/3;border-radius:4px;background:repeating-linear-gradient(135deg,#E6E6E1 0 8px,#EFEFEB 8px 16px)"></div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="width:834px;font:400 12px/1.5 'Geist',sans-serif;color:#6B6D73">Wordmark se oculta (solo Popi). Búsqueda abre overlay a pantalla completa con resultados de biblioteca + TMDB.</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 12px 'Geist',sans-serif;color:#6B6D73">Móvil · 390</div>
+      <div style="width:390px;height:780px;background:#F6F6F3;border-radius:28px;overflow:hidden;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.06),0 0 0 8px #0D0E12">
+        <header style="height:56px;margin-top:44px;padding:0 20px;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:6px"><img src="assets/mascot.png" alt="" style="width:28px"><span style="width:62px;height:20px;background:#0038be;-webkit-mask:url(assets/wordmark-white.png) center/contain no-repeat;mask:url(assets/wordmark-white.png) center/contain no-repeat"></span></div>
+          <span style="width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px #E4E4DF;display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;border-radius:50%;border:2px solid #0D0E12"></span></span>
+        </header>
+        <div style="padding:28px 20px;display:flex;flex-direction:column;gap:10px">
+          <div style="font:500 10px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">Mi biblioteca · 248</div>
+          <div style="font:800 64px/0.85 'Bricolage Grotesque',sans-serif;letter-spacing:-0.05em">Biblio&shy;teca</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px">
+            <sc-for list="{{ postersShort }}" as="p" hint-placeholder-count="4">
+              <div style="aspect-ratio:2/3;border-radius:4px;background:repeating-linear-gradient(135deg,#E6E6E1 0 8px,#EFEFEB 8px 16px)"></div>
+            </sc-for>
+          </div>
+        </div>
+        <nav style="position:absolute;left:12px;right:12px;bottom:20px;height:68px;border-radius:24px;background:#0D0E12;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;font:500 11px 'Geist',sans-serif;color:#8E9096;box-shadow:0 12px 32px rgba(13,14,18,.3)">
+          <span style="display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff"><span style="width:18px;height:3px;border-radius:2px;background:#406ace"></span>Biblioteca</span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:18px;height:3px;border-radius:2px;background:transparent"></span>Descubrir</span>
+          <span style="display:flex;justify-content:center">
+            <sc-if value="{{ mascotTab }}" hint-placeholder-val="{{ true }}">
+              <span style="width:60px;height:60px;margin-top:-28px;border-radius:50%;background:#0038be;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 5px #F6F6F3"><img src="assets/mascot-line-white.png" alt="Añadir" style="width:40px"></span>
+            </sc-if>
+            <sc-if value="{{ plainTab }}" hint-placeholder-val="{{ false }}">
+              <span style="width:52px;height:52px;border-radius:50%;background:#0038be;color:#fff;font:400 28px/52px 'Geist',sans-serif;text-align:center">+</span>
+            </sc-if>
+          </span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:18px;height:3px;border-radius:2px;background:transparent"></span>Asistente</span>
+          <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:18px;height:3px;border-radius:2px;background:transparent"></span>Más</span>
+        </nav>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 12px 'Geist',sans-serif;color:#6B6D73">Móvil · hoja "Más" abierta</div>
+      <div style="width:390px;height:780px;background:#F6F6F3;border-radius:28px;overflow:hidden;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.06),0 0 0 8px #0D0E12">
+        <div style="position:absolute;inset:0;background:rgba(13,14,18,.4)"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;padding:12px 20px 40px;display:flex;flex-direction:column;gap:4px">
+          <span style="width:40px;height:4px;border-radius:2px;background:#D6D6D1;align-self:center;margin-bottom:16px"></span>
+          <div style="display:flex;align-items:center;gap:14px;padding:4px 4px 20px;border-bottom:1px solid #EEEEEA;margin-bottom:8px">
+            <span style="width:52px;height:52px;border-radius:50%;background:#0D0E12;color:#fff;font:700 20px/52px 'Bricolage Grotesque',sans-serif;text-align:center">I</span>
+            <div><div style="font:600 16px 'Geist',sans-serif">israel</div><div style="font:500 11px 'Geist Mono',monospace;color:#6B6D73;margin-top:3px">VER PERFIL →</div></div>
+          </div>
+          <div style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;font:500 17px 'Geist',sans-serif">Estadísticas<span style="color:#A9ABB0">→</span></div>
+          <div style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;font:500 17px 'Geist',sans-serif">Importar lista<span style="color:#A9ABB0">→</span></div>
+          <div style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;font:500 17px 'Geist',sans-serif">Favoritos<span style="color:#A9ABB0">→</span></div>
+          <div style="height:56px;display:flex;align-items:center;padding:0 4px;font:500 17px 'Geist',sans-serif;color:#6B6D73;border-top:1px solid #EEEEEA;margin-top:8px">Cerrar sesión</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:16px;padding:14px;border-radius:10px;background:#F6F6F3">
+            <img src="assets/mascot.png" alt="" style="width:36px;transform:rotate(12deg);filter:saturate(.55)">
+            <span style="font:400 13px/1.4 'Geist',sans-serif;color:#2A2C33">Llevas 9 días sin registrar nada. ¿Qué estás viendo?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- E · Tailwind -->
+  <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+    <div style="width:720px;background:#0D0E12;color:#E4E4DF;border-radius:10px;padding:36px;display:flex;flex-direction:column;gap:16px">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#8E9096">08 · Tailwind v4 · static/css/input.css</div>
+      <pre style="margin:0;font:400 12px/1.65 'Geist Mono',monospace;white-space:pre-wrap;color:#E4E4DF">@theme {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --color-paper: #F6F6F3;   --color-surface: #FFFFFF;
+  --color-line: #E4E4DF;    --color-muted: #6B6D73;
+  --color-ink-2: #2A2C33;   --color-ink: #0D0E12;
+
+  --color-brand-50: #EEF2FD; --color-brand-100: #DCE4FA;
+  --color-brand-200: #A6B9E8; --color-brand-300: #7392DB;
+  --color-brand-400: #406ACE; --color-brand-500: #0038BE;
+  --color-brand-600: #002FA0; --color-brand-700: #00257D;
+
+  --color-watching: #0038BE;  --color-completed: #2E9E6A;
+  --color-planned: #C08F1E;   --color-dropped: #D0584A;
+
+  --text-display-xl: 10rem;  --text-display-xl--line-height: .85;
+  --text-display-lg: 6rem;   --text-display-lg--line-height: .9;
+  --text-display-md: 3.5rem; --text-display-md--line-height: .95;
+  --radius-card: 10px;
+}</pre>
+    </div>
+    <div style="width:560px;background:#fff;border-radius:10px;padding:36px;display:flex;flex-direction:column;gap:14px;font:400 13px/1.55 'Geist',sans-serif;color:#2A2C33">
+      <div style="font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#6B6D73">09 · Qué se reutiliza y qué cambia</div>
+      <div><b style="font-weight:600;color:#0D0E12">Se mantiene:</b> <span style="font:500 12px 'Geist Mono',monospace">brand-500 #0038be</span>, <span style="font:500 12px 'Geist Mono',monospace">data-reveal</span>, <span style="font:500 12px 'Geist Mono',monospace">data-counter</span>, <span style="font:500 12px 'Geist Mono',monospace">animate-fade-in-up</span>, todas las URLs y el bloque <span style="font:500 12px 'Geist Mono',monospace">messages</span>.</div>
+      <div><b style="font-weight:600;color:#0D0E12">Cambia:</b> body de <span style="font:500 12px 'Geist Mono',monospace">bg-zinc-950</span> a <span style="font:500 12px 'Geist Mono',monospace">bg-paper text-ink</span>; Inter → Geist + Bricolage; sidebar → topbar; emojis de nav fuera (iconos Heroicons inline solo en móvil).</div>
+      <div><b style="font-weight:600;color:#0D0E12">Partials nuevos:</b></div>
+      <div style="font:400 12px/1.8 'Geist Mono',monospace;color:#0D0E12;background:#F6F6F3;border-radius:6px;padding:12px 16px">templates/partials/_navbar.html<br>templates/partials/_tabbar_mobile.html<br>templates/partials/_toasts.html<br>templates/components/mascot.html<br>static/images/mascot/base.png · line-white.png<br>static/js/nav.js  <span style="color:#6B6D73">(menú avatar, hoja Más, atajo /)</span></div>
+      <div><b style="font-weight:600;color:#0D0E12">Sin backend nuevo:</b> el estado activo del nav usa <span style="font:500 12px 'Geist Mono',monospace">request.resolver_match.app_name</span> en lugar de comparar paths.</div>
+    </div>
+  </div>
+
+  <p style="margin:0;font:12px/1.5 'Geist',sans-serif;color:#6B6D73">Siguiente: "navbar como <a href="#1a" style="font:600 10.5px 'Geist Mono',monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#0D0E12;border-radius:5px">1a</a>, pasa a la home" · "prueba el nav azul de <a href="#1b" style="font:600 10.5px 'Geist Mono',monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#0D0E12;border-radius:5px">1b</a> solo en móvil" · "cambia el nombre de la mascota"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showGrid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;mascotTab&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Móvil&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const mascotTab = this.props.mascotTab ?? true;
+    return {
+      showGrid: this.props.showGrid ?? false,
+      mascotTab, plainTab: !mascotTab,
+      cols: Array.from({ length: 12 }, (_, i) => i),
+      posters: ['2:3', '2:3', '2:3', '2:3', '2:3', '2:3'],
+      postersShort: [1, 2, 3, 4],
+      brand: [
+        { name: '50', hex: '#EEF2FD' }, { name: '100', hex: '#DCE4FA' }, { name: '200', hex: '#A6B9E8' },
+        { name: '300', hex: '#7392DB' }, { name: '400', hex: '#406ACE' }, { name: '500', hex: '#0038BE' },
+        { name: '600', hex: '#002FA0' }, { name: '700', hex: '#00257D' }
+      ],
+      neutrals: [
+        { name: 'paper', hex: '#F6F6F3' }, { name: 'surface', hex: '#FFFFFF' }, { name: 'line', hex: '#E4E4DF' },
+        { name: 'faint', hex: '#A9ABB0' }, { name: 'muted', hex: '#6B6D73' }, { name: 'ink-2', hex: '#2A2C33' },
+        { name: 'ink', hex: '#0D0E12' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
