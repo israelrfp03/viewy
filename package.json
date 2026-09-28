@@ -3,8 +3,7 @@
   "scripts": {
     "build:css": "tailwindcss -i ./tailwind/input.css -o ./static/css/output.css --minify",
     "watch:css": "tailwindcss -i ./tailwind/input.css -o ./static/css/output.css --watch",
-    "copy:vendor": "node -e \"const fs=require('fs');fs.copyFileSync('node_modules/chart.js/dist/chart.umd.min.js','static/js/vendor/chart.umd.min.js');fs.copyFileSync('node_modules/chart.js/dist/chart.umd.min.js.map','static/js/vendor/chart.umd.min.js.map')\"",
-    "postinstall": "npm run copy:vendor"
+    "copy:vendor": "node -e \"const fs=require('fs');fs.copyFileSync('node_modules/chart.js/dist/chart.umd.min.js','static/js/vendor/chart.umd.min.js');fs.copyFileSync('node_modules/chart.js/dist/chart.umd.min.js.map','static/js/vendor/chart.umd.min.js.map')\""
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",

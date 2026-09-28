@@ -43,7 +43,10 @@ build/
 dist/
 *.egg-info/
 
-# Node / Tailwind / Chart.js
+# Node / Tailwind
 node_modules/
 static/css/output.css
-static/js/vendor/
+# static/js/vendor/ SÍ se versiona a propósito (ver más abajo): es el único
+# fichero de terceros que la app necesita servir en producción, y depender
+# de que "npm run copy:vendor" se ejecute bien en cada build de Vercel
+# resultó frágil (el postinstall falló ahí por un problema de timing).
