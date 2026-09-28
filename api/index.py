@@ -26,23 +26,22 @@ _REWRITE_PREFIX = "/api/index"
 def app(environ, start_response):
     raw_path_info = environ.get("PATH_INFO", "")
 
-    # TEMPORAL: bypass total de Django para confirmar que Vercel realmente
-    # está ejecutando este código y ver el environ real, sin intermediarios.
-    # Se activa por query string (?__debug__=1) en vez de por PATH_INFO,
-    # porque sospechamos que PATH_INFO no lleva la ruta reescrita que
-    # esperábamos (ver comentario de arriba) y por tanto nunca contendría
-    # "__debug__" aunque la petición sea a /__debug__.
-    if "__debug__" in environ.get("QUERY_STRING", "") or "__debug__" in raw_path_info:
-        body = "\n".join(
-            f"{key}={value!r}"
-            for key, value in sorted(environ.items())
-            if isinstance(value, (str, int, float, bool))
-        ).encode("utf-8")
-        start_response(
-            "200 OK",
-            [("Content-Type", "text/plain; charset=utf-8"), ("Content-Length", str(len(body)))],
-        )
-        return [body]
+    # TEMPORAL: bypass incondicional para todas las peticiones, para ver el
+    # environ real que construye Vercel sin depender de ninguna condición
+    # sobre PATH_INFO/QUERY_STRING (las dos veces que probamos a activarlo
+    # solo para ciertas rutas/queries, nunca se disparó, así que dejamos de
+    # adivinar y volcamos el environ siempre). Quitar en cuanto el routing
+    # quede confirmado.
+    body = "\n".join(
+        f"{key}={value!r}"
+        for key, value in sorted(environ.items())
+        if isinstance(value, (str, int, float, bool))
+    ).encode("utf-8")
+    start_response(
+        "200 OK",
+        [("Content-Type", "text/plain; charset=utf-8"), ("Content-Length", str(len(body)))],
+    )
+    return [body]
 
     path_info = raw_path_info
     if path_info.startswith(_REWRITE_PREFIX):
