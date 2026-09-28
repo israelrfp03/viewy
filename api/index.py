@@ -28,7 +28,11 @@ def app(environ, start_response):
 
     # TEMPORAL: bypass total de Django para confirmar que Vercel realmente
     # está ejecutando este código y ver el environ real, sin intermediarios.
-    if "__debug__" in raw_path_info:
+    # Se activa por query string (?__debug__=1) en vez de por PATH_INFO,
+    # porque sospechamos que PATH_INFO no lleva la ruta reescrita que
+    # esperábamos (ver comentario de arriba) y por tanto nunca contendría
+    # "__debug__" aunque la petición sea a /__debug__.
+    if "__debug__" in environ.get("QUERY_STRING", "") or "__debug__" in raw_path_info:
         body = "\n".join(
             f"{key}={value!r}"
             for key, value in sorted(environ.items())
