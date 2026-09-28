@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
 @source "../templates/**/*.html";
+/* Tailwind escanea todo el proyecto por defecto, no solo @source — esto
+   evita que recoja clases "de ejemplo" en la documentación del handoff de
+   diseño (ese README tenía un fragmento con [mask:url(...)_...] como
+   ilustración, y Tailwind lo compiló como si fuera una clase real usada). */
+@source not "../design_handoff_viewy_redesign/**/*";
 
 @theme {
   --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;
