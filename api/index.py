@@ -24,8 +24,20 @@ _REWRITE_PREFIX = "/api/index"
 
 
 def app(environ, start_response):
-    path_info = environ.get("PATH_INFO", "")
+    raw_path_info = environ.get("PATH_INFO", "")
+    path_info = raw_path_info
     if path_info.startswith(_REWRITE_PREFIX):
         path_info = path_info[len(_REWRITE_PREFIX):]
     environ["PATH_INFO"] = path_info or "/"
-    return _django_app(environ, start_response)
+
+    # TEMPORAL: cabecera de depuración para ver en producción qué PATH_INFO
+    # llega realmente desde Vercel, sin adivinar a ciegas. Quitar en cuanto
+    # el routing quede confirmado.
+    def debug_start_response(status, headers, exc_info=None):
+        headers = list(headers) + [
+            ("X-Debug-Raw-Path-Info", raw_path_info or "(empty)"),
+            ("X-Debug-Script-Name", environ.get("SCRIPT_NAME", "") or "(empty)"),
+        ]
+        return start_response(status, headers, exc_info)
+
+    return _django_app(environ, debug_start_response)
