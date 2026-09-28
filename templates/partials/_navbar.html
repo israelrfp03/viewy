@@ -3,49 +3,55 @@
 <header data-navbar
         class="sticky top-0 z-40 hidden border-b border-transparent bg-paper/95 backdrop-blur transition-colors duration-200 lg:flex lg:h-[72px] lg:items-center lg:gap-10 lg:px-14">
     <a href="{% url 'library:home' %}" class="flex items-center gap-2">
-        {% include "components/mascot.html" with variant="default" size="sticker" %}
+        <img src="{% static 'images/mascot/base.png' %}" alt="" aria-hidden="true" class="h-8 w-8 object-contain">
         {% if user.is_authenticated %}
-            <span class="h-6 w-[76px] bg-brand-500" style="mask:url({% static 'images/mascot/wordmark-white.png' %}) center/contain no-repeat;-webkit-mask:url({% static 'images/mascot/wordmark-white.png' %}) center/contain no-repeat"></span>
+            <span class="font-display text-xl font-extrabold tracking-tight text-brand-500">viewy</span>
         {% endif %}
     </a>
 
     {% if user.is_authenticated %}
         <nav class="flex gap-7 text-sm font-medium">
-            <a href="{% url 'library:list' %}"
-               class="flex flex-col items-center gap-1 pt-2.5 {% if app == 'library' and url_name != 'home' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
+            {% url 'library:list' as library_url %}
+            {% url 'recommendations:form' as recommendations_url %}
+            {% url 'assistant:chat' as assistant_url %}
+            {% url 'analytics:dashboard' as analytics_url %}
+            <a href="{{ library_url }}" class="flex flex-col items-center gap-1.5 pt-2 {% if url_name == 'list' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
                 Biblioteca
-                <span class="h-1 w-1 rounded-full {% if app == 'library' and url_name != 'home' %}bg-brand-500{% else %}bg-transparent{% endif %}"></span>
+                <span class="h-1 w-1 rounded-full {% if url_name == 'list' %}animate-nav-dot bg-brand-500{% else %}bg-transparent{% endif %}"></span>
             </a>
-            <a href="{% url 'recommendations:form' %}"
-               class="pb-2 {% if app == 'recommendations' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
+            <a href="{{ recommendations_url }}" class="flex flex-col items-center gap-1.5 pt-2 {% if app == 'recommendations' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
                 Descubrir
+                <span class="h-1 w-1 rounded-full {% if app == 'recommendations' %}animate-nav-dot bg-brand-500{% else %}bg-transparent{% endif %}"></span>
             </a>
-            <a href="{% url 'assistant:chat' %}"
-               class="pb-2 {% if app == 'assistant' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
+            <a href="{{ assistant_url }}" class="flex flex-col items-center gap-1.5 pt-2 {% if app == 'assistant' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
                 Asistente
+                <span class="h-1 w-1 rounded-full {% if app == 'assistant' %}animate-nav-dot bg-brand-500{% else %}bg-transparent{% endif %}"></span>
             </a>
-            <a href="{% url 'analytics:dashboard' %}"
-               class="pb-2 {% if app == 'analytics' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
+            <a href="{{ analytics_url }}" class="flex flex-col items-center gap-1.5 pt-2 {% if app == 'analytics' %}text-ink{% else %}text-muted hover:text-ink{% endif %}">
                 Estadísticas
+                <span class="h-1 w-1 rounded-full {% if app == 'analytics' %}animate-nav-dot bg-brand-500{% else %}bg-transparent{% endif %}"></span>
             </a>
         </nav>
 
         <div class="ml-auto flex items-center gap-3">
-            <form method="get" action="{% url 'library:search' %}" class="flex h-10 w-[280px] items-center gap-2.5 rounded-full bg-white pl-4 pr-1.5 ring-1 ring-inset ring-line">
-                <span class="h-3 w-3 shrink-0 rounded-full border-2 border-faint"></span>
+            <form method="get" action="{% url 'library:search' %}"
+                  class="group flex h-10 w-80 items-center gap-2.5 rounded-full bg-white px-4 ring-1 ring-inset ring-line transition-shadow duration-200 focus-within:ring-2 focus-within:ring-brand-500 focus-within:shadow-[0_0_0_4px_#DCE4FA]">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 text-faint transition-colors duration-200 group-focus-within:text-brand-500">
+                    <circle cx="10.5" cy="10.5" r="6.5" />
+                    <path d="m20 20-4.3-4.3" />
+                </svg>
                 <input type="search" name="q" data-search-input placeholder="Buscar películas, series, anime"
                        class="w-full border-0 bg-transparent text-sm text-ink placeholder-faint focus:outline-none focus:ring-0">
-                <span class="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-[#F0F0EC] font-mono text-[11px] text-muted">/</span>
             </form>
 
             <a href="{% url 'library:search' %}"
-               class="flex h-10 items-center gap-2 rounded-full bg-brand-500 px-[18px] text-sm font-semibold text-white transition hover:-translate-y-px hover:bg-brand-600 hover:shadow-[0_6px_16px_rgba(0,56,190,.3)] active:scale-[.98]">
+               class="flex h-10 shrink-0 items-center gap-2 rounded-full bg-brand-500 px-[18px] text-sm font-semibold text-white transition hover:-translate-y-px hover:bg-brand-600 hover:shadow-[0_6px_16px_rgba(0,56,190,.3)] active:scale-[.98]">
                 <span class="text-lg leading-none">+</span>Añadir
             </a>
 
             <div data-dropdown class="relative">
                 <button type="button" data-dropdown-trigger
-                        class="flex h-10 w-10 items-center justify-center rounded-full bg-ink font-display text-[15px] font-bold text-white shadow-[0_0_0_3px_#F6F6F3,0_0_0_5px_#0038be]">
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[15px] font-bold text-white shadow-[0_0_0_0px_#F6F6F3,0_0_0_0px_#0038be] transition-[box-shadow] duration-200 hover:shadow-[0_0_0_3px_#F6F6F3,0_0_0_5px_#0038be] focus-visible:shadow-[0_0_0_3px_#F6F6F3,0_0_0_5px_#0038be]">
                     {{ user.username|first|upper }}
                 </button>
                 <div data-dropdown-panel class="absolute right-0 top-12 z-10 hidden w-[240px] rounded-card bg-white p-2 shadow-[0_12px_40px_rgba(13,14,18,.12)] ring-1 ring-line">
@@ -81,23 +87,27 @@
 <header data-navbar
         class="sticky top-0 z-40 hidden border-b border-transparent bg-paper/95 backdrop-blur transition-colors duration-200 md:flex md:h-16 md:items-center md:gap-7 md:px-8 lg:hidden">
     <a href="{% url 'library:home' %}" class="flex items-center">
-        {% include "components/mascot.html" with variant="default" size="sticker" %}
+        <img src="{% static 'images/mascot/base.png' %}" alt="" aria-hidden="true" class="h-8 w-8 object-contain">
     </a>
 
     {% if user.is_authenticated %}
         <nav class="flex gap-6 text-sm font-medium text-muted">
-            <a href="{% url 'library:list' %}" class="py-[22px] {% if app == 'library' and url_name != 'home' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Biblioteca</a>
+            <a href="{% url 'library:list' %}" class="py-[22px] {% if url_name == 'list' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Biblioteca</a>
             <a href="{% url 'recommendations:form' %}" class="py-[22px] {% if app == 'recommendations' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Descubrir</a>
             <a href="{% url 'assistant:chat' %}" class="py-[22px] {% if app == 'assistant' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Asistente</a>
             <a href="{% url 'analytics:dashboard' %}" class="py-[22px] {% if app == 'analytics' %}text-ink shadow-[inset_0_-2px_0_#0038be]{% endif %}">Estadísticas</a>
         </nav>
         <div class="ml-auto flex items-center gap-2">
             <a href="{% url 'library:search' %}" aria-label="Buscar" class="flex h-10 w-10 items-center justify-center rounded-full bg-white ring-1 ring-inset ring-line">
-                <span class="h-[13px] w-[13px] rounded-full border-2 border-ink"></span>
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-ink">
+                    <circle cx="10.5" cy="10.5" r="6.5" />
+                    <path d="m20 20-4.3-4.3" />
+                </svg>
             </a>
             <a href="{% url 'library:search' %}" aria-label="Añadir" class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-xl leading-none text-white">+</a>
             <div data-dropdown class="relative">
-                <button type="button" data-dropdown-trigger class="flex h-10 w-10 items-center justify-center rounded-full bg-ink font-display text-[15px] font-bold text-white">
+                <button type="button" data-dropdown-trigger
+                        class="flex h-10 w-10 items-center justify-center rounded-full bg-ink font-display text-[15px] font-bold text-white shadow-[0_0_0_0px_#F6F6F3,0_0_0_0px_#0038be] transition-[box-shadow] duration-200 hover:shadow-[0_0_0_3px_#F6F6F3,0_0_0_5px_#0038be] focus-visible:shadow-[0_0_0_3px_#F6F6F3,0_0_0_5px_#0038be]">
                     {{ user.username|first|upper }}
                 </button>
                 <div data-dropdown-panel class="absolute right-0 top-12 z-10 hidden w-[240px] rounded-card bg-white p-2 shadow-[0_12px_40px_rgba(13,14,18,.12)] ring-1 ring-line">

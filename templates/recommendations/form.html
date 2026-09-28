@@ -6,7 +6,7 @@
     <div class="grid gap-8 border-b border-line pb-10 lg:grid-cols-12 lg:items-end">
         <div class="lg:col-span-6">
             <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Basado en tus {{ request.user.library_entries.count }} títulos</p>
-            <h1 class="mt-2 font-display text-6xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl">Recomiéndame algo.</h1>
+            <h1 class="mt-2 break-words font-display text-5xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl">Recomiéndame algo.</h1>
         </div>
 
         <div class="lg:col-span-6">
@@ -67,7 +67,7 @@
                     {% if results.0.media_type == "movie" %}Película{% elif results.0.media_type == "series" %}Serie{% else %}Anime{% endif %}
                     {% if results.0.release_year %} · {{ results.0.release_year }}{% endif %}
                 </p>
-                <h2 class="font-display text-5xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-6xl">{{ results.0.title }}</h2>
+                <h2 class="break-words font-display text-4xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-6xl">{{ results.0.title }}</h2>
 
                 {% if results.0.reason %}
                     <div class="rounded-card bg-white p-6 ring-1 ring-inset ring-line-soft">

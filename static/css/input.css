@@ -39,6 +39,7 @@
   --radius-card: 10px;
 
   --animate-fade-in-up: fade-in-up 0.5s ease-out both;
+  --animate-nav-dot: nav-dot 0.3s cubic-bezier(.34,1.56,.64,1) both;
 }
 
 @keyframes fade-in-up {
@@ -52,8 +53,40 @@
   }
 }
 
+/* Punto azul de la sección activa en la navbar: un pequeño "pop" al
+   cargar la página en la que ya estás, para que se note el cambio de
+   sección entre navegaciones (MPA normal, sin JS). */
+@keyframes nav-dot {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+/* Transición nativa entre páginas (View Transition API, sin JS): el
+   navegador cruza-desvanece la página vieja con la nueva en cada
+   navegación normal (clic en un enlace, submit de formulario). Solo
+   funciona en navegadores con soporte de cross-document view
+   transitions (Chrome/Edge recientes); en el resto, la navegación es
+   la normal de siempre, sin animación y sin errores. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.22s;
+    animation-timing-function: ease-out;
+  }
 }
 
 /* Recetas de botón reutilizables (components/button.html en el handoff de
@@ -108,5 +141,14 @@ html {
   .animate-fade-in-up {
     animation: none !important;
     opacity: 1 !important;
+  }
+  .animate-nav-dot {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-sheet-backdrop],
+  [data-sheet-panel] {
+    transition: none !important;
   }
 }

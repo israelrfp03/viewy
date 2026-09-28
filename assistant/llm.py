@@ -28,6 +28,7 @@ VALID_INTENTS = {
     "anime_stats",
     "estimated_watch_time",
     "recommendation",
+    "where_to_watch",
     "clarify",
     "out_of_scope",
 }
@@ -48,6 +49,7 @@ INTENT_SCHEMA = {
         "limit": {"type": "INTEGER", "nullable": True},
         "clarify_question": {"type": "STRING", "nullable": True},
         "recommendation_text": {"type": "STRING", "nullable": True},
+        "title": {"type": "STRING", "nullable": True},
     },
     "required": ["intent"],
 }
@@ -101,6 +103,12 @@ def _validate_intent(parsed, current_year):
     if not isinstance(recommendation_text, str):
         recommendation_text = ""
 
+    title = parsed.get("title")
+    if not isinstance(title, str) or not title.strip():
+        title = None
+    else:
+        title = title.strip()
+
     return {
         "intent": intent,
         "media_type": media_type,
@@ -110,4 +118,5 @@ def _validate_intent(parsed, current_year):
         "limit": limit,
         "clarify_question": clarify_question,
         "recommendation_text": recommendation_text.strip(),
+        "title": title,
     }

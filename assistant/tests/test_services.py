@@ -16,6 +16,7 @@ def _fake_intent(intent, **overrides):
     base = {
         "intent": intent, "media_type": None, "status": None, "year": None,
         "month": None, "limit": 5, "clarify_question": None, "recommendation_text": "",
+        "title": None,
     }
     base.update(overrides)
     return base
@@ -90,3 +91,16 @@ class TestRecommendationDelegation:
         ) as mock_recs:
             answer_question(user, "recomiéndame algo")
         mock_recs.assert_called_once_with(user, "algo corto")
+
+
+class TestWhereToWatchDelegation:
+    """where_to_watch es la única excepción al patrón "solo biblioteca del
+    usuario": consulta TMDB en vivo con el título que extrajo el LLM."""
+
+    def test_delegates_to_tmdb_with_extracted_title(self, user):
+        with patch(
+            "assistant.services.parse_intent",
+            return_value=_fake_intent("where_to_watch", title="One Piece"),
+        ), patch("assistant.handlers.get_watch_providers", return_value=None) as mock_providers:
+            answer_question(user, "¿dónde puedo ver one piece?")
+        mock_providers.assert_called_once_with("One Piece")

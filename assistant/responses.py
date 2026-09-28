@@ -169,6 +169,23 @@ def render_recommendation(result, filters):
     return f"Te recomendaría: {titles}. Tienes el detalle completo en la página de Recomendaciones."
 
 
+def render_where_to_watch(result, filters):
+    if not result["title"]:
+        return "Dime qué título quieres buscar, por ejemplo: «¿dónde puedo ver One Piece?»."
+    if result["error"]:
+        return "No he podido consultar la disponibilidad ahora mismo. Inténtalo de nuevo en un momento."
+    providers = result["providers"]
+    if not providers:
+        return f"No he encontrado dónde ver «{result['title']}» en España ahora mismo."
+
+    parts = []
+    if providers.flatrate:
+        parts.append("en streaming por suscripción en " + ", ".join(providers.flatrate))
+    if providers.free:
+        parts.append("gratis en " + ", ".join(providers.free))
+    return f"Puedes ver «{providers.title}» " + " y ".join(parts) + " (España, datos de TMDB)."
+
+
 RESPONSE_RENDERERS = {
     "total_library": render_total_library,
     "count_by_status": render_count_by_status,
@@ -183,4 +200,5 @@ RESPONSE_RENDERERS = {
     "anime_stats": render_anime_stats,
     "estimated_watch_time": render_estimated_watch_time,
     "recommendation": render_recommendation,
+    "where_to_watch": render_where_to_watch,
 }

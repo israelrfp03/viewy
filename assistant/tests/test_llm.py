@@ -64,3 +64,20 @@ class TestParseIntent:
     def test_non_dict_response_raises_response_error(self):
         with pytest.raises(llm.LLMResponseError):
             _parse(["no", "es", "un", "dict"])
+
+    def test_where_to_watch_title_is_preserved(self):
+        result = _parse({"intent": "where_to_watch", "title": "One Piece"})
+        assert result["intent"] == "where_to_watch"
+        assert result["title"] == "One Piece"
+
+    def test_title_is_trimmed(self):
+        result = _parse({"intent": "where_to_watch", "title": "  One Piece  "})
+        assert result["title"] == "One Piece"
+
+    def test_missing_title_is_none(self):
+        result = _parse({"intent": "where_to_watch"})
+        assert result["title"] is None
+
+    def test_blank_title_is_sanitized_to_none(self):
+        result = _parse({"intent": "where_to_watch", "title": "   "})
+        assert result["title"] is None

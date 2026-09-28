@@ -13,11 +13,19 @@
             </div>
         {% endif %}
 
-        <form method="post" class="mt-8 flex flex-col gap-5">
+        <form method="post" id="edit-entry-form" data-total-episodes="{{ entry.media.episodes|default:'' }}" class="mt-8 flex flex-col gap-5">
             {% csrf_token %}
             {% include "components/field.html" with field=form.status %}
             {% include "components/field.html" with field=form.rating %}
-            {% include "components/field.html" with field=form.current_episode %}
+            <div class="flex flex-col gap-1.5">
+                <label for="{{ form.current_episode.id_for_label }}" class="text-[13px] font-semibold text-ink">
+                    {{ form.current_episode.label }}{% if entry.media.episodes %} <span class="font-normal text-muted">(de {{ entry.media.episodes }} en total)</span>{% endif %}
+                </label>
+                {{ form.current_episode }}
+                {% for error in form.current_episode.errors %}
+                    <p class="text-xs font-medium text-dropped-fg">{{ error }}</p>
+                {% endfor %}
+            </div>
             <div class="grid grid-cols-2 gap-4">
                 {% include "components/field.html" with field=form.started_at %}
                 {% include "components/field.html" with field=form.finished_at %}
@@ -33,4 +41,24 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        (function () {
+            var form = document.getElementById("edit-entry-form");
+            var totalEpisodes = form.getAttribute("data-total-episodes");
+            if (!totalEpisodes) return;
+
+            var statusField = document.getElementById("{{ form.status.id_for_label }}");
+            var episodeField = document.getElementById("{{ form.current_episode.id_for_label }}");
+            if (!statusField || !episodeField) return;
+
+            statusField.addEventListener("change", function () {
+                if (statusField.value === "completed") {
+                    episodeField.value = totalEpisodes;
+                }
+            });
+        })();
+    </script>
 {% endblock %}

@@ -5,7 +5,11 @@ from django.conf import settings
 
 SEARCH_URL = f"{settings.TMDB_API_BASE_URL}/search/multi"
 DETAIL_URL = f"{settings.TMDB_API_BASE_URL}/{{source_type}}/{{external_id}}"
+WATCH_PROVIDERS_URL = f"{settings.TMDB_API_BASE_URL}/{{source_type}}/{{external_id}}/watch/providers"
 REQUEST_TIMEOUT = 5
+
+# Región fija: todavía no hay ajuste de país por usuario en Viewy.
+DEFAULT_WATCH_REGION = "ES"
 
 TMDB_TO_INTERNAL_MEDIA_TYPE = {
     "movie": "movie",
@@ -45,6 +49,14 @@ class TMDBSearchResult:
 class TMDBDetail(TMDBSearchResult):
     duration_minutes: int | None
     episodes: int | None
+
+
+@dataclass
+class WatchProviders:
+    title: str
+    region: str
+    flatrate: list[str]  # suscripción (Netflix, Disney+...)
+    free: list[str]  # gratis con anuncios o sin coste
 
 
 def _headers():
@@ -152,3 +164,29 @@ def get_detail(external_id, source_type):
         duration_minutes=(data.get("runtime") or None) if media_type == "movie" else None,
         episodes=episodes or None,
     )
+
+
+def get_watch_providers(query, region=DEFAULT_WATCH_REGION):
+    """Busca `query` en TMDB y devuelve dónde verlo en `region` (streaming o
+    gratis). Usa el primer resultado de búsqueda como mejor coincidencia —
+    heurística simple, igual que el resto de búsquedas de esta integración.
+
+    Devuelve None si no hay ninguna coincidencia o si TMDB no tiene datos de
+    disponibilidad para esa región (habitual: catálogo incompleto o título
+    no estrenado allí)."""
+    results = search(query)
+    if not results:
+        return None
+
+    match = results[0]
+    url = WATCH_PROVIDERS_URL.format(source_type=match.source_type, external_id=match.external_id)
+    data = _request(url)
+    region_data = data.get("results", {}).get(region, {})
+
+    flatrate = [p["provider_name"] for p in region_data.get("flatrate", [])]
+    free = [p["provider_name"] for p in region_data.get("free", [])]
+
+    if not flatrate and not free:
+        return None
+
+    return WatchProviders(title=match.title, region=region, flatrate=flatrate, free=free)

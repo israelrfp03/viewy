@@ -25,6 +25,7 @@ from analytics.services import (
     recent_completed,
     status_counts,
 )
+from integrations.tmdb import TMDBError, get_watch_providers
 from library.models import UserMedia
 from recommendations.services import get_recommendations
 
@@ -139,6 +140,21 @@ def handle_recommendation(user, filters):
     return {"results": results, "error_code": error_code, "is_thin_profile": is_thin_profile}
 
 
+def handle_where_to_watch(user, filters):
+    """Única excepción deliberada al patrón "solo ORM/pandas locales" de este
+    router: consulta TMDB en vivo, no datos ya calculados del usuario."""
+    title = filters["title"]
+    if not title:
+        return {"title": None, "providers": None, "error": False}
+
+    try:
+        providers = get_watch_providers(title)
+    except TMDBError:
+        return {"title": title, "providers": None, "error": True}
+
+    return {"title": title, "providers": providers, "error": False}
+
+
 INTENT_HANDLERS = {
     "total_library": handle_total_library,
     "count_by_status": handle_count_by_status,
@@ -153,4 +169,5 @@ INTENT_HANDLERS = {
     "anime_stats": handle_anime_stats,
     "estimated_watch_time": handle_estimated_watch_time,
     "recommendation": handle_recommendation,
+    "where_to_watch": handle_where_to_watch,
 }

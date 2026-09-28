@@ -10,7 +10,7 @@
             </div>
             <div>
                 <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Miembro desde {{ user.date_joined|date:"d M Y" }}</p>
-                <h1 class="mt-2 font-display text-6xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl">{{ user.username }}</h1>
+                <h1 class="mt-2 break-words font-display text-5xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl">{{ user.username }}</h1>
             </div>
         </div>
         <form method="post" action="{% url 'accounts:logout' %}">

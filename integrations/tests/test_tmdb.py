@@ -186,3 +186,65 @@ class TestGetDetail:
         )
         detail = tmdb.get_detail("1", "movie")
         assert detail.title == ""
+
+
+def _mock_search_then_providers(monkeypatch, search_json, providers_json):
+    """Las dos llamadas HTTP que hace get_watch_providers (buscar, luego
+    consultar disponibilidad) devuelven JSON distinto según la URL pedida."""
+
+    def fake_get(url, *args, **kwargs):
+        response = requests.Response()
+        response.status_code = 200
+        response.json = lambda: providers_json if "watch/providers" in url else search_json
+        return response
+
+    monkeypatch.setattr(tmdb.requests, "get", fake_get)
+
+
+class TestGetWatchProviders:
+    def test_returns_platforms_for_region(self, monkeypatch):
+        _mock_search_then_providers(
+            monkeypatch,
+            search_json={
+                "results": [
+                    {
+                        "id": 37854, "media_type": "tv", "name": "One Piece",
+                        "first_air_date": "1999-10-20", "poster_path": "", "overview": "",
+                        "original_language": "ja", "genre_ids": [16],
+                    }
+                ]
+            },
+            providers_json={
+                "results": {
+                    "ES": {
+                        "flatrate": [{"provider_name": "Netflix"}, {"provider_name": "Crunchyroll"}],
+                        "free": [{"provider_name": "3Cat"}],
+                    }
+                }
+            },
+        )
+        result = tmdb.get_watch_providers("One Piece")
+        assert result.title == "One Piece"
+        assert result.region == "ES"
+        assert result.flatrate == ["Netflix", "Crunchyroll"]
+        assert result.free == ["3Cat"]
+
+    def test_no_search_results_returns_none(self, monkeypatch):
+        _mock_search_then_providers(monkeypatch, search_json={"results": []}, providers_json={})
+        assert tmdb.get_watch_providers("título que no existe") is None
+
+    def test_no_providers_for_region_returns_none(self, monkeypatch):
+        _mock_search_then_providers(
+            monkeypatch,
+            search_json={
+                "results": [
+                    {
+                        "id": 1, "media_type": "movie", "title": "Película rara",
+                        "release_date": "2020-01-01", "poster_path": "", "overview": "",
+                        "original_language": "en", "genre_ids": [],
+                    }
+                ]
+            },
+            providers_json={"results": {}},
+        )
+        assert tmdb.get_watch_providers("Película rara") is None

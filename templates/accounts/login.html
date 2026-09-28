@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}Viewy — Iniciar sesión{% endblock %}
 
 {% block content %}
     <div data-reveal class="-mx-5 grid overflow-hidden rounded-none sm:-mx-10 lg:-mx-14 lg:my-8 lg:grid-cols-12 lg:rounded-card">
         <div class="hidden flex-col justify-between gap-8 bg-brand-500 p-10 text-white lg:col-span-5 lg:flex lg:p-14">
-            <span class="h-8 w-28 bg-white" style="mask:url({% static 'images/mascot/wordmark-white.png' %}) left/contain no-repeat;-webkit-mask:url({% static 'images/mascot/wordmark-white.png' %}) left/contain no-repeat"></span>
+            <span class="font-display text-2xl font-extrabold tracking-tight text-white">viewy</span>
             <div class="w-44">{% include "components/mascot.html" with variant="default" size="hero" line=True %}</div>
             <div>
                 <p class="font-display text-5xl font-extrabold leading-[0.95] tracking-tight">Vuelve a lo que estabas viendo.</p>

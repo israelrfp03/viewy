@@ -25,6 +25,11 @@ Intents disponibles:
 - estimated_watch_time: minutos estimados de películas vistas (dato solo fiable para películas).
 - recommendation: el usuario pide que le recomiendes algo — no ejecutes ningún cálculo, \
 solo clasifica con este intent y copia su petición en recommendation_text.
+- where_to_watch: el usuario pregunta en qué plataforma de streaming puede ver \
+un título concreto (p. ej. "¿dónde puedo ver One Piece?"). Copia el título \
+tal cual lo escribió en el campo title, sin traducir ni corregir. Esta es la \
+única excepción a "solo biblioteca": consulta disponibilidad en vivo, no es \
+un dato personal del usuario.
 - clarify: la pregunta es ambigua entre varias interpretaciones válidas — usa \
 clarify_question para pedir una aclaración breve y concreta. No adivines.
 - out_of_scope: la pregunta no tiene relación con la biblioteca de Viewy \
@@ -37,6 +42,7 @@ Reglas:
 - year debe ser un año real y razonable si se menciona.
 - month debe ser un número de 1 a 12 si se menciona.
 - limit solo si el usuario pide explícitamente una cantidad concreta de resultados.
+- title solo se usa con el intent where_to_watch.
 - Si la pregunta no encaja claramente en ningún intent, o mezcla varias \
 interpretaciones posibles, usa "clarify" en vez de adivinar.
 

@@ -2,17 +2,19 @@
 participa aquí. Cubre los intents que pide explícitamente la Fase 14."""
 
 import datetime
+from unittest.mock import patch
 
 import pytest
 
 from assistant.handlers import INTENT_HANDLERS
 from assistant.responses import RESPONSE_RENDERERS
+from integrations.tmdb import TMDBError, WatchProviders
 
 pytestmark = pytest.mark.django_db
 
 DEFAULT_FILTERS = {
     "media_type": None, "status": None, "year": None, "month": None,
-    "limit": 5, "clarify_question": None, "recommendation_text": "",
+    "limit": 5, "clarify_question": None, "recommendation_text": "", "title": None,
 }
 
 
@@ -126,3 +128,34 @@ class TestTotalLibrary:
         result, text = _run("total_library", user)
         assert result["value"] == 1
         assert "1" in text
+
+
+class TestWhereToWatch:
+    """Única excepción del router que llama a un servicio externo (TMDB) en
+    vez de solo ORM/pandas locales — se mockea igual que el resto de tests
+    de integraciones, nunca toca internet real."""
+
+    def test_no_title_asks_for_one(self, user):
+        result, text = _run("where_to_watch", user, title=None)
+        assert result["title"] is None
+        assert "título" in text.lower()
+
+    def test_found_lists_platforms(self, user):
+        fake = WatchProviders(title="One Piece", region="ES", flatrate=["Netflix"], free=["3Cat"])
+        with patch("assistant.handlers.get_watch_providers", return_value=fake):
+            result, text = _run("where_to_watch", user, title="One Piece")
+        assert result["providers"] is fake
+        assert "Netflix" in text
+        assert "3Cat" in text
+
+    def test_not_found_says_so_without_crashing(self, user):
+        with patch("assistant.handlers.get_watch_providers", return_value=None):
+            result, text = _run("where_to_watch", user, title="título raro")
+        assert result["providers"] is None
+        assert "no he encontrado" in text.lower()
+
+    def test_tmdb_error_degrades_gracefully(self, user):
+        with patch("assistant.handlers.get_watch_providers", side_effect=TMDBError("caído")):
+            result, text = _run("where_to_watch", user, title="One Piece")
+        assert result["error"] is True
+        assert "inténtalo de nuevo" in text.lower()

@@ -48,18 +48,35 @@
   }
 
   function initSheets() {
+    var CLOSE_DELAY = 220;
+
     document.querySelectorAll("[data-sheet-trigger]").forEach(function (trigger) {
       var sheet = document.querySelector(trigger.getAttribute("data-sheet-trigger"));
       if (!sheet) return;
 
-      trigger.addEventListener("click", function () {
+      var backdrop = sheet.querySelector("[data-sheet-backdrop]");
+      var panel = sheet.querySelector("[data-sheet-panel]");
+
+      function open() {
         sheet.classList.remove("hidden");
-      });
+        window.requestAnimationFrame(function () {
+          if (backdrop) backdrop.classList.remove("opacity-0");
+          if (panel) panel.classList.remove("translate-y-full");
+        });
+      }
+
+      function close() {
+        if (backdrop) backdrop.classList.add("opacity-0");
+        if (panel) panel.classList.add("translate-y-full");
+        window.setTimeout(function () {
+          sheet.classList.add("hidden");
+        }, CLOSE_DELAY);
+      }
+
+      trigger.addEventListener("click", open);
 
       sheet.querySelectorAll("[data-sheet-close]").forEach(function (closeEl) {
-        closeEl.addEventListener("click", function () {
-          sheet.classList.add("hidden");
-        });
+        closeEl.addEventListener("click", close);
       });
     });
   }
