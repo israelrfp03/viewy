@@ -25,6 +25,21 @@ _REWRITE_PREFIX = "/api/index"
 
 def app(environ, start_response):
     raw_path_info = environ.get("PATH_INFO", "")
+
+    # TEMPORAL: bypass total de Django para confirmar que Vercel realmente
+    # está ejecutando este código y ver el environ real, sin intermediarios.
+    if "__debug__" in raw_path_info:
+        body = "\n".join(
+            f"{key}={value!r}"
+            for key, value in sorted(environ.items())
+            if isinstance(value, (str, int, float, bool))
+        ).encode("utf-8")
+        start_response(
+            "200 OK",
+            [("Content-Type", "text/plain; charset=utf-8"), ("Content-Length", str(len(body)))],
+        )
+        return [body]
+
     path_info = raw_path_info
     if path_info.startswith(_REWRITE_PREFIX):
         path_info = path_info[len(_REWRITE_PREFIX):]
