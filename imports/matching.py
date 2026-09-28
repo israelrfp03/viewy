@@ -5,7 +5,11 @@ posterior y opcional). Reglas fijas, sin machine learning: el sistema nunca
 elige en solitario cuando hay ambigüedad real.
 """
 
+import logging
+
 from integrations import tmdb
+
+logger = logging.getLogger(__name__)
 
 MAX_CANDIDATES = 5
 
@@ -16,6 +20,7 @@ def find_candidates(title):
     try:
         results = tmdb.search(title)
     except tmdb.TMDBError:
+        logger.warning("import matching: TMDB falló buscando %r", title, exc_info=True)
         return [], "provider_error"
     return results[:MAX_CANDIDATES], None
 

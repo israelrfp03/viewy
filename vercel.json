@@ -1,0 +1,11 @@
+{
+  "buildCommand": "bash build_files.sh",
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "staticfiles/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index" }
+  ]
+}

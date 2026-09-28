@@ -3,12 +3,16 @@ ORM / pandas), redacta (plantilla). El LLM nunca calcula ni redacta — solo
 clasifica la pregunta en un intent y unos filtros ya acotados.
 """
 
+import logging
+
 from django.utils import timezone
 
 from .handlers import INTENT_HANDLERS
 from .llm import LLMError, parse_intent
 from .prompts import SYSTEM_PROMPT, build_user_prompt
 from .responses import RESPONSE_RENDERERS
+
+logger = logging.getLogger(__name__)
 
 OUT_OF_SCOPE_MESSAGE = "Este asistente está pensado para responder preguntas sobre tu biblioteca de Viewy."
 FALLBACK_MESSAGE = "No he podido interpretar tu pregunta ahora mismo. Inténtalo de nuevo en un momento."
@@ -25,6 +29,7 @@ def answer_question(user, question):
     try:
         filters = parse_intent(SYSTEM_PROMPT, build_user_prompt(question), current_year)
     except LLMError:
+        logger.warning("assistant: el LLM no pudo clasificar la pregunta", exc_info=True)
         return FALLBACK_MESSAGE, "llm_unavailable"
 
     intent = filters["intent"]

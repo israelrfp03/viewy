@@ -50,26 +50,30 @@ Quiero que el proyecto me permita demostrar conocimientos de:
 - Python
 - Django
 - Django ORM
-- MySQL
-- diseño de bases de datos
-- autenticación de usuarios
+- PostgreSQL
+- Supabase
+- diseño de bases de datos relacionales
+- autenticación y autorización de usuarios
 - HTML
 - Tailwind CSS
 - JavaScript
-- consumo de APIs externas
+- consumo e integración de APIs externas
 - pandas
 - DataFrames
 - análisis de datos
 - visualización de estadísticas
 - integración con LLM
 - testing
-- Docker
-- Docker Compose
-- variables de entorno
+- variables de entorno y gestión de secretos
+- configuración de producción
+- Vercel
+- despliegue continuo desde GitHub
 - buenas prácticas de arquitectura
 - Git
-- despliegue
+- GitHub
 - documentación técnica
+- diseño responsive
+- seguridad básica en aplicaciones web
 
 ---
 
@@ -77,19 +81,22 @@ Quiero que el proyecto me permita demostrar conocimientos de:
 
 El stack previsto es:
 
+El stack previsto es:
+
 - Python
 - Django
 - Django ORM
-- MySQL
+- PostgreSQL
+- Supabase
 - HTML
 - Tailwind CSS
 - JavaScript
 - pandas
 - APIs externas
 - integración con LLM
-- Docker
-- Docker Compose
 - Pytest
+- Vercel
+- variables de entorno
 - Git
 - GitHub
 
@@ -221,19 +228,19 @@ No crees services vacíos o innecesarios solo por seguir una arquitectura.
 
 ## Base de datos
 
-La base de datos principal será MySQL.
+La base de datos principal será PostgreSQL, gestionada mediante Supabase.
 
 Quiero aprender a trabajar con una base de datos relacional real.
 
-Al principio se puede utilizar SQLite si facilita el arranque del proyecto, pero el objetivo final es utilizar MySQL.
+Al principio se puede utilizar SQLite si facilita el arranque del proyecto en local, pero el objetivo final de producción es PostgreSQL vía Supabase.
 
-Cuando llegue el momento de introducir MySQL:
+Cuando llegue el momento de introducir PostgreSQL:
 
 - explica la configuración
-- explica la conexión con Django
+- explica la conexión con Django mediante `DATABASE_URL`
 - explica las variables de entorno
-- explica cómo manejar migraciones
-- explica cómo usarlo con Docker
+- explica cómo manejar migraciones en producción
+- explica connection pooler vs conexión directa
 
 No cambies de base de datos sin explicarme antes el motivo.
 
@@ -792,36 +799,304 @@ No crear tests triviales sin valor.
 
 ---
 
-## Fase 15 — MySQL, Docker y producción
+## Fase 15 — Producción y despliegue con Vercel + Supabase
 
-Preparar:
+Objetivo:
 
-- MySQL
-- Docker
-- Docker Compose
+Preparar Viewy para producción y desplegarlo online de forma sencilla y gratuita para portfolio.
+
+Stack de despliegue previsto:
+
+- GitHub
+- Vercel
+- Supabase
+- PostgreSQL
+
+No utilizar Docker como requisito obligatorio para el despliegue.
+
+Docker podrá aprenderse más adelante como una fase opcional separada.
+
+### Preparar producción
+
+Revisar y configurar correctamente:
+
+- DEBUG=False
+- ALLOWED_HOSTS
+- CSRF_TRUSTED_ORIGINS
+- SECRET_KEY mediante variable de entorno
 - variables de entorno
-- configuración de producción
-- DEBUG
-- static files
 - logging
-- conexión entre contenedores
+- configuración segura de producción
+- static files
+- media files si existen
+- configuración de base de datos
 - migraciones
-- despliegue
+- manejo de errores
+- páginas 404/500 si corresponde
 
-Explicar Docker desde cero porque no he trabajado anteriormente con Docker.
+### Base de datos
+
+La base de datos de producción será PostgreSQL mediante Supabase.
+
+Quiero aprender:
+
+- diferencia entre SQLite/MySQL/PostgreSQL si actualmente usamos otra base de datos
+- cómo conectar Django a PostgreSQL
+- DATABASE_URL
+- variables de entorno
+- credenciales
+- migraciones en producción
+- constraints
+- índices
+- conexión segura
+- diferencias entre desarrollo y producción
+
+Si actualmente el proyecto usa SQLite o MySQL, analiza primero el cambio a PostgreSQL y explica qué implicaciones tiene.
+
+No cambies la base de datos sin revisar antes:
+
+- compatibilidad de modelos
+- migraciones
+- tipos de campos
+- constraints
+- tests
+
+### Supabase
+
+Utilizar Supabase principalmente como:
+
+- base de datos PostgreSQL gestionada
+
+No utilizar Supabase Auth si Django ya gestiona correctamente la autenticación.
+
+No duplicar sistemas de usuarios.
 
 Explicar:
+
+- qué proporciona Supabase
+- qué datos necesita Django para conectarse
+- cómo obtener la connection string
+- cómo configurar credenciales mediante variables de entorno
+- cómo proteger secretos
+- qué ocurre si el proyecto gratuito se pausa por inactividad
+
+### Vercel
+
+Desplegar Django en Vercel.
+
+Quiero entender:
+
+- cómo conectar GitHub con Vercel
+- cómo configurar el proyecto
+- cómo definir variables de entorno
+- cómo funciona el build
+- cómo se ejecuta Django
+- cómo se sirven los static files
+- cómo revisar logs
+- cómo funcionan los redeploys
+- cómo funciona el despliegue automático tras hacer push a main
+
+No asumir que ya conozco Vercel.
+
+### Variables de entorno
+
+Revisar todas las variables necesarias.
+
+Por ejemplo:
+
+- DJANGO_SECRET_KEY
+- DATABASE_URL
+- TMDB_ACCESS_TOKEN
+- clave del proveedor LLM
+- clave/token del proveedor de anime si existe
+
+Nunca:
+
+- hardcodear secretos
+- subir `.env`
+- imprimir secretos en logs
+- exponer tokens en templates o JavaScript
+
+Actualizar `.env.example` con los nombres necesarios pero sin valores reales.
+
+### Static files
+
+Configurar correctamente los static files para producción.
+
+Revisar si necesitamos:
+
+- collectstatic
+- WhiteNoise
+- configuración específica de Vercel
+
+Elegir la solución más sencilla y apropiada.
+
+Explicarme:
+
+- qué son static files
+- diferencia entre static y media
+- qué hace collectstatic
+- por qué el comportamiento cambia entre desarrollo y producción
+
+### Media files
+
+Si Viewy almacena archivos subidos por usuarios:
+
+analizar cómo gestionarlos en producción.
+
+No utilizar el filesystem efímero de Vercel como almacenamiento permanente.
+
+Si actualmente solo utilizamos URLs externas de posters y no subimos archivos:
+
+no añadir almacenamiento externo innecesariamente.
+
+### Migraciones
+
+Definir un procedimiento claro para aplicar migraciones en producción.
+
+Quiero saber:
+
+- cuándo ejecutar migrate
+- cómo comprobar migraciones pendientes
+- cómo evitar errores al desplegar
+- qué hacer si una migración falla
+
+No ejecutar cambios destructivos sin explicarlos.
+
+### Logging y errores
+
+Configurar logging útil para producción.
+
+Quiero poder diagnosticar:
+
+- errores de Django
+- errores de API externa
+- errores del LLM
+- errores de base de datos
+
+No registrar:
+
+- passwords
+- API keys
+- tokens
+- información sensible innecesaria
+
+### Seguridad
+
+Revisar al menos:
+
+- DEBUG=False
+- SECRET_KEY segura
+- cookies
+- CSRF
+- HTTPS
+- ALLOWED_HOSTS
+- variables de entorno
+- permisos de usuario
+- exposición de errores
+- dependencias vulnerables si procede
+
+### Despliegue
+
+Flujo esperado:
+
+GitHub
+→ Vercel
+→ Django
+→ Supabase PostgreSQL
+
+Y APIs externas:
+
+- TMDB
+- proveedor anime si existe
+- proveedor LLM
+
+Quiero que el despliegue quede conectado a GitHub.
+
+Idealmente:
+
+git push
+→ Vercel redeploy automático
+
+### Verificación
+
+Después del despliegue:
+
+1. comprobar home
+2. comprobar registro
+3. comprobar login/logout
+4. comprobar biblioteca
+5. comprobar CRUD
+6. comprobar búsqueda TMDB
+7. comprobar anime
+8. comprobar analytics
+9. comprobar gráficas
+10. comprobar recomendaciones
+11. comprobar assistant
+12. comprobar importación
+13. comprobar desde móvil
+14. comprobar responsive
+15. comprobar logs
+16. comprobar base de datos
+17. comprobar variables de entorno
+18. comprobar static files
+19. comprobar errores 404/500
+
+### Coste
+
+Quiero priorizar opciones gratuitas para portfolio.
+
+Antes de activar cualquier servicio de pago:
+
+- avisarme
+- explicar el motivo
+- explicar alternativas gratuitas
+
+No asumir que quiero pagar por infraestructura.
+
+### Docker
+
+Docker NO forma parte obligatoria de esta fase.
+
+No crear:
+
+- Dockerfile
+- docker-compose.yml
+- contenedores
+
+salvo que yo lo pida explícitamente.
+
+Docker podrá convertirse más adelante en una fase opcional independiente para aprender:
 
 - imágenes
 - contenedores
 - Dockerfile
-- docker-compose.yml
+- Docker Compose
 - volumes
 - ports
 - networks
-- variables de entorno
 
-No asumir que ya conozco Docker.
+pero no debe bloquear el despliegue de Viewy.
+
+### Cuando termines
+
+1. comprueba que la aplicación funciona localmente
+2. comprueba configuración de producción
+3. comprueba conexión con Supabase
+4. comprueba migraciones
+5. comprueba static files
+6. despliega en Vercel
+7. comprueba la URL pública
+8. comprueba todos los flujos críticos
+9. prueba desde móvil real si es posible
+10. revisa logs
+11. documenta variables de entorno necesarias
+12. explica cómo hacer futuros deploys
+13. explica cómo revertir un despliegue si hace falta
+14. documenta limitaciones del plan gratuito
+15. DETENTE
+
+No avances a la FASE 16 hasta que el despliegue esté estable.
 
 ---
 
@@ -843,8 +1118,7 @@ Debe explicar:
 - uso de pandas
 - integración con IA
 - tests
-- Docker
-- despliegue
+- despliegue (Vercel + Supabase)
 
 El README debe estar orientado a portfolio y recruiters técnicos.
 
@@ -881,8 +1155,8 @@ Cuando aparezca algo importante, explícame conceptos como:
 - settings
 - variables de entorno
 - testing
-- Docker
-- MySQL
+- PostgreSQL
+- Vercel
 - APIs
 - pandas
 - DataFrames

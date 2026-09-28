@@ -5,6 +5,8 @@ El LLM nunca calcula nada que ya podamos calcular: recibe agregados y
 ejemplos ya resueltos por ORM. Solo decide qué títulos encajan.
 """
 
+import logging
+
 from django.db.models import Avg
 
 from analytics.services import get_dashboard_stats, get_favorites, get_top_rated
@@ -13,6 +15,8 @@ from library.models import MediaItem, UserMedia
 
 from .llm import LLMError, get_recommendations_from_llm
 from .prompts import SYSTEM_PROMPT, build_user_prompt
+
+logger = logging.getLogger(__name__)
 
 MAX_EXAMPLE_TITLES = 8
 MAX_DROPPED_TITLES = 5
@@ -118,6 +122,7 @@ def get_recommendations(user, request_text):
     try:
         raw_recommendations = get_recommendations_from_llm(SYSTEM_PROMPT, user_prompt)
     except LLMError:
+        logger.warning("recommendations: el LLM falló generando sugerencias", exc_info=True)
         return [], "llm_unavailable", is_thin_profile
 
     if not raw_recommendations:
@@ -148,6 +153,7 @@ def _verify_with_tmdb(item, existing_external_ids):
     try:
         results = tmdb.search(item["title"])
     except tmdb.TMDBError:
+        logger.warning("recommendations: TMDB falló verificando %r", item.get("title"), exc_info=True)
         return None
 
     if not results:

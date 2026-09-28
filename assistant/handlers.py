@@ -7,6 +7,8 @@ código: esto es Python puro sobre ORM/pandas ya existentes.
 gestionan antes de llegar aquí (assistant/services.py).
 """
 
+import logging
+
 from analytics.dataframes import (
     busiest_month,
     content_type_over_time,
@@ -28,6 +30,8 @@ from analytics.services import (
 from integrations.tmdb import TMDBError, get_watch_providers
 from library.models import UserMedia
 from recommendations.services import get_recommendations
+
+logger = logging.getLogger(__name__)
 
 
 def _serialize_entries(entries, show_date=False):
@@ -150,6 +154,7 @@ def handle_where_to_watch(user, filters):
     try:
         providers = get_watch_providers(title)
     except TMDBError:
+        logger.warning("where_to_watch: TMDB falló buscando %r", title, exc_info=True)
         return {"title": title, "providers": None, "error": True}
 
     return {"title": title, "providers": providers, "error": False}

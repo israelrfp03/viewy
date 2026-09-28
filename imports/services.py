@@ -3,6 +3,8 @@ lote, solo si hace falta), buscar candidatos en TMDB, construir la vista
 previa, y confirmar el lote guardando cada fila en su propia transacción.
 """
 
+import logging
+
 from django.db import transaction
 
 from integrations import tmdb
@@ -12,6 +14,8 @@ from library.services import get_or_create_media_from_tmdb
 from .llm import LLMError, parse_ambiguous_lines
 from .matching import classify_match, find_candidates, resolved_media_type
 from .parsing import parse_text
+
+logger = logging.getLogger(__name__)
 
 MAX_ITEMS = 100
 
@@ -31,7 +35,8 @@ def analyze_text(user, text):
             resolved = parse_ambiguous_lines(raw_lines)
             llm_results = {low_confidence_indices[position]: value for position, value in resolved.items()}
         except LLMError:
-            pass  # si el LLM falla, se usan las líneas tal cual (título completo, sin rating)
+            logger.warning("import analyze_text: el LLM falló resolviendo líneas ambiguas", exc_info=True)
+            # se usan las líneas tal cual (título completo, sin rating)
 
     existing_external_ids = set(
         MediaItem.objects.filter(user_entries__user=user)
@@ -148,6 +153,7 @@ def _confirm_row(user, row, summary):
     try:
         detail = tmdb.get_detail(external_id, source_type)
     except tmdb.TMDBError:
+        logger.warning("import confirm: TMDB falló obteniendo detalle de %r", external_id, exc_info=True)
         summary["errors"] += 1
         return
 

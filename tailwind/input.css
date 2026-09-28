@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@source "../../templates/**/*.html";
+@source "../templates/**/*.html";
 
 @theme {
   --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;

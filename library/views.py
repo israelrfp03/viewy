@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -12,6 +14,8 @@ from .forms import LibrarySearchForm, MediaItemForm, UserMediaForm
 from .models import AnimeMetadata, MediaItem, UserMedia
 from .queries import DEFAULT_SORT, SORT_LABELS, filter_user_library
 from .services import get_or_create_media_from_tmdb
+
+logger = logging.getLogger(__name__)
 
 LIBRARY_PAGE_SIZE = 12
 
@@ -127,6 +131,7 @@ def media_search(request):
         try:
             results = tmdb.search(form.cleaned_data["q"])
         except tmdb.TMDBError:
+            logger.warning("media_search: TMDB falló buscando %r", form.cleaned_data["q"], exc_info=True)
             messages.error(request, "TMDB no está disponible ahora mismo, inténtalo más tarde.")
 
     return render(
@@ -154,6 +159,7 @@ def media_add_from_tmdb(request):
     try:
         detail = tmdb.get_detail(external_id, source_type)
     except tmdb.TMDBError:
+        logger.warning("media_add_from_tmdb: TMDB falló obteniendo %r", external_id, exc_info=True)
         messages.error(request, "No se pudo obtener la información de TMDB. Inténtalo de nuevo.")
         return redirect("library:search")
 
@@ -214,6 +220,9 @@ def entry_detail(request, pk):
                     anime_metadata.external_source, anime_metadata.external_id
                 )
             except AnimeProviderUnavailable:
+                logger.warning(
+                    "entry_detail: proveedor de anime caído para %r", anime_metadata.external_id, exc_info=True
+                )
                 anime_provider_unavailable = True
 
     context = {
@@ -243,6 +252,7 @@ def anime_search_candidates(request, pk):
     try:
         candidates, used_provider = search_anime(query)
     except AnimeProviderUnavailable:
+        logger.warning("anime_search_candidates: proveedores caídos buscando %r", query, exc_info=True)
         anime_provider_unavailable = True
         messages.error(
             request, "Ni AniList ni Jikan están disponibles ahora mismo, inténtalo más tarde."
@@ -276,6 +286,7 @@ def anime_confirm_match(request, pk):
     try:
         enrichment = get_anime_enrichment(source, external_id)
     except AnimeProviderUnavailable:
+        logger.warning("anime_confirm_match: proveedor caído para %r/%r", source, external_id, exc_info=True)
         messages.error(request, "No se pudo obtener la información. Inténtalo de nuevo.")
         return redirect("library:anime_search", pk=pk)
 

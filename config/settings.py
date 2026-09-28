@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 
+import dj_database_url
 from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,6 +29,29 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='', cast=Csv())
+
+# Dominios desde los que se acepta un POST con CSRF token válido — Django lo
+# exige explícito con esquema (https://...), no basta con el hostname como en
+# ALLOWED_HOSTS. Necesario porque el dominio de Vercel no es localhost.
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='', cast=Csv())
+
+# Vercel (como casi cualquier PaaS) termina el HTTPS en su proxy y reenvía la
+# petición a Django por HTTP interno, marcando este header. Sin decirle a
+# Django que se fíe de él, request.is_secure() siempre daría False y
+# SECURE_SSL_REDIRECT provocaría un bucle infinito de redirecciones.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # Empieza bajo (1 semana) a propósito: HSTS le dice al navegador "fuerza
+    # HTTPS en este dominio durante N segundos", y si algo fallara con el
+    # certificado no hay vuelta atrás hasta que expire. Subir este valor
+    # (hasta 31536000 = 1 año) una vez confirmado que el despliegue es estable.
+    SECURE_HSTS_SECONDS = 60 * 60 * 24 * 7
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 
 # Application definition
@@ -50,6 +74,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -80,13 +105,29 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
+#
+# En local, sin DATABASE_URL definida, se usa SQLite (cero configuración).
+# En producción, DATABASE_URL apunta al pooler de Supabase (Postgres) —
+# conn_health_checks evita usar una conexión ya cerrada por el pooler tras
+# un periodo de inactividad de la función serverless.
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+DATABASE_URL = config('DATABASE_URL', default='')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -125,6 +166,20 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+# Aquí deja collectstatic todo junto, listo para que WhiteNoise lo sirva.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# CompressedManifestStaticFilesStorage: cada fichero se sirve con un hash en
+# el nombre (cache-busting real: el navegador puede cachear "para siempre"
+# porque un cambio de contenido cambia el nombre) y comprimido con gzip/brotli.
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 
 # Authentication
@@ -157,5 +212,49 @@ GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
 MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    },
+}
+
+# Viewy no envía ningún correo (sin reset de contraseña por email, sin
+# notificaciones) — el aviso de "backend de email no apto para producción"
+# no aplica aquí. Se silencia explícito en vez de configurar un SMTP real
+# que nunca se usaría.
+SILENCED_SYSTEM_CHECKS = ['mail.E001']
+
+
+# Logging
+# https://docs.djangoproject.com/en/6.1/topics/logging/
+#
+# Todo va a stdout/stderr (console), nunca a fichero: en Vercel el filesystem
+# es efímero (desaparece entre invocaciones), así que un log en disco no
+# serviría de nada. Vercel captura stdout/stderr automáticamente en su panel
+# de Logs. Los módulos de la app usan logging.getLogger(__name__) y suben
+# hasta 'root' salvo 'django.request', que Django ya gestiona aparte.
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{levelname} {asctime} {name} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
     },
 }
