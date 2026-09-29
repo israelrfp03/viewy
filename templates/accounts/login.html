@@ -4,22 +4,13 @@
 
 {% block content %}
     <div data-reveal class="flex flex-col gap-8 sm:gap-10 lg:grid lg:grid-cols-12 lg:gap-0 lg:overflow-hidden lg:-mx-14 lg:my-8 lg:rounded-card">
-        <div class="flex flex-col justify-between gap-8 rounded-card bg-brand-500 px-5 py-10 text-white sm:px-8 sm:py-12 lg:col-span-5 lg:gap-8 lg:rounded-none lg:p-14">
-            <span class="font-display text-lg sm:text-xl lg:text-2xl font-extrabold tracking-tight text-white">viewy</span>
-            <div class="w-32 sm:w-40 lg:w-44">{% include "components/mascot.html" with variant="default" size="hero" %}</div>
-            <div>
-                <p class="font-display text-2xl sm:text-3xl lg:text-5xl font-extrabold leading-[0.95] tracking-tight">Vuelve a lo que estabas viendo.</p>
-                <p class="mt-2 sm:mt-3 lg:mt-4 font-mono text-[11px] uppercase tracking-[.1em] text-brand-100">Tu biblioteca te espera</p>
-            </div>
-        </div>
-
-        <div class="flex flex-col justify-center px-5 py-10 sm:px-8 lg:col-span-7 lg:px-16 lg:py-16">
-            <div class="mx-auto flex w-full max-w-[420px] flex-col gap-6">
+        <div class="flex flex-col justify-center px-5 py-6 sm:py-10 lg:col-span-7 lg:px-16 lg:py-16 lg:order-2">
+            <div class="mx-auto flex w-full max-w-[420px] flex-col gap-3 sm:gap-6">
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-                    <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Iniciar sesión</p>
+                    <p class="font-mono text-[10px] uppercase tracking-[.1em] text-muted">Iniciar sesión</p>
                     <a href="{% url 'accounts:register' %}" class="text-sm font-medium text-brand-500 hover:text-brand-600">¿Nuevo en Viewy? Crea tu cuenta</a>
                 </div>
-                <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-ink">Hola de nuevo.</h1>
+                <h1 class="font-display text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-ink">Hola de nuevo.</h1>
 
                 {% if form.errors %}
                     <div class="rounded-card bg-dropped-bg px-4 py-3.5 text-sm font-medium text-dropped-fg">
@@ -27,7 +18,7 @@
                     </div>
                 {% endif %}
 
-                <form method="post" class="flex flex-col gap-4">
+                <form method="post" class="flex flex-col gap-3 sm:gap-4">
                     {% csrf_token %}
                     {% include "components/field.html" with field=form.username %}
                     {% include "components/field.html" with field=form.password %}
@@ -35,6 +26,14 @@
                 </form>
 
                 <p class="text-center text-xs text-muted">Tus datos solo los ves tú.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center justify-center gap-4 rounded-card bg-brand-500 px-5 py-8 text-center text-white sm:gap-6 sm:px-8 sm:py-10 lg:col-span-5 lg:gap-8 lg:rounded-none lg:p-14 lg:order-1">
+            <div class="w-40 sm:w-28 lg:w-40">{% include "components/mascot.html" with variant="celebrate" size="spot" %}</div>
+            <div>
+                <p class="font-display text-lg sm:text-2xl lg:text-3xl font-bold text-white">Vuelve a lo que estabas viendo.</p>
+                <p class="mt-2 max-w-[260px] text-xs sm:text-sm text-[#B5C0D6]">Tu biblioteca te espera</p>
             </div>
         </div>
     </div>
