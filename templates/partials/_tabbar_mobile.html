@@ -5,12 +5,19 @@
         <img src="{% static 'images/mascot/base.png' %}" alt="" aria-hidden="true" class="h-7 w-7 object-contain">
         <span class="font-display text-lg font-extrabold tracking-tight text-brand-500">viewy</span>
     </a>
-    <a href="{% url 'library:search' %}" aria-label="Buscar" class="flex h-11 w-11 items-center justify-center rounded-full bg-white ring-1 ring-inset ring-line">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-[18px] w-[18px] text-ink">
-            <circle cx="10.5" cy="10.5" r="6.5" />
-            <path d="m20 20-4.3-4.3" />
-        </svg>
-    </a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'library:search' %}" aria-label="Buscar" class="flex h-11 w-11 items-center justify-center rounded-full bg-white ring-1 ring-inset ring-line">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-[18px] w-[18px] text-ink">
+                <circle cx="10.5" cy="10.5" r="6.5" />
+                <path d="m20 20-4.3-4.3" />
+            </svg>
+        </a>
+    {% else %}
+        <div class="flex items-center gap-2">
+            <a href="{% url 'accounts:login' %}" class="text-sm font-medium text-ink">Entrar</a>
+            <a href="{% url 'accounts:register' %}" class="flex h-9 items-center rounded-full bg-ink px-3.5 text-sm font-semibold text-white">Crear cuenta</a>
+        </div>
+    {% endif %}
 </header>
 
 {% if user.is_authenticated and not url_name == 'preview' %}

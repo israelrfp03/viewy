@@ -73,16 +73,16 @@
             </div>
         </div>
 
-        <div data-reveal style="transition-delay:120ms" class="relative hidden h-[420px] lg:col-span-4 lg:block">
-            <div data-parallax class="absolute right-[34%] top-0 w-[190px]">
+        <div data-reveal style="transition-delay:120ms" class="relative mx-auto h-[230px] w-[220px] lg:col-span-4 lg:mx-0 lg:h-[420px] lg:w-auto">
+            <div data-parallax class="absolute right-[34%] top-0 w-[104px] lg:w-[190px]">
                 <img src="https://image.tmdb.org/t/p/w500/dqZENchTd7lp5zht7BdlqM7RBhD.jpg" alt="Frieren: Beyond Journey's End"
-                     class="aspect-2/3 w-full rounded-[4px] object-cover shadow-[0_24px_48px_rgba(13,14,18,.18)]" style="transform:rotate(-7deg)">
+                     class="aspect-2/3 w-full rounded-[4px] object-cover shadow-[0_12px_24px_rgba(13,14,18,.18)] lg:shadow-[0_24px_48px_rgba(13,14,18,.18)]" style="transform:rotate(-7deg)">
             </div>
-            <div data-parallax class="absolute right-0 top-16 w-[220px]">
+            <div data-parallax class="absolute right-0 top-9 w-[121px] lg:top-16 lg:w-[220px]">
                 <img src="https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg" alt="Dune: Part Two"
-                     class="aspect-2/3 w-full rounded-[4px] object-cover shadow-[0_24px_48px_rgba(13,14,18,.2)]" style="transform:rotate(4deg)">
+                     class="aspect-2/3 w-full rounded-[4px] object-cover shadow-[0_12px_24px_rgba(13,14,18,.2)] lg:shadow-[0_24px_48px_rgba(13,14,18,.2)]" style="transform:rotate(4deg)">
             </div>
-            <div class="absolute bottom-4 left-0 w-[210px]">
+            <div class="absolute bottom-2 left-0 w-[115px] lg:bottom-4 lg:w-[210px]">
                 {% include "components/mascot.html" with variant="default" size="hero" %}
             </div>
         </div>
@@ -253,11 +253,14 @@
         </div>
         <div class="flex flex-col gap-2.5 lg:col-span-2 lg:col-start-7">
             <span class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Producto</span>
-            <span>Biblioteca</span><span>Estadísticas</span><span>Recomendaciones</span>
+            <a href="{% url 'library:list' %}" class="hover:text-white">Biblioteca</a>
+            <a href="{% url 'analytics:dashboard' %}" class="hover:text-white">Estadísticas</a>
+            <a href="{% url 'recommendations:form' %}" class="hover:text-white">Recomendaciones</a>
         </div>
         <div class="flex flex-col gap-2.5 lg:col-span-2 lg:col-start-9">
             <span class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Cuenta</span>
-            <span>Crear cuenta</span><span>Iniciar sesión</span>
+            <a href="{% url 'accounts:register' %}" class="hover:text-white">Crear cuenta</a>
+            <a href="{% url 'accounts:login' %}" class="hover:text-white">Iniciar sesión</a>
         </div>
         <div class="flex items-end justify-start gap-2 lg:col-span-2 lg:col-start-11 lg:flex-col lg:items-end lg:justify-end">
             <span class="w-9 opacity-60">{% include "components/mascot.html" with variant="default" size="sticker" line=True %}</span>
