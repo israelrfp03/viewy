@@ -28,7 +28,7 @@
                     {% csrf_token %}
                     {% include "components/field.html" with field=form.username %}
                     {% include "components/field.html" with field=form.email %}
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {% include "components/field.html" with field=form.password1 %}
                         {% include "components/field.html" with field=form.password2 %}
                     </div>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="hidden flex-col items-center justify-center gap-6 bg-ink p-14 text-center lg:col-span-5 lg:flex">
-            <div class="w-24">{% include "components/mascot.html" with variant="happy" size="spot" %}</div>
+            <div class="w-24">{% include "components/mascot.html" with variant="happy" size="spot" black=True %}</div>
             <p class="font-display text-2xl font-bold text-white">¿Traes una lista vieja?</p>
             <p class="max-w-[260px] text-sm text-[#A9ABB0]">Cuando termines de registrarte podrás pegarla y la ordenamos por ti.</p>
         </div>
