@@ -151,20 +151,20 @@
         <div class="flex min-h-[380px] flex-col gap-6 rounded-card bg-white p-10 lg:col-span-7">
             <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">Biblioteca</p>
             <p class="max-w-[420px] font-display text-[2.5rem] font-bold leading-[1] tracking-tight text-ink">Cuatro estados. Cero listas perdidas en notas del móvil.</p>
-            <div class="mt-auto flex items-end gap-4">
-                <div class="flex flex-1 flex-col gap-2.5">
+            <div class="mt-auto flex items-end gap-4 overflow-x-auto pb-1 lg:overflow-visible">
+                <div class="flex w-[104px] shrink-0 flex-col gap-2.5 lg:w-auto lg:flex-1">
                     <img src="https://image.tmdb.org/t/p/w500/dqZENchTd7lp5zht7BdlqM7RBhD.jpg" alt="Frieren: Beyond Journey's End" class="aspect-2/3 w-full rounded-[4px] object-cover">
                     {% include "components/status_badge.html" with status="watching" %}
                 </div>
-                <div class="flex flex-1 flex-col gap-2.5">
+                <div class="flex w-[104px] shrink-0 flex-col gap-2.5 lg:w-auto lg:flex-1">
                     <img src="https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg" alt="Dune: Parte Dos" class="aspect-2/3 w-full rounded-[4px] object-cover">
                     {% include "components/status_badge.html" with status="completed" %}
                 </div>
-                <div class="flex flex-1 flex-col gap-2.5">
+                <div class="flex w-[104px] shrink-0 flex-col gap-2.5 lg:w-auto lg:flex-1">
                     <img src="https://image.tmdb.org/t/p/w500/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg" alt="Severance" class="aspect-2/3 w-full rounded-[4px] object-cover">
                     {% include "components/status_badge.html" with status="planned" %}
                 </div>
-                <div class="flex flex-1 flex-col gap-2.5">
+                <div class="flex w-[104px] shrink-0 flex-col gap-2.5 lg:w-auto lg:flex-1">
                     <img src="https://image.tmdb.org/t/p/w500/tvUHVSTJV9ITON3oyHaWp7oaAc8.jpg" alt="Perfect Days" class="aspect-2/3 w-full rounded-[4px] object-cover">
                     {% include "components/status_badge.html" with status="dropped" %}
                 </div>
