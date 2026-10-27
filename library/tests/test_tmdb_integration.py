@@ -30,6 +30,48 @@ class TestMediaSearch:
         assert response.status_code == 200
 
 
+
+class TestTMDBPreview:
+    DETAIL = TMDBDetail("1", "movie", "movie", "Interstellar", 2014, "", "Viaje espacial.", False, 169, None)
+
+    def _url(self):
+        return reverse("library:tmdb_preview", args=["movie", "1"])
+
+    def test_shows_detail_without_adding_anything(self, client, user):
+        client.force_login(user)
+        with patch("library.views.tmdb.get_detail", return_value=self.DETAIL):
+            response = client.get(self._url())
+        assert response.status_code == 200
+        assert b"Viaje espacial." in response.content
+        assert "Añadir a mi biblioteca" in response.content.decode()
+        assert not MediaItem.objects.exists()
+
+    def test_title_already_in_library_links_to_entry(self, client, user):
+        media = MediaItem.objects.create(
+            title="Interstellar", media_type="movie", external_source="tmdb", external_id="1"
+        )
+        entry = UserMedia.objects.create(user=user, media=media)
+        client.force_login(user)
+        with patch("library.views.tmdb.get_detail", return_value=self.DETAIL):
+            response = client.get(self._url())
+        assert reverse("library:detail", args=[entry.pk]).encode() in response.content
+
+    def test_invalid_source_type_is_404(self, client, user):
+        client.force_login(user)
+        response = client.get(reverse("library:tmdb_preview", args=["person", "1"]))
+        assert response.status_code == 404
+
+    def test_requires_login(self, client):
+        response = client.get(self._url())
+        assert response.status_code == 302
+
+    def test_provider_down_redirects_to_search(self, client, user):
+        client.force_login(user)
+        with patch("library.views.tmdb.get_detail", side_effect=tmdb.TMDBError("caído")):
+            response = client.get(self._url())
+        assert response.status_code == 302
+
+
 class TestMediaAddFromTMDB:
     def test_valid_selection_creates_media_and_entry(self, client, user):
         client.force_login(user)

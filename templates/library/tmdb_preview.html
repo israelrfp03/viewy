@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Viewy — {{ detail.title }}{% endblock %}
+
+{% block content %}
+    <a href="{% url 'library:search' %}{% if query %}?q={{ query|urlencode }}{% endif %}" class="mb-8 inline-flex items-center gap-1.5 text-[13px] font-medium text-muted hover:text-ink">
+        ← Resultados
+    </a>
+
+    <div data-reveal class="grid gap-10 lg:grid-cols-12">
+        <div class="lg:sticky lg:top-24 lg:col-span-4 lg:self-start">
+            <div class="aspect-2/3 w-full max-w-[320px] overflow-hidden rounded-[4px] shadow-[0_32px_64px_rgba(13,14,18,.2)]">
+                {% if detail.poster_url %}
+                    <img src="{{ detail.poster_url }}" alt="{{ detail.title }}" class="h-full w-full object-cover">
+                {% else %}
+                    <div class="flex h-full w-full flex-col justify-between bg-brand-500 p-4 text-white">
+                        {% include "components/mascot.html" with variant="default" size="sticker" line=True %}
+                        <span class="font-display text-2xl font-extrabold leading-[0.95]">Sin póster todavía</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mt-5 flex max-w-[320px] flex-col gap-3">
+                {% if entry %}
+                    <p class="text-sm text-muted">Ya está en tu biblioteca.</p>
+                    <a href="{% url 'library:detail' entry.pk %}" class="btn-primary w-full">Ver mi registro</a>
+                {% else %}
+                    <form method="post" action="{% url 'library:add_from_tmdb' %}" class="flex flex-col gap-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="external_id" value="{{ detail.external_id }}">
+                        <input type="hidden" name="source_type" value="{{ detail.source_type }}">
+                        <select name="media_type" class="field-input">
+                            {% if detail.media_type == "movie" %}
+                                <option value="movie" {% if not detail.is_anime_candidate %}selected{% endif %}>Película</option>
+                            {% else %}
+                                <option value="series" {% if not detail.is_anime_candidate %}selected{% endif %}>Serie</option>
+                            {% endif %}
+                            <option value="anime" {% if detail.is_anime_candidate %}selected{% endif %}>Anime</option>
+                        </select>
+                        <button type="submit" class="btn-primary w-full">Añadir a mi biblioteca</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="lg:col-span-8">
+            <p class="font-mono text-[11px] uppercase tracking-[.1em] text-muted">
+                {% if detail.media_type == "movie" %}Película{% else %}Serie{% endif %}{% if detail.release_year %} · {{ detail.release_year }}{% endif %}{% if detail.episodes %} · {{ detail.episodes }} episodios{% endif %}{% if detail.duration_minutes %} · {{ detail.duration_minutes }} min{% endif %}
+            </p>
+            <h1 class="mt-3 break-words font-display text-5xl font-extrabold leading-[0.9] tracking-tight text-ink sm:text-7xl lg:text-[6rem]">{{ detail.title }}</h1>
+
+            {% if detail.description %}
+                <p class="mt-6 max-w-[600px] text-lg leading-relaxed text-ink-2">{{ detail.description }}</p>
+                {% if detail.description_language == "en" %}
+                    <p class="mt-2 font-mono text-[11px] uppercase tracking-[.1em] text-muted">Sinopsis en inglés · no hay traducción disponible</p>
+                {% endif %}
+            {% else %}
+                <p class="mt-6 text-sm text-muted">TMDB no tiene sinopsis para este título.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

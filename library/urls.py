@@ -10,6 +10,7 @@ urlpatterns = [
     path("library/add/", views.media_create, name="create"),
     path("library/search/", views.media_search, name="search"),
     path("library/add-from-tmdb/", views.media_add_from_tmdb, name="add_from_tmdb"),
+    path("library/tmdb/<str:source_type>/<str:external_id>/", views.tmdb_preview, name="tmdb_preview"),
     path("library/<int:pk>/edit/", views.media_update, name="update"),
     path("library/<int:pk>/delete/", views.media_delete, name="delete"),
     path("library/<int:pk>/", views.entry_detail, name="detail"),

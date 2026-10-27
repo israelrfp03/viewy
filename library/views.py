@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Avg, Count, Q
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from integrations import tmdb
@@ -136,6 +137,31 @@ def media_search(request):
 
     return render(
         request, "library/search.html", {"form": form, "results": results, "searched": searched}
+    )
+
+
+@login_required
+def tmdb_preview(request, source_type, external_id):
+    if source_type not in ("movie", "tv"):
+        raise Http404
+
+    try:
+        detail = tmdb.get_detail(external_id, source_type)
+    except tmdb.TMDBError:
+        logger.warning("tmdb_preview: TMDB falló obteniendo %r", external_id, exc_info=True)
+        messages.error(request, "No se pudo obtener la información de TMDB. Inténtalo de nuevo.")
+        return redirect("library:search")
+
+    entry = UserMedia.objects.filter(
+        user=request.user,
+        media__external_source=MediaItem.ExternalSource.TMDB,
+        media__external_id=detail.external_id,
+    ).first()
+
+    return render(
+        request,
+        "library/tmdb_preview.html",
+        {"detail": detail, "entry": entry, "query": request.GET.get("q", "")},
     )
 
 

@@ -16,14 +16,16 @@
             <div class="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
                 {% for result in results %}
                     <div data-reveal style="transition-delay: {% widthratio forloop.counter0 1 60 %}ms" class="flex flex-col gap-2.5">
-                        <div class="aspect-2/3 overflow-hidden rounded-[4px]">
-                            {% if result.poster_url %}
-                                <img src="{{ result.poster_url }}" alt="{{ result.title }}" class="h-full w-full object-cover">
-                            {% else %}
-                                <div class="flex h-full w-full items-center justify-center bg-brand-500 text-3xl font-black text-white/20">{{ result.title|slice:":1" }}</div>
-                            {% endif %}
-                        </div>
-                        <p class="truncate text-sm font-semibold text-ink">{{ result.title }}</p>
+                        <a href="{% url 'library:tmdb_preview' result.source_type result.external_id %}?q={{ form.q.value|urlencode }}" class="group flex flex-col gap-2.5">
+                            <div class="aspect-2/3 overflow-hidden rounded-[4px]">
+                                {% if result.poster_url %}
+                                    <img src="{{ result.poster_url }}" alt="{{ result.title }}" class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105">
+                                {% else %}
+                                    <div class="flex h-full w-full items-center justify-center bg-brand-500 text-3xl font-black text-white/20">{{ result.title|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                            <p class="truncate text-sm font-semibold text-ink group-hover:text-brand-500">{{ result.title }}</p>
+                        </a>
                         <p class="-mt-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted">
                             {% if result.media_type == "movie" %}Película{% else %}Serie{% endif %}
                             {% if result.release_year %} · {{ result.release_year }}{% endif %}
