@@ -31,7 +31,9 @@ def get_or_create_media_from_tmdb(detail, media_type):
         media.external_id = detail.external_id
         media.external_source = MediaItem.ExternalSource.TMDB
         media.poster_url = detail.poster_url or media.poster_url
-        media.description = detail.description or media.description
+        if detail.description:
+            media.description = detail.description
+            media.description_language = detail.description_language
         media.release_year = detail.release_year or media.release_year
         media.duration_minutes = detail.duration_minutes or media.duration_minutes
         media.episodes = detail.episodes or media.episodes
@@ -45,6 +47,7 @@ def get_or_create_media_from_tmdb(detail, media_type):
         media_type=media_type,
         release_year=detail.release_year,
         description=detail.description,
+        description_language=detail.description_language,
         poster_url=detail.poster_url,
         external_id=detail.external_id,
         external_source=MediaItem.ExternalSource.TMDB,

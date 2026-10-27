@@ -50,6 +50,9 @@
 
             {% if media.description %}
                 <p class="mt-6 max-w-[600px] text-lg leading-relaxed text-ink-2">{{ media.description }}</p>
+                {% if media.description_language == "en" %}
+                    <p class="mt-2 font-mono text-[11px] uppercase tracking-[.1em] text-muted">Sinopsis en inglés · no hay traducción disponible</p>
+                {% endif %}
             {% endif %}
 
             {% if media.genres %}

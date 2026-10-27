@@ -30,6 +30,9 @@
                         </p>
                         {% if result.description %}
                             <p class="line-clamp-2 text-xs text-muted">{{ result.description|truncatewords:20 }}</p>
+                            {% if result.description_language == "en" %}
+                                <p class="font-mono text-[10px] uppercase tracking-[.1em] text-faint">Sin traducción · en inglés</p>
+                            {% endif %}
                         {% endif %}
                         <form method="post" action="{% url 'library:add_from_tmdb' %}" class="mt-1 flex flex-col gap-1.5">
                             {% csrf_token %}

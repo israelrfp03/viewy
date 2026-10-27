@@ -188,6 +188,53 @@ class TestGetDetail:
         assert detail.title == ""
 
 
+
+def _mock_by_language(monkeypatch, spanish_json, english_json):
+    calls = []
+
+    def fake_get(url, *args, params=None, **kwargs):
+        calls.append(params["language"])
+        response = requests.Response()
+        response.status_code = 200
+        data = english_json if params["language"] == tmdb.FALLBACK_LANGUAGE else spanish_json
+        response.json = lambda: data
+        return response
+
+    monkeypatch.setattr(tmdb.requests, "get", fake_get)
+    return calls
+
+
+class TestDescriptionLanguage:
+    DETAIL = {"id": 1, "title": "X", "release_date": "", "poster_path": "",
+              "original_language": "en", "genres": []}
+
+    def test_spanish_overview_is_used_without_fallback(self, monkeypatch):
+        calls = _mock_by_language(monkeypatch, {**self.DETAIL, "overview": "En español"}, None)
+        detail = tmdb.get_detail("1", "movie")
+        assert detail.description == "En español"
+        assert detail.description_language == "es"
+        assert calls == [tmdb.PRIMARY_LANGUAGE]
+
+    def test_missing_spanish_overview_falls_back_to_english(self, monkeypatch):
+        _mock_by_language(
+            monkeypatch, {**self.DETAIL, "overview": ""}, {**self.DETAIL, "overview": "In English"}
+        )
+        detail = tmdb.get_detail("1", "movie")
+        assert detail.description == "In English"
+        assert detail.description_language == "en"
+
+    def test_search_fills_missing_overviews_from_english(self, monkeypatch):
+        item = {"media_type": "movie", "title": "X", "original_language": "en", "genre_ids": []}
+        _mock_by_language(
+            monkeypatch,
+            {"results": [{**item, "id": 1, "overview": "Hola"}, {**item, "id": 2, "overview": ""}]},
+            {"results": [{**item, "id": 1, "overview": "Hello"}, {**item, "id": 2, "overview": "Bye"}]},
+        )
+        first, second = tmdb.search("x")
+        assert (first.description, first.description_language) == ("Hola", "es")
+        assert (second.description, second.description_language) == ("Bye", "en")
+
+
 def _mock_search_then_providers(monkeypatch, search_json, providers_json):
     """Las dos llamadas HTTP que hace get_watch_providers (buscar, luego
     consultar disponibilidad) devuelven JSON distinto según la URL pedida."""

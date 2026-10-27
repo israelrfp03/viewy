@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import requests
 from django.conf import settings
@@ -10,6 +10,10 @@ REQUEST_TIMEOUT = 5
 
 # Región fija: todavía no hay ajuste de país por usuario en Viewy.
 DEFAULT_WATCH_REGION = "ES"
+
+# TMDB devuelve la sinopsis vacía si nadie la ha traducido: se reintenta en inglés.
+PRIMARY_LANGUAGE = "es-ES"
+FALLBACK_LANGUAGE = "en-US"
 
 TMDB_TO_INTERNAL_MEDIA_TYPE = {
     "movie": "movie",
@@ -43,6 +47,7 @@ class TMDBSearchResult:
     poster_url: str
     description: str
     is_anime_candidate: bool
+    description_language: str = field(default="es", kw_only=True)
 
 
 @dataclass
@@ -66,7 +71,8 @@ def _headers():
     }
 
 
-def _request(url, params=None):
+def _request(url, params=None, language=PRIMARY_LANGUAGE):
+    params = {**(params or {}), "language": language}
     try:
         response = requests.get(url, headers=_headers(), params=params, timeout=REQUEST_TIMEOUT)
     except requests.exceptions.Timeout as exc:
@@ -100,6 +106,14 @@ def _poster_url(poster_path):
     return f"{settings.TMDB_IMAGE_BASE_URL}{poster_path}"
 
 
+def _pick_overview(spanish, english):
+    if spanish:
+        return spanish, "es"
+    if english:
+        return english, "en"
+    return "", "es"
+
+
 def _is_anime_candidate(original_language, genre_ids):
     """Heurística: idioma original japonés + género 'Animation'.
 
@@ -113,6 +127,11 @@ def _is_anime_candidate(original_language, genre_ids):
 
 def search(query):
     data = _request(SEARCH_URL, params={"query": query})
+    english_overviews = {}
+    if any(not item.get("overview") for item in data.get("results", [])):
+        fallback = _request(SEARCH_URL, params={"query": query}, language=FALLBACK_LANGUAGE)
+        english_overviews = {item["id"]: item.get("overview") or "" for item in fallback.get("results", [])}
+
     results = []
 
     for item in data.get("results", []):
@@ -123,6 +142,9 @@ def search(query):
 
         title = item.get("title") or item.get("name") or ""
         release_date = item.get("release_date") or item.get("first_air_date")
+        description, description_language = _pick_overview(
+            item.get("overview"), english_overviews.get(item["id"])
+        )
 
         results.append(
             TMDBSearchResult(
@@ -132,10 +154,11 @@ def search(query):
                 title=title,
                 release_year=_extract_year(release_date),
                 poster_url=_poster_url(item.get("poster_path")),
-                description=item.get("overview") or "",
+                description=description,
                 is_anime_candidate=_is_anime_candidate(
                     item.get("original_language"), item.get("genre_ids", [])
                 ),
+                description_language=description_language,
             )
         )
 
@@ -152,6 +175,11 @@ def get_detail(external_id, source_type):
     genre_ids = [genre["id"] for genre in data.get("genres", [])]
     episodes = data.get("number_of_episodes") if media_type == "series" else None
 
+    english_overview = None
+    if not data.get("overview"):
+        english_overview = _request(url, language=FALLBACK_LANGUAGE).get("overview")
+    description, description_language = _pick_overview(data.get("overview"), english_overview)
+
     return TMDBDetail(
         external_id=str(data["id"]),
         source_type=source_type,
@@ -159,8 +187,9 @@ def get_detail(external_id, source_type):
         title=title,
         release_year=_extract_year(release_date),
         poster_url=_poster_url(data.get("poster_path")),
-        description=data.get("overview") or "",
+        description=description,
         is_anime_candidate=_is_anime_candidate(data.get("original_language"), genre_ids),
+        description_language=description_language,
         duration_minutes=(data.get("runtime") or None) if media_type == "movie" else None,
         episodes=episodes or None,
     )

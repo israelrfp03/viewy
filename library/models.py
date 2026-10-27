@@ -16,6 +16,8 @@ class MediaItem(models.Model):
     media_type = models.CharField(max_length=10, choices=MediaType.choices, db_index=True)
     release_year = models.PositiveSmallIntegerField(null=True, blank=True)
     description = models.TextField(blank=True)
+    # "en" cuando TMDB no tenía sinopsis en español y se guardó la inglesa.
+    description_language = models.CharField(max_length=5, blank=True)
     genres = models.JSONField(default=list, blank=True)
     poster_url = models.URLField(blank=True)
     external_id = models.CharField(max_length=100, blank=True)
